@@ -24,6 +24,10 @@ public class GameScreen implements Screen {
     private Actor m_movingCrosshair;
     private Actor m_shootingCrosshair;
 
+    private final static String PLAYER_ACTOR_NAME = "plr";
+    private final static String MOVING_CROSSHAIR_ACTOR_NAME = "mc";
+    private final static String SHOOTING_CROSSHAIR_ACTOR_NAME = "sc";
+
     public GameScreen() {
         m_camera = new OrthographicCamera();
         m_spriteBatch = new SpriteBatch();
@@ -38,16 +42,18 @@ public class GameScreen implements Screen {
                 (Gdx.graphics.getHeight() - obj.getHeight()) / 2);
         obj.setTexture(new TextureRegion(texture, 0, 0, texture.getWidth(), texture.getHeight()));
         m_actor = obj;
+        m_actor.setName(PLAYER_ACTOR_NAME);
         m_stage.addActor(m_actor);
 
-//        obj = new GameObject();
-//        obj.setSize(128, 128);
-//        obj.setOrigin(Align.center);
-//        texture = new Texture(Gdx.files.internal("movingCrosshair.png"));
-//        texture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
-//        obj.setTexture(new TextureRegion(texture, 0, 0, texture.getWidth(), texture.getHeight()));
-//        m_movingCrosshair = obj;
-//        m_stage.addActor(m_movingCrosshair);
+        obj = new GameObject();
+        obj.setSize(128, 128);
+        obj.setOrigin(Align.center);
+        texture = new Texture(Gdx.files.internal("movingCrosshair.png"));
+        texture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        obj.setTexture(new TextureRegion(texture, 0, 0, texture.getWidth(), texture.getHeight()));
+        m_movingCrosshair = obj;
+        m_movingCrosshair.setName(MOVING_CROSSHAIR_ACTOR_NAME);
+        m_stage.addActor(m_movingCrosshair);
     }
 
     @Override
@@ -61,7 +67,8 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         m_stage.act(delta);
         m_stage.draw();
-//        m_actor.setPosition(m_actor.getX() + delta * 300, m_actor.getY() + delta * 300);
+        Actor actor = m_stage.getRoot().findActor(MOVING_CROSSHAIR_ACTOR_NAME);
+        actor.setPosition(actor.getX() + delta * 300, actor.getY() + delta * 300);
         m_actor.setRotation(m_actor.getRotation() + delta * 100);
     }
 

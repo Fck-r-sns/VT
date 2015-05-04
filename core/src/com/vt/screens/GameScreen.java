@@ -1,7 +1,6 @@
 package com.vt.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -24,12 +23,11 @@ public class GameScreen implements Screen {
     private SpriteBatch m_spriteBatch;
     private Stage m_stage;
     private Actor m_actor;
-    private Actor m_movingCrosshair;
-    private Actor m_shootingCrosshair;
+    private Actor m_movementPointer;
 
     private final static String PLAYER_ACTOR_NAME = "plr";
-    private final static String MOVING_CROSSHAIR_ACTOR_NAME = "mc";
-    private final static String SHOOTING_CROSSHAIR_ACTOR_NAME = "sc";
+    private final static String MOVEMENT_POINTER_ACTOR_NAME = "mp";
+    private final static String FIRE_POINTER_ACTOR_NAME = "fp";
 
     public GameScreen() {
         m_camera = new OrthographicCamera();
@@ -52,17 +50,17 @@ public class GameScreen implements Screen {
         obj = new GameObject();
         obj.setSize(128, 128);
         obj.setOrigin(Align.center);
-        texture = new Texture(Gdx.files.internal("movingCrosshair.png"));
+        texture = new Texture(Gdx.files.internal("movementPointer.png"));
         texture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         obj.setTexture(new TextureRegion(texture, 0, 0, texture.getWidth(), texture.getHeight()));
-        m_movingCrosshair = obj;
-        m_movingCrosshair.setName(MOVING_CROSSHAIR_ACTOR_NAME);
-        m_stage.addActor(m_movingCrosshair);
+        m_movementPointer = obj;
+        m_movementPointer.setName(MOVEMENT_POINTER_ACTOR_NAME);
+        m_stage.addActor(m_movementPointer);
 
         m_stage.getRoot().addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                m_stage.getRoot().findActor(MOVING_CROSSHAIR_ACTOR_NAME).setPosition(x, y, Align.center);
+                m_stage.getRoot().findActor(MOVEMENT_POINTER_ACTOR_NAME).setPosition(x, y, Align.center);
                 return true;
             }
         });
@@ -80,7 +78,6 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         m_stage.act(delta);
         m_stage.draw();
-        Actor actor = m_stage.getRoot().findActor(MOVING_CROSSHAIR_ACTOR_NAME);
 //        actor.setPosition(actor.getX() + delta * 300, actor.getY() + delta * 300);
         m_actor.setRotation(m_actor.getRotation() + delta * 100);
     }

@@ -1,6 +1,7 @@
 package com.vt.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -8,6 +9,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -43,6 +46,7 @@ public class GameScreen implements Screen {
         obj.setTexture(new TextureRegion(texture, 0, 0, texture.getWidth(), texture.getHeight()));
         m_actor = obj;
         m_actor.setName(PLAYER_ACTOR_NAME);
+
         m_stage.addActor(m_actor);
 
         obj = new GameObject();
@@ -54,6 +58,15 @@ public class GameScreen implements Screen {
         m_movingCrosshair = obj;
         m_movingCrosshair.setName(MOVING_CROSSHAIR_ACTOR_NAME);
         m_stage.addActor(m_movingCrosshair);
+
+        m_stage.getRoot().addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                m_stage.getRoot().findActor(MOVING_CROSSHAIR_ACTOR_NAME).setPosition(x, y, Align.center);
+                return true;
+            }
+        });
+        Gdx.input.setInputProcessor(m_stage);
     }
 
     @Override
@@ -68,7 +81,7 @@ public class GameScreen implements Screen {
         m_stage.act(delta);
         m_stage.draw();
         Actor actor = m_stage.getRoot().findActor(MOVING_CROSSHAIR_ACTOR_NAME);
-        actor.setPosition(actor.getX() + delta * 300, actor.getY() + delta * 300);
+//        actor.setPosition(actor.getX() + delta * 300, actor.getY() + delta * 300);
         m_actor.setRotation(m_actor.getRotation() + delta * 100);
     }
 

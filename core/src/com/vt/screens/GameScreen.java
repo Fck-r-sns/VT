@@ -42,7 +42,8 @@ public class GameScreen implements Screen {
         m_player = new ActingGameObject();
         m_player.setSize(Constants.PLAYER_WIDTH, Constants.PLAYER_HEIGHT);
         m_player.setOrigin(Align.center);
-//        m_player.setPosition(-m_player.getWidth() / 2, -m_player.getHeight() / 2);
+        m_player.setPosition((m_camera.viewportWidth - m_player.getWidth()) / 2,
+                (m_camera.viewportHeight - m_player.getHeight()) / 2);
         m_player.setTexture(Assets.getInstance().player);
         this.m_player.setName(Constants.PLAYER_ACTOR_NAME);
         m_stage.addActor(this.m_player);
@@ -50,11 +51,11 @@ public class GameScreen implements Screen {
         m_movementPointer = new MovementPointer();
         m_movementPointer.setSize(Constants.MOVEMENT_POINTER_WIDTH, Constants.MOVEMENT_POINTER_HEIGHT);
         m_movementPointer.setOrigin(Align.center);
-        m_movementPointer.setPosition((Gdx.graphics.getWidth() - m_movementPointer.getWidth()) / 2,
-                (Gdx.graphics.getHeight() - m_movementPointer.getHeight()) / 2);
+        m_movementPointer.setPosition((m_camera.viewportWidth - m_movementPointer.getWidth()) / 2,
+                (m_camera.viewportHeight - m_movementPointer.getHeight()) / 2);
         m_movementPointer.setTexture(Assets.getInstance().movementPointer);
         this.m_movementPointer.setName(Constants.MOVEMENT_POINTER_ACTOR_NAME);
-        this.m_movementPointer.setVisible(false);
+//        this.m_movementPointer.setVisible(false);
         m_stage.addActor(this.m_movementPointer);
 
         m_stage.getRoot().addListener(new InputListener() {

@@ -6,6 +6,7 @@ import com.badlogic.gdx.ai.steer.behaviors.Arrive;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -27,22 +28,27 @@ public class GameScreen implements Screen {
     private MovementPointer m_movementPointer;
 
     public GameScreen() {
-        m_camera = new OrthographicCamera();
         m_spriteBatch = new SpriteBatch();
-        m_stage = new Stage(new ScreenViewport(), m_spriteBatch);
+        m_camera = new OrthographicCamera();
+        m_stage = new Stage(new ScreenViewport(m_camera), m_spriteBatch); // stage overwrites camera's viewport
+        m_camera.setToOrtho(false,
+                Constants.VIEWPORT_WIDTH,
+                Constants.VIEWPORT_WIDTH
+                        * Gdx.graphics.getHeight()
+                        / Gdx.graphics.getWidth());
+        m_camera.update();
         Assets.getInstance().init();
 
         m_player = new ActingGameObject();
-        m_player.setSize(128, 128);
+        m_player.setSize(Constants.PLAYER_WIDTH, Constants.PLAYER_HEIGHT);
         m_player.setOrigin(Align.center);
-        m_player.setPosition((Gdx.graphics.getWidth() - m_player.getWidth()) / 2,
-                (Gdx.graphics.getHeight() - m_player.getHeight()) / 2);
+//        m_player.setPosition(-m_player.getWidth() / 2, -m_player.getHeight() / 2);
         m_player.setTexture(Assets.getInstance().player);
         this.m_player.setName(Constants.PLAYER_ACTOR_NAME);
         m_stage.addActor(this.m_player);
 
         m_movementPointer = new MovementPointer();
-        m_movementPointer.setSize(128, 128);
+        m_movementPointer.setSize(Constants.MOVEMENT_POINTER_WIDTH, Constants.MOVEMENT_POINTER_HEIGHT);
         m_movementPointer.setOrigin(Align.center);
         m_movementPointer.setPosition((Gdx.graphics.getWidth() - m_movementPointer.getWidth()) / 2,
                 (Gdx.graphics.getHeight() - m_movementPointer.getHeight()) / 2);
@@ -66,7 +72,7 @@ public class GameScreen implements Screen {
         });
         Gdx.input.setInputProcessor(m_stage);
 
-        m_player.setBehavior(new Arrive(m_player, m_movementPointer).setTimeToTarget(0.001f));
+        m_player.setBehavior(new Arrive<Vector2>(m_player, m_movementPointer));
 //        m_player.setBehavior(new Seek<Vector2>(m_player, m_movementPointer));
     }
 
@@ -76,6 +82,8 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        m_camera.update(false);
+        m_spriteBatch.setProjectionMatrix(m_camera.combined);
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         m_stage.act(delta);
@@ -84,14 +92,10 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        m_camera.setToOrtho(true, width, height);
-        m_camera.update();
-        m_spriteBatch.setProjectionMatrix(m_camera.combined);
     }
 
     @Override
     public void pause() {
-
     }
 
     @Override
@@ -106,6 +110,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
+        m_spriteBatch.dispose();
         Assets.getInstance().dispose();
         m_stage.dispose();
     }

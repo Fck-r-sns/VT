@@ -48,11 +48,13 @@ public class GameScreen implements Screen {
         obj.setTexture(Assets.getInstance().movementPointer);
         m_movementPointer = obj;
         m_movementPointer.setName(Constants.MOVEMENT_POINTER_ACTOR_NAME);
+        m_movementPointer.setVisible(false);
         m_stage.addActor(m_movementPointer);
 
         m_stage.getRoot().addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                m_movementPointer.setVisible(true);
                 m_movementPointer.setPosition(x, y, Align.center);
                 return true;
             }
@@ -67,7 +69,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-        Assets.getInstance().init();
     }
 
     @Override
@@ -93,7 +94,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void resume() {
-
+        Assets.getInstance().init();
     }
 
     @Override
@@ -104,5 +105,6 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         Assets.getInstance().dispose();
+        m_stage.dispose();
     }
 }

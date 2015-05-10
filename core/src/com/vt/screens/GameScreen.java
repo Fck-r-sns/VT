@@ -2,11 +2,10 @@ package com.vt.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.ai.steer.behaviors.Seek;
+import com.badlogic.gdx.ai.steer.behaviors.Arrive;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -67,7 +66,8 @@ public class GameScreen implements Screen {
         });
         Gdx.input.setInputProcessor(m_stage);
 
-        m_player.setBehavior(new Seek<Vector2>(m_player, m_movementPointer));
+        m_player.setBehavior(new Arrive(m_player, m_movementPointer).setTimeToTarget(0.001f));
+//        m_player.setBehavior(new Seek<Vector2>(m_player, m_movementPointer));
     }
 
     @Override

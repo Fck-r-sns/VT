@@ -35,10 +35,12 @@ public class ActingGameObject extends GameObject implements Steerable<Vector2> {
         if (m_behavior != null) {
             m_behavior.calculateSteering(m_acceleration);
 
-            Vector2 pos = new Vector2(getX(Align.center), getY(Align.center));
-            pos.mulAdd(m_acceleration.linear, delta);
+            Vector2 pos = getPosition();
+            pos.mulAdd(m_linearVelocity, delta);
             setPosition(pos.x, pos.y, Align.center);
             m_linearVelocity.mulAdd(m_acceleration.linear, delta).limit(getMaxLinearSpeed());
+
+            setRotation(m_linearVelocity.angle());
         }
     }
 

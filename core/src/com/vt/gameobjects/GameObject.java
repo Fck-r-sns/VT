@@ -1,6 +1,5 @@
 package com.vt.gameobjects;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -8,15 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 /**
  * Created by Fck.r.sns on 04.05.2015.
  */
-public class GameObject extends Actor {
-    private void log(String text) {
-        Gdx.app.log("GameObject", text);
-    }
-
+public abstract class GameObject extends Actor {
     private TextureRegion m_texture;
-
-    public GameObject() {
-    }
 
     public void setTexture(TextureRegion texture) {
         m_texture = texture;
@@ -32,6 +24,12 @@ public class GameObject extends Actor {
     }
 
     @Override
+    public void act(float delta) {
+        update(delta);
+        super.act(delta);
+    }
+
+    @Override
     public void setRotation (float degrees) {
         if (degrees > 360) {
             super.setRotation(degrees - 360);
@@ -40,5 +38,8 @@ public class GameObject extends Actor {
         } else {
             super.setRotation(degrees);
         }
+    }
+
+    protected void update(float delta) {
     }
 }

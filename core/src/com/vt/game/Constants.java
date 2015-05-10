@@ -12,4 +12,10 @@ public class Constants {
     public final static String PLAYER_ACTOR_NAME = "plr";
     public final static String MOVEMENT_POINTER_ACTOR_NAME = "mp";
     public final static String FIRE_POINTER_ACTOR_NAME = "fp";
+
+    public final static float MAX_LINEAR_SPEED_DEFAULT = 100;
+    public final static float MAX_LINEAR_ACCELERATION_DEFAULT = 200;
+    public final static float MAX_ANGULAR_SPEED_DEFAULT = 5;
+    public final static float MAX_ANGULAR_ACCELERATION_DEFAULT = 10;
+
 }

@@ -2,17 +2,19 @@ package com.vt.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.ai.steer.behaviors.Seek;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.vt.game.Constants;
-import com.vt.gameobjects.GameObject;
+import com.vt.gameobjects.ActingGameObject;
+import com.vt.gameobjects.MovementPointer;
 import com.vt.resources.Assets;
 
 /**
@@ -22,8 +24,8 @@ public class GameScreen implements Screen {
     private OrthographicCamera m_camera;
     private SpriteBatch m_spriteBatch;
     private Stage m_stage;
-    private Actor m_actor;
-    private Actor m_movementPointer;
+    private ActingGameObject m_player;
+    private MovementPointer m_movementPointer;
 
     public GameScreen() {
         m_camera = new OrthographicCamera();
@@ -31,40 +33,41 @@ public class GameScreen implements Screen {
         m_stage = new Stage(new ScreenViewport(), m_spriteBatch);
         Assets.getInstance().init();
 
-        GameObject obj = new GameObject();
-        obj.setSize(128, 128);
-        obj.setOrigin(Align.center);
-        obj.setPosition((Gdx.graphics.getWidth() - obj.getWidth()) / 2,
-                (Gdx.graphics.getHeight() - obj.getHeight()) / 2);
-        obj.setTexture(Assets.getInstance().player);
-        m_actor = obj;
-        m_actor.setName(Constants.PLAYER_ACTOR_NAME);
+        m_player = new ActingGameObject();
+        m_player.setSize(128, 128);
+        m_player.setOrigin(Align.center);
+        m_player.setPosition((Gdx.graphics.getWidth() - m_player.getWidth()) / 2,
+                (Gdx.graphics.getHeight() - m_player.getHeight()) / 2);
+        m_player.setTexture(Assets.getInstance().player);
+        this.m_player.setName(Constants.PLAYER_ACTOR_NAME);
+        m_stage.addActor(this.m_player);
 
-        m_stage.addActor(m_actor);
-
-        obj = new GameObject();
-        obj.setSize(128, 128);
-        obj.setOrigin(Align.center);
-        obj.setTexture(Assets.getInstance().movementPointer);
-        m_movementPointer = obj;
-        m_movementPointer.setName(Constants.MOVEMENT_POINTER_ACTOR_NAME);
-        m_movementPointer.setVisible(false);
-        m_stage.addActor(m_movementPointer);
+        m_movementPointer = new MovementPointer();
+        m_movementPointer.setSize(128, 128);
+        m_movementPointer.setOrigin(Align.center);
+        m_movementPointer.setPosition((Gdx.graphics.getWidth() - m_movementPointer.getWidth()) / 2,
+                (Gdx.graphics.getHeight() - m_movementPointer.getHeight()) / 2);
+        m_movementPointer.setTexture(Assets.getInstance().movementPointer);
+        this.m_movementPointer.setName(Constants.MOVEMENT_POINTER_ACTOR_NAME);
+        this.m_movementPointer.setVisible(false);
+        m_stage.addActor(this.m_movementPointer);
 
         m_stage.getRoot().addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                m_movementPointer.setVisible(true);
-                m_movementPointer.setPosition(x, y, Align.center);
+                GameScreen.this.m_movementPointer.setVisible(true);
+                GameScreen.this.m_movementPointer.setPosition(x, y, Align.center);
                 return true;
             }
 
             @Override
-            public void touchDragged (InputEvent event, float x, float y, int pointer) {
-                m_movementPointer.setPosition(x, y, Align.center);
+            public void touchDragged(InputEvent event, float x, float y, int pointer) {
+                GameScreen.this.m_movementPointer.setPosition(x, y, Align.center);
             }
         });
         Gdx.input.setInputProcessor(m_stage);
+
+        m_player.setBehavior(new Seek<Vector2>(m_player, m_movementPointer));
     }
 
     @Override
@@ -77,7 +80,6 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         m_stage.act(delta);
         m_stage.draw();
-        m_actor.setRotation(m_actor.getRotation() + delta * 100);
     }
 
     @Override

@@ -14,7 +14,7 @@ public class ViewPointer extends GameObject {
         setOrigin(Align.center);
         setTexture(Assets.getInstance().viewPointer);
         this.setName(Constants.VIEW_POINTER_ACTOR_NAME);
-        this.setVisible(true);
+        this.setActive(true);
     }
 
     public Vector2 getPosition() {

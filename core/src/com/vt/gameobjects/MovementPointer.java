@@ -15,14 +15,14 @@ public class MovementPointer extends GameObject implements Steerable<Vector2> {
     class Controller extends InputListener {
         @Override
         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-            setVisible(true);
+            setActive(true);
             setPosition(x, y, Align.center);
             return true;
         }
 
         @Override
         public void touchDragged(InputEvent event, float x, float y, int pointer) {
-            setVisible(true);
+            setActive(true);
             setPosition(x, y, Align.center);
         }
     }
@@ -32,7 +32,7 @@ public class MovementPointer extends GameObject implements Steerable<Vector2> {
         setOrigin(Align.center);
         setTexture(Assets.getInstance().movementPointer);
         this.setName(Constants.MOVEMENT_POINTER_ACTOR_NAME);
-        this.setVisible(false);
+        this.setActive(false);
     }
 
     @Override

@@ -32,10 +32,11 @@ public class PlayerObject extends ActingGameObject {
     protected void update(float delta) {
         super.update(delta);
         if (m_movementPointer.getPosition().dst(getPosition()) < Constants.PLAYER_ARRIVAL_TOLERANCE) {
-            m_movementPointer.setVisible(false);
+            m_movementPointer.setActive(false);
             m_linearVelocity.set(0, 0);
         }
 
-        setRotation(m_viewPointer.getPosition().sub(getPosition()).angle());
+        if (m_viewPointer.isActive())
+            setRotation(m_viewPointer.getPosition().sub(getPosition()).angle());
     }
 }

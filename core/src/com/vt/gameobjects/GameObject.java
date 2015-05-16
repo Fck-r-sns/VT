@@ -8,10 +8,24 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  * Created by Fck.r.sns on 04.05.2015.
  */
 public abstract class GameObject extends Actor {
+    boolean m_active;
     private TextureRegion m_texture;
+
+    public GameObject() {
+        setActive(true);
+    }
 
     public void setTexture(TextureRegion texture) {
         m_texture = texture;
+    }
+
+    public boolean isActive() {
+        return m_active;
+    }
+    
+    public void setActive(boolean active) {
+        m_active = active;
+        setVisible(m_active);
     }
 
     @Override

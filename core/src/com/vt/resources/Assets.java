@@ -21,7 +21,7 @@ public class Assets implements Disposable, AssetErrorListener {
 
     public TextureAtlas.AtlasRegion player;
     public TextureAtlas.AtlasRegion movementPointer;
-    public TextureAtlas.AtlasRegion firePointer;
+    public TextureAtlas.AtlasRegion viewPointer;
 
     public static Assets getInstance() {
         return m_instance;
@@ -39,7 +39,7 @@ public class Assets implements Disposable, AssetErrorListener {
 
         player = atlas.findRegion(Constants.PLAYER_ASSET_NAME);
         movementPointer = atlas.findRegion(Constants.MOVEMENT_POINTER_ASSET_NAME);
-        firePointer = atlas.findRegion(Constants.FIRE_POINTER_ASSET_NAME);
+        viewPointer = atlas.findRegion(Constants.VIEW_POINTER_ASSET_NAME);
     }
 
     @Override

@@ -3,14 +3,14 @@ VT.png
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-firePointer
+movementPointer
   rotate: false
   xy: 1, 131
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-movementPointer
+viewPointer
   rotate: false
   xy: 259, 131
   size: 256, 256

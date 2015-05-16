@@ -22,8 +22,8 @@ public class ActingGameObject extends GameObject implements Steerable<Vector2> {
     protected float m_maxAngularSpeed = Constants.MAX_ANGULAR_SPEED_DEFAULT;
     protected float m_maxAngularAcceleration = Constants.MAX_ANGULAR_ACCELERATION_DEFAULT;
 
-    SteeringAcceleration<Vector2> m_acceleration = new SteeringAcceleration<Vector2>(new Vector2(0, 0));
-    SteeringBehavior<Vector2> m_behavior;
+    protected SteeringAcceleration<Vector2> m_acceleration = new SteeringAcceleration<Vector2>(new Vector2(0, 0));
+    protected SteeringBehavior<Vector2> m_behavior;
 
     public void setBehavior(SteeringBehavior<Vector2> behavior) {
         m_behavior = behavior;

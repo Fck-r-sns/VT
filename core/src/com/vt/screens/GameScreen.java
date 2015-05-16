@@ -2,19 +2,15 @@ package com.vt.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.ai.steer.behaviors.Arrive;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.vt.game.Constants;
-import com.vt.gameobjects.ActingGameObject;
 import com.vt.gameobjects.MovementPointer;
+import com.vt.gameobjects.PlayerObject;
+import com.vt.gameobjects.ViewPointer;
 import com.vt.resources.Assets;
 
 /**
@@ -24,8 +20,9 @@ public class GameScreen implements Screen {
     private OrthographicCamera m_camera;
     private SpriteBatch m_spriteBatch;
     private Stage m_stage;
-    private ActingGameObject m_player;
+    private PlayerObject m_player;
     private MovementPointer m_movementPointer;
+    private ViewPointer m_viewPointer;
 
     public GameScreen() {
         m_spriteBatch = new SpriteBatch();
@@ -39,42 +36,23 @@ public class GameScreen implements Screen {
         m_camera.update();
         Assets.getInstance().init();
 
-        m_player = new ActingGameObject();
-        m_player.setSize(Constants.PLAYER_WIDTH, Constants.PLAYER_HEIGHT);
-        m_player.setOrigin(Align.center);
-        m_player.setPosition((m_camera.viewportWidth - m_player.getWidth()) / 2,
-                (m_camera.viewportHeight - m_player.getHeight()) / 2);
-        m_player.setTexture(Assets.getInstance().player);
-        this.m_player.setName(Constants.PLAYER_ACTOR_NAME);
-        m_stage.addActor(this.m_player);
-
         m_movementPointer = new MovementPointer();
-        m_movementPointer.setSize(Constants.MOVEMENT_POINTER_WIDTH, Constants.MOVEMENT_POINTER_HEIGHT);
-        m_movementPointer.setOrigin(Align.center);
         m_movementPointer.setPosition((m_camera.viewportWidth - m_movementPointer.getWidth()) / 2,
                 (m_camera.viewportHeight - m_movementPointer.getHeight()) / 2);
-        m_movementPointer.setTexture(Assets.getInstance().movementPointer);
-        this.m_movementPointer.setName(Constants.MOVEMENT_POINTER_ACTOR_NAME);
-//        this.m_movementPointer.setVisible(false);
         m_stage.addActor(this.m_movementPointer);
 
-        m_stage.getRoot().addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                GameScreen.this.m_movementPointer.setVisible(true);
-                GameScreen.this.m_movementPointer.setPosition(x, y, Align.center);
-                return true;
-            }
+        m_viewPointer = new ViewPointer();
+        m_viewPointer.setPosition((m_camera.viewportWidth - m_viewPointer.getWidth()) / 2,
+                (m_camera.viewportHeight - m_viewPointer.getHeight()) / 2);
+        m_stage.addActor(this.m_viewPointer);
 
-            @Override
-            public void touchDragged(InputEvent event, float x, float y, int pointer) {
-                GameScreen.this.m_movementPointer.setPosition(x, y, Align.center);
-            }
-        });
+        m_player = new PlayerObject(m_movementPointer, m_viewPointer);
+        m_player.setPosition((m_camera.viewportWidth - m_player.getWidth()) / 2,
+                (m_camera.viewportHeight - m_player.getHeight()) / 2);
+        m_stage.addActor(this.m_player);
+
+        m_stage.getRoot().addListener(m_movementPointer.getInputListener());
         Gdx.input.setInputProcessor(m_stage);
-
-        m_player.setBehavior(new Arrive<Vector2>(m_player, m_movementPointer));
-//        m_player.setBehavior(new Seek<Vector2>(m_player, m_movementPointer));
     }
 
     @Override

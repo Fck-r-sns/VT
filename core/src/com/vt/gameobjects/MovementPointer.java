@@ -2,15 +2,46 @@ package com.vt.gameobjects;
 
 import com.badlogic.gdx.ai.steer.Steerable;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.vt.game.Constants;
+import com.vt.resources.Assets;
 
 /**
  * Created by Fck.r.sns on 10.05.2015.
  */
 public class MovementPointer extends GameObject implements Steerable<Vector2> {
+    class Controller extends InputListener {
+        @Override
+        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+            setVisible(true);
+            setPosition(x, y, Align.center);
+            return true;
+        }
+
+        @Override
+        public void touchDragged(InputEvent event, float x, float y, int pointer) {
+            setVisible(true);
+            setPosition(x, y, Align.center);
+        }
+    }
+    
+    public MovementPointer() {
+        setSize(Constants.MOVEMENT_POINTER_WIDTH, Constants.MOVEMENT_POINTER_HEIGHT);
+        setOrigin(Align.center);
+        setTexture(Assets.getInstance().movementPointer);
+        this.setName(Constants.MOVEMENT_POINTER_ACTOR_NAME);
+        this.setVisible(false);
+    }
+
     @Override
     protected void update(float delta) {
         super.update(delta);
+    }
+
+    public InputListener getInputListener() {
+        return new Controller();
     }
 
     @Override

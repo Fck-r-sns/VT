@@ -1,5 +1,7 @@
 package com.vt.gameobjects;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ai.steer.Steerable;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -15,15 +17,19 @@ public class MovementPointer extends GameObject implements Steerable<Vector2> {
     class Controller extends InputListener {
         @Override
         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-            setActive(true);
-            setPosition(x, y, Align.center);
+            if (!Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
+                setActive(true);
+                setPosition(x, y, Align.center);
+            }
             return true;
         }
 
         @Override
         public void touchDragged(InputEvent event, float x, float y, int pointer) {
-            setActive(true);
-            setPosition(x, y, Align.center);
+            if (!Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
+                setActive(true);
+                setPosition(x, y, Align.center);
+            }
         }
     }
     

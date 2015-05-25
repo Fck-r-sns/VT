@@ -52,6 +52,7 @@ public class GameScreen implements Screen {
         m_stage.addActor(this.m_player);
 
         m_stage.getRoot().addListener(m_movementPointer.getInputListener());
+        m_stage.getRoot().addListener(m_viewPointer.getInputListener());
         Gdx.input.setInputProcessor(m_stage);
     }
 
@@ -92,5 +93,6 @@ public class GameScreen implements Screen {
         m_spriteBatch.dispose();
         Assets.getInstance().dispose();
         m_stage.dispose();
+
     }
 }

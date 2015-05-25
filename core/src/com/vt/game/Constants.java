@@ -6,12 +6,12 @@ package com.vt.game;
 public class Constants {
     // game geometry ----------------------------------------------------------
     public static final float VIEWPORT_WIDTH = 10.0f;
-    public static final float PLAYER_WIDTH = 1.0f;
-    public static final float PLAYER_HEIGHT = 1.0f;
-    public static final float MOVEMENT_POINTER_HEIGHT = 1.0f;
-    public static final float MOVEMENT_POINTER_WIDTH = 1.0f;
-    public static final float VIEW_POINTER_WIDTH = 1.0f;
-    public static final float VIEW_POINTER_HEIGHT = 1.0f;
+    public static final float PLAYER_WIDTH = 0.5f;
+    public static final float PLAYER_HEIGHT = 0.5f;
+    public static final float MOVEMENT_POINTER_HEIGHT = 0.3f;
+    public static final float MOVEMENT_POINTER_WIDTH = 0.3f;
+    public static final float VIEW_POINTER_WIDTH = 0.3f;
+    public static final float VIEW_POINTER_HEIGHT = 0.3f;
     // ------------------------------------------------------------------------
 
     // resources --------------------------------------------------------------
@@ -28,12 +28,12 @@ public class Constants {
     // ------------------------------------------------------------------------
 
     // physics ----------------------------------------------------------------
-    public final static float MAX_LINEAR_SPEED_DEFAULT = 10;
-    public final static float MAX_LINEAR_ACCELERATION_DEFAULT = 20;
+    public final static float MAX_LINEAR_SPEED_DEFAULT = 5;
+    public final static float MAX_LINEAR_ACCELERATION_DEFAULT = 7;
     public final static float MAX_ANGULAR_SPEED_DEFAULT = 5;
     public final static float MAX_ANGULAR_ACCELERATION_DEFAULT = 10;
 
-    public final static float PLAYER_ARRIVAL_TOLERANCE = 0.05f;
-    public final static float PLAYER_ARRIVAL_DECELERATION_RADIUS = 3f;
+    public final static float PLAYER_ARRIVAL_TOLERANCE = 0.02f;
+    public final static float PLAYER_ARRIVAL_DECELERATION_RADIUS = 2f;
     // ------------------------------------------------------------------------
 }

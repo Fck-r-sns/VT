@@ -46,7 +46,7 @@ public class ViewPointer extends GameObject {
     public ViewPointer() {
         setSize(Constants.VIEW_POINTER_WIDTH, Constants.VIEW_POINTER_HEIGHT);
         setOrigin(Align.center);
-        setTexture(Assets.getInstance().viewPointer);
+        setTexture(Assets.getInstance().gameEntities.viewPointer);
         this.setName(Constants.VIEW_POINTER_ACTOR_NAME);
         this.setActive(true);
     }

@@ -36,7 +36,7 @@ public class MovementPointer extends GameObject implements Steerable<Vector2> {
     public MovementPointer() {
         setSize(Constants.MOVEMENT_POINTER_WIDTH, Constants.MOVEMENT_POINTER_HEIGHT);
         setOrigin(Align.center);
-        setTexture(Assets.getInstance().movementPointer);
+        setTexture(Assets.getInstance().gameEntities.movementPointer);
         this.setName(Constants.MOVEMENT_POINTER_ACTOR_NAME);
         this.setActive(false);
     }

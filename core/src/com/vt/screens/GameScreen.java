@@ -5,12 +5,21 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.vt.game.Constants;
+import com.vt.gameobjects.GameObject;
 import com.vt.gameobjects.MovementPointer;
 import com.vt.gameobjects.PlayerObject;
 import com.vt.gameobjects.ViewPointer;
+import com.vt.gameobjects.gui.Panel;
 import com.vt.resources.Assets;
 
 /**
@@ -54,6 +63,23 @@ public class GameScreen implements Screen {
         m_stage.getRoot().addListener(m_movementPointer.getInputListener());
         m_stage.getRoot().addListener(m_viewPointer.getInputListener());
         Gdx.input.setInputProcessor(m_stage);
+
+        Group gui = new Group();
+        GameObject guiPanel = new Panel();
+        gui.addActor(guiPanel);
+        guiPanel.setPosition(0, 0, Align.bottomLeft);
+        guiPanel.addCaptureListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                event.stop();
+                return true;
+            }
+
+            @Override
+            public void touchDragged(InputEvent event, float x, float y, int pointer) {
+            }
+        });
+        m_stage.addActor(gui);
     }
 
     @Override
@@ -93,6 +119,5 @@ public class GameScreen implements Screen {
         m_spriteBatch.dispose();
         Assets.getInstance().dispose();
         m_stage.dispose();
-
     }
 }

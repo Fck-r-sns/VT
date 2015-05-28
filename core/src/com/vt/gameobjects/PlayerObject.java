@@ -19,7 +19,7 @@ public class PlayerObject extends ActingGameObject {
 
         setSize(Constants.PLAYER_WIDTH, Constants.PLAYER_HEIGHT);
         setOrigin(Align.center);
-        setTexture(Assets.getInstance().player);
+        setTexture(Assets.getInstance().gameEntities.player);
         this.setName(Constants.PLAYER_ACTOR_NAME);
 
         setBehavior(

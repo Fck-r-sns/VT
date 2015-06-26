@@ -5,21 +5,20 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.vt.game.Constants;
-import com.vt.gameobjects.GameObject;
 import com.vt.gameobjects.MovementPointer;
 import com.vt.gameobjects.PlayerObject;
 import com.vt.gameobjects.ViewPointer;
-import com.vt.gameobjects.gui.Panel;
+import com.vt.gameobjects.gui.Button;
+import com.vt.gameobjects.terrain.Floor;
+import com.vt.gameobjects.terrain.Level;
+import com.vt.gameobjects.terrain.StubLevel;
 import com.vt.resources.Assets;
 
 /**
@@ -32,6 +31,9 @@ public class GameScreen implements Screen {
     private PlayerObject m_player;
     private MovementPointer m_movementPointer;
     private ViewPointer m_viewPointer;
+    private Button m_button;
+
+    private Level m_level;
 
     public GameScreen() {
         m_spriteBatch = new SpriteBatch();
@@ -44,6 +46,8 @@ public class GameScreen implements Screen {
                         / Gdx.graphics.getWidth());
         m_camera.update();
         Assets.getInstance().init();
+
+        m_level = new StubLevel(10, 10);
 
         m_movementPointer = new MovementPointer();
         m_movementPointer.setPosition((m_camera.viewportWidth - m_movementPointer.getWidth()) / 2,
@@ -60,23 +64,28 @@ public class GameScreen implements Screen {
                 (m_camera.viewportHeight - m_player.getHeight()) / 2);
         m_stage.addActor(this.m_player);
 
-        m_stage.getRoot().addListener(m_movementPointer.getInputListener());
-        m_stage.getRoot().addListener(m_viewPointer.getInputListener());
+        m_stage.getRoot().addListener(m_movementPointer.getController().setActive(true));
+        m_stage.getRoot().addListener(m_viewPointer.getController().setActive(false));
         Gdx.input.setInputProcessor(m_stage);
 
         Group gui = new Group();
-        GameObject guiPanel = new Panel();
-        gui.addActor(guiPanel);
-        guiPanel.setPosition(0, 0, Align.bottomLeft);
-        guiPanel.addCaptureListener(new InputListener() {
+        m_button = new Button();
+        gui.addActor(m_button);
+        m_button.setPosition(0, m_camera.viewportHeight, Align.topLeft);
+        m_button.addCaptureListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 event.stop();
+                m_viewPointer.getController().setActive(true);
+                m_movementPointer.getController().setActive(false);
                 return true;
             }
 
             @Override
-            public void touchDragged(InputEvent event, float x, float y, int pointer) {
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                event.stop();
+                m_viewPointer.getController().setActive(false);
+                m_movementPointer.getController().setActive(true);
             }
         });
         m_stage.addActor(gui);
@@ -92,6 +101,9 @@ public class GameScreen implements Screen {
         m_spriteBatch.setProjectionMatrix(m_camera.combined);
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        m_spriteBatch.begin();
+        m_level.draw(m_spriteBatch);
+        m_spriteBatch.end();
         m_stage.act(delta);
         m_stage.draw();
     }
@@ -116,8 +128,8 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
+        m_stage.dispose();
         m_spriteBatch.dispose();
         Assets.getInstance().dispose();
-        m_stage.dispose();
     }
 }

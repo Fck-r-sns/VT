@@ -13,12 +13,12 @@ import com.vt.resources.Assets;
  * Created by Fck.r.sns on 10.05.2015.
  */
 public class ViewPointer extends GameObject {
-    class Controller extends InputListener {
+    class Controller extends PointerController {
         private Vector2 touchPosition = new Vector2(0, 0);
         @Override
         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-            if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
-                setActive(true);
+            if (this.isActive()) {
+                ViewPointer.this.setActive(true);
                 setPosition(x, y, Align.center);
             }
             return true;
@@ -26,8 +26,8 @@ public class ViewPointer extends GameObject {
 
         @Override
         public void touchDragged(InputEvent event, float x, float y, int pointer) {
-            if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
-                setActive(true);
+            if (this.isActive()) {
+                ViewPointer.this.setActive(true);
                 setPosition(x, y, Align.center);
             }
         }
@@ -43,16 +43,19 @@ public class ViewPointer extends GameObject {
         }
     }
 
+    private Controller m_controller;
+
     public ViewPointer() {
         setSize(Constants.VIEW_POINTER_WIDTH, Constants.VIEW_POINTER_HEIGHT);
         setOrigin(Align.center);
         setTexture(Assets.getInstance().gameEntities.viewPointer);
         this.setName(Constants.VIEW_POINTER_ACTOR_NAME);
         this.setActive(true);
+        m_controller = new Controller();
     }
 
-    public InputListener getInputListener() {
-        return new Controller();
+    public PointerController getController() {
+        return m_controller;
     }
 
     public Vector2 getPosition() {

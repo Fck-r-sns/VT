@@ -1,7 +1,5 @@
 package com.vt.gameobjects;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ai.steer.Steerable;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -14,11 +12,11 @@ import com.vt.resources.Assets;
  * Created by Fck.r.sns on 10.05.2015.
  */
 public class MovementPointer extends GameObject implements Steerable<Vector2> {
-    class Controller extends InputListener {
+    class Controller extends PointerController {
         @Override
         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-            if (!Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
-                setActive(true);
+            if (this.isActive()) {
+                MovementPointer.this.setActive(true);
                 setPosition(x, y, Align.center);
             }
             return true;
@@ -26,12 +24,14 @@ public class MovementPointer extends GameObject implements Steerable<Vector2> {
 
         @Override
         public void touchDragged(InputEvent event, float x, float y, int pointer) {
-            if (!Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
-                setActive(true);
+            if (this.isActive()) {
+                MovementPointer.this.setActive(true);
                 setPosition(x, y, Align.center);
             }
         }
     }
+
+    private Controller m_controller;
     
     public MovementPointer() {
         setSize(Constants.MOVEMENT_POINTER_WIDTH, Constants.MOVEMENT_POINTER_HEIGHT);
@@ -39,6 +39,7 @@ public class MovementPointer extends GameObject implements Steerable<Vector2> {
         setTexture(Assets.getInstance().gameEntities.movementPointer);
         this.setName(Constants.MOVEMENT_POINTER_ACTOR_NAME);
         this.setActive(false);
+        m_controller = new Controller();
     }
 
     @Override
@@ -46,8 +47,8 @@ public class MovementPointer extends GameObject implements Steerable<Vector2> {
         super.update(delta);
     }
 
-    public InputListener getInputListener() {
-        return new Controller();
+    public PointerController getController() {
+        return m_controller;
     }
 
     @Override

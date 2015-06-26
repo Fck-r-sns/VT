@@ -18,7 +18,8 @@ public class PlayerObject extends ActingGameObject {
         m_viewPointer = vp;
 
         setSize(Constants.PLAYER_WIDTH, Constants.PLAYER_HEIGHT);
-        setOrigin(Align.center);
+        setOrigin(Constants.PLAYER_ORIGIN_X * Constants.PLAYER_WIDTH,
+                Constants.PLAYER_ORIGIN_Y * Constants.PLAYER_HEIGHT);
         setTexture(Assets.getInstance().gameEntities.player);
         this.setName(Constants.PLAYER_ACTOR_NAME);
 
@@ -36,7 +37,14 @@ public class PlayerObject extends ActingGameObject {
             m_linearVelocity.set(0, 0);
         }
 
-        if (m_viewPointer.isActive())
-            setRotation(m_viewPointer.getPosition().sub(getPosition()).angle());
+        if (m_viewPointer.isActive()) {
+            float originX = getOriginX();
+            float originY = getOriginY();
+            Vector2 pos = getPosition();
+            Vector2 pointerPos = new Vector2(m_viewPointer.getOriginX(), m_viewPointer.getOriginY());
+            float angle = pointerPos.sub(pos.sub(originX, originY)).angle();
+//            setRotation(m_viewPointer.getPosition().sub(getOriginX(), getOriginY()).angle());
+            setRotation(angle);
+        }
     }
 }

@@ -1,19 +1,17 @@
 package com.vt.gameobjects.gui;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.vt.game.Constants;
 import com.vt.gameobjects.GameObject;
 import com.vt.resources.Assets;
 
 /**
- * Created by Fck.r.sns on 28.05.2015.
+ * Created by Fck.r.sns on 19.06.2015.
  */
-public class Panel extends GameObject {
-    public Panel() {
-        float height = Constants.VIEWPORT_WIDTH / Gdx.graphics.getWidth() * Gdx.graphics.getHeight();
-        float width = height / Constants.GUI_PANEL_HEIGHT * Constants.GUI_PANEL_WIDTH;
-        setSize(width, height);
+
+public class Button extends GameObject {
+    public Button() {
+        setSize(Constants.BUTTON_WIDTH, Constants.BUTTON_HEIGHT);
         setOrigin(Align.topLeft);
         setTexture(Assets.getInstance().gui.buttonUp);
         this.setName(Constants.GUI_BUTTON_ACTOR_NAME);

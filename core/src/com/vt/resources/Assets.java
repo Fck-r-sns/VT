@@ -14,7 +14,8 @@ import com.vt.game.Constants;
  */
 public class Assets implements Disposable, AssetErrorListener {
     public class Gui {
-        public TextureAtlas.AtlasRegion panel;
+        public TextureAtlas.AtlasRegion buttonUp;
+        public TextureAtlas.AtlasRegion buttonDown;
     }
 
     public class GameEntities {
@@ -23,8 +24,16 @@ public class Assets implements Disposable, AssetErrorListener {
         public TextureAtlas.AtlasRegion viewPointer;
     }
 
+    public class Terrain {
+        public TextureAtlas.AtlasRegion plainFloorLight;
+        public TextureAtlas.AtlasRegion plainFloorWithDotsLight;
+        public TextureAtlas.AtlasRegion plainFloorDark;
+        public TextureAtlas.AtlasRegion plainFloorWithDotsDark;
+    }
+
     public GameEntities gameEntities;
     public Gui gui;
+    public Terrain terrain;
 
     private static final String TAG = Assets.class.getName();
     private static final Assets m_instance = new Assets();
@@ -41,6 +50,7 @@ public class Assets implements Disposable, AssetErrorListener {
         m_assetsManager.setErrorListener(this);
         m_assetsManager.load(Constants.TEXTURE_ATLAS_PACK, TextureAtlas.class);
         m_assetsManager.load(Constants.GUI_ATLAS_PACK, TextureAtlas.class);
+        m_assetsManager.load(Constants.TERRAIN_ATLAS_PACK, TextureAtlas.class);
         m_assetsManager.finishLoading();
 
         TextureAtlas atlas = m_assetsManager.get(Constants.TEXTURE_ATLAS_PACK);
@@ -57,7 +67,18 @@ public class Assets implements Disposable, AssetErrorListener {
             t.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         gui = new Gui();
-        gui.panel = atlas.findRegion(Constants.PANEL_ASSET_NAME);
+        gui.buttonUp = atlas.findRegion(Constants.BUTTON_UP_ASSET_NAME);
+        gui.buttonDown = atlas.findRegion(Constants.BUTTON_DOWN_ASSET_NAME);
+
+        atlas = m_assetsManager.get(Constants.TERRAIN_ATLAS_PACK);
+        for (Texture t : atlas.getTextures())
+            t.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
+        terrain = new Terrain();
+        terrain.plainFloorLight = atlas.findRegion(Constants.PLAIN_FLOOR_LIGHT_ASSET_NAME);
+        terrain.plainFloorWithDotsLight = atlas.findRegion(Constants.PLAIN_FLOOR_WITH_DOTS_LIGHT_ASSET_NAME);
+        terrain.plainFloorDark = atlas.findRegion(Constants.PLAIN_FLOOR_DARK_ASSET_NAME);
+        terrain.plainFloorWithDotsDark = atlas.findRegion(Constants.PLAIN_FLOOR_WITH_DOTS_DARK_ASSET_NAME);
     }
 
     @Override

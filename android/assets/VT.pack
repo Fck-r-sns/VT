@@ -1,7 +1,7 @@
 
 VT.png
 format: RGBA8888
-filter: Linear,Linear
+filter: Nearest,Nearest
 repeat: none
 movementPointer
   rotate: false
@@ -24,3 +24,10 @@ circleWithPointer_white
   orig: 128, 128
   offset: 0, 0
   index: -1
+marine_rifle
+  rotate: false
+  xy: 517, 355
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 1

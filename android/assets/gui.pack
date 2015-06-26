@@ -1,26 +1,19 @@
 
 gui.png
 format: RGBA8888
-filter: Linear,Linear
+filter: Nearest,Nearest
 repeat: none
-guiPanel
-  rotate: false
-  xy: 1, 103
-  size: 300, 1200
-  orig: 300, 1200
-  offset: 0, 0
-  index: -1
 buttonDown
   rotate: false
   xy: 1, 1
-  size: 200, 100
-  orig: 200, 100
+  size: 44, 44
+  orig: 44, 44
   offset: 0, 0
   index: -1
 buttonUp
   rotate: false
-  xy: 303, 1203
-  size: 200, 100
-  orig: 200, 100
+  xy: 47, 1
+  size: 44, 44
+  orig: 44, 44
   offset: 0, 0
   index: -1

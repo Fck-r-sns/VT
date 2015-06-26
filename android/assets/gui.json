@@ -1,5 +1,6 @@
 {
-	com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
-		testButton: { down: buttonDown, up: buttonUp }
-	}
+com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
+	testButton: { down: buttonDown, up: buttonUp },
+	toggle: { down: buttonDown, checked: buttonDown, up: buttonUp }
+}
 }

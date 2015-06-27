@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.vt.game.CameraHelper;
 import com.vt.game.Constants;
+import com.vt.game.InputIntegrator;
 import com.vt.gameobjects.CameraTarget;
 import com.vt.gameobjects.GameObject;
 import com.vt.gameobjects.MovementPointer;
@@ -29,9 +30,11 @@ import com.vt.resources.Assets;
  */
 public class GameScreen implements Screen {
     private OrthographicCamera m_camera;
+    private OrthographicCamera m_cameraGui;
     private CameraHelper m_cameraHelper;
     private SpriteBatch m_spriteBatch;
     private Stage m_stage;
+    private Stage m_stageGui;
     private PlayerObject m_player;
     private MovementPointer m_movementPointer;
     private ViewPointer m_viewPointer;
@@ -41,16 +44,23 @@ public class GameScreen implements Screen {
     private Level m_level;
 
     public GameScreen() {
+        Constants.SCREEN_RATIO = (float) Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth();
         m_spriteBatch = new SpriteBatch();
         m_camera = new OrthographicCamera();
         m_cameraHelper = new CameraHelper(m_camera);
         m_stage = new Stage(new ScreenViewport(m_camera), m_spriteBatch); // stage overwrites camera's viewport
         m_camera.setToOrtho(false,
                 Constants.VIEWPORT_WIDTH,
-                Constants.VIEWPORT_WIDTH
-                        * Gdx.graphics.getHeight()
-                        / Gdx.graphics.getWidth());
+                Constants.VIEWPORT_WIDTH * Constants.SCREEN_RATIO);
         m_camera.update();
+
+        m_cameraGui = new OrthographicCamera();
+        m_stageGui = new Stage(new ScreenViewport(m_cameraGui), m_spriteBatch); // stage overwrites camera's viewport
+        m_cameraGui.setToOrtho(false,
+                Constants.GUI_VIEWPORT_WIDTH,
+                Constants.GUI_VIEWPORT_WIDTH * Constants.SCREEN_RATIO);
+        m_cameraGui.update();
+
         Assets.getInstance().init();
 
         m_level = new StubLevel(10, 10);
@@ -77,12 +87,15 @@ public class GameScreen implements Screen {
 
         m_stage.getRoot().addListener(m_movementPointer.getController().setActive(true));
         m_stage.getRoot().addListener(m_viewPointer.getController().setActive(false));
-        Gdx.input.setInputProcessor(m_stage);
 
         Group gui = new Group();
         m_button = new Button();
         gui.addActor(m_button);
-        m_button.setPosition(0, m_camera.viewportHeight, Align.topLeft);
+        m_button.setPosition(
+                Constants.BUTTON_MARGIN_X + 0,
+                Constants.BUTTON_MARGIN_Y + m_cameraGui.viewportHeight,
+                Align.topLeft
+        );
         m_button.addCaptureListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -99,7 +112,12 @@ public class GameScreen implements Screen {
                 m_movementPointer.getController().setActive(true);
             }
         });
-        m_stage.addActor(gui);
+        m_stageGui.addActor(gui);
+        Gdx.input.setInputProcessor(
+                new InputIntegrator()
+                        .addInputProcessor(m_stageGui)
+                        .addInputProcessor(m_stage)
+        );
     }
 
     @Override
@@ -118,10 +136,27 @@ public class GameScreen implements Screen {
         m_spriteBatch.end();
         m_stage.act(delta);
         m_stage.draw();
+
+        m_cameraGui.update(false);
+        m_spriteBatch.setProjectionMatrix(m_cameraGui.combined);
+        m_stageGui.act(delta);
+        m_stageGui.draw();
     }
 
     @Override
     public void resize(int width, int height) {
+        Constants.SCREEN_RATIO = (float) Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth();
+
+        m_camera.setToOrtho(false,
+                Constants.VIEWPORT_WIDTH,
+                Constants.VIEWPORT_WIDTH * Constants.SCREEN_RATIO);
+        m_camera.update();
+
+        m_cameraGui.setToOrtho(false,
+                Constants.GUI_VIEWPORT_WIDTH,
+                Constants.GUI_VIEWPORT_WIDTH * Constants.SCREEN_RATIO);
+        m_cameraGui.update();
+
     }
 
     @Override

@@ -5,6 +5,8 @@ package com.vt.game;
  */
 public class Constants {
     // game geometry ----------------------------------------------------------
+    public static float SCREEN_RATIO = 1.0f;
+
     public static final float VIEWPORT_WIDTH = 10.0f;
     public static final float PLAYER_WIDTH = 0.75f;
     public static final float PLAYER_HEIGHT = 0.75f;
@@ -15,10 +17,13 @@ public class Constants {
     public static final float VIEW_POINTER_WIDTH = 0.5f;
     public static final float VIEW_POINTER_HEIGHT = 0.5f;
 
+    public static final float GUI_VIEWPORT_WIDTH = 1000.0f;
     public static final float GUI_PANEL_WIDTH = 500;
     public static final float GUI_PANEL_HEIGHT = 1200;
-    public static final float BUTTON_WIDTH = 1.0f;
-    public static final float BUTTON_HEIGHT = 1.0f;
+    public static final float BUTTON_WIDTH = 100.0f;
+    public static final float BUTTON_HEIGHT = 100.0f;
+    public static final float BUTTON_MARGIN_X = 20.0f;
+    public static final float BUTTON_MARGIN_Y = -20.0f;
 
     public static final float TILE_SIZE = 1.0f;
     // ------------------------------------------------------------------------

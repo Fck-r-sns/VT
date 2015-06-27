@@ -31,6 +31,8 @@ public abstract class GameObject extends Actor {
 
     @Override
     public void draw (Batch batch, float parentAlpha) {
+        if (m_texture == null)
+            return;
         batch.draw(m_texture, getX(), getY(),
                 getOriginX(), getOriginY(),
                 getWidth(), getHeight(),

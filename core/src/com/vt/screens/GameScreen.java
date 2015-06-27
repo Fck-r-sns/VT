@@ -11,7 +11,10 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.vt.game.CameraHelper;
 import com.vt.game.Constants;
+import com.vt.gameobjects.CameraTarget;
+import com.vt.gameobjects.GameObject;
 import com.vt.gameobjects.MovementPointer;
 import com.vt.gameobjects.PlayerObject;
 import com.vt.gameobjects.ViewPointer;
@@ -26,11 +29,13 @@ import com.vt.resources.Assets;
  */
 public class GameScreen implements Screen {
     private OrthographicCamera m_camera;
+    private CameraHelper m_cameraHelper;
     private SpriteBatch m_spriteBatch;
     private Stage m_stage;
     private PlayerObject m_player;
     private MovementPointer m_movementPointer;
     private ViewPointer m_viewPointer;
+    private CameraTarget m_cameraTarget;
     private Button m_button;
 
     private Level m_level;
@@ -38,6 +43,7 @@ public class GameScreen implements Screen {
     public GameScreen() {
         m_spriteBatch = new SpriteBatch();
         m_camera = new OrthographicCamera();
+        m_cameraHelper = new CameraHelper(m_camera);
         m_stage = new Stage(new ScreenViewport(m_camera), m_spriteBatch); // stage overwrites camera's viewport
         m_camera.setToOrtho(false,
                 Constants.VIEWPORT_WIDTH,
@@ -63,6 +69,11 @@ public class GameScreen implements Screen {
         m_player.setPosition((m_camera.viewportWidth - m_player.getWidth()) / 2,
                 (m_camera.viewportHeight - m_player.getHeight()) / 2);
         m_stage.addActor(this.m_player);
+
+        m_cameraTarget = new CameraTarget(new GameObject[]{m_player, m_viewPointer});
+        m_cameraTarget.setPosition(m_player.getX(Align.center), m_player.getY(Align.center));
+        m_cameraHelper.setTarget(m_cameraTarget);
+        m_stage.addActor(m_cameraTarget);
 
         m_stage.getRoot().addListener(m_movementPointer.getController().setActive(true));
         m_stage.getRoot().addListener(m_viewPointer.getController().setActive(false));
@@ -97,6 +108,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        m_cameraHelper.update(delta);
         m_camera.update(false);
         m_spriteBatch.setProjectionMatrix(m_camera.combined);
         Gdx.gl.glClearColor(0, 0, 0, 1);

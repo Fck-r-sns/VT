@@ -11,8 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
  */
 public class CameraHelper {
     static final float DEFAULT_ZOOM = 1.0f;
-    static final float MIN_ZOOM = 0.1f;
-    static final float MAX_ZOOM = 10f;
+    static final float MIN_ZOOM = 0.5f;
+    static final float MAX_ZOOM = 2f;
 
     private OrthographicCamera m_camera;
     private Actor m_target;

@@ -20,7 +20,6 @@ import com.vt.gameobjects.MovementPointer;
 import com.vt.gameobjects.PlayerObject;
 import com.vt.gameobjects.ViewPointer;
 import com.vt.gameobjects.gui.Button;
-import com.vt.gameobjects.terrain.Floor;
 import com.vt.gameobjects.terrain.Level;
 import com.vt.gameobjects.terrain.StubLevel;
 import com.vt.resources.Assets;

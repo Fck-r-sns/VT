@@ -3,7 +3,6 @@ package com.vt.gameobjects;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
 
 /**
  * Created by Fck.r.sns on 04.05.2015.
@@ -11,9 +10,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 public abstract class GameObject extends Actor {
     boolean m_active;
     private TextureRegion m_texture;
+    private boolean m_usePositionCorrection = false;
 
     public GameObject() {
         setActive(true);
+    }
+
+    public void setUsePositionCorrection(boolean value) {
+        m_usePositionCorrection = value;
     }
 
     public void setTexture(TextureRegion texture) {
@@ -23,21 +27,27 @@ public abstract class GameObject extends Actor {
     public boolean isActive() {
         return m_active;
     }
-    
+
     public void setActive(boolean active) {
         m_active = active;
         setVisible(m_active);
     }
 
     @Override
-    public void draw (Batch batch, float parentAlpha) {
+    public void draw(Batch batch, float parentAlpha) {
         if (m_texture == null)
             return;
-        batch.draw(m_texture, getX(), getY(),
+        float xOffset = m_usePositionCorrection ? getWidth() / 2 - getOriginX() : 0.0f;
+        float yOffset = m_usePositionCorrection ? getHeight() / 2 - getOriginY() : 0.0f;
+        batch.draw(
+                m_texture,
+                getX() + xOffset,
+                getY() + yOffset,
                 getOriginX(), getOriginY(),
                 getWidth(), getHeight(),
                 getScaleX(), getScaleY(),
-                getRotation());
+                getRotation()
+        );
     }
 
     @Override
@@ -47,7 +57,7 @@ public abstract class GameObject extends Actor {
     }
 
     @Override
-    public void setRotation (float degrees) {
+    public void setRotation(float degrees) {
         if (degrees > 360) {
             super.setRotation(degrees - 360);
         } else if (degrees < 0) {

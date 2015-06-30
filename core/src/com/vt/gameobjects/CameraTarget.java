@@ -47,14 +47,14 @@ public class CameraTarget extends ActingGameObject {
 
         setBehavior(
                 new Arrive<Vector2>(this, m_posUpdater)
-                        .setDecelerationRadius(Constants.PLAYER_ARRIVAL_DECELERATION_RADIUS)
+                        .setDecelerationRadius(Constants.CAMERA_ARRIVAL_DECELERATION_RADIUS)
         );
     }
 
     @Override
     protected void update(float delta) {
         super.update(delta);
-        if (m_posUpdater.getPosition().dst(getPosition()) < Constants.PLAYER_ARRIVAL_TOLERANCE) {
+        if (m_posUpdater.getPosition().dst(getPosition()) < Constants.CAMERA_ARRIVAL_TOLERANCE) {
             m_linearVelocity.set(0, 0);
         }
     }

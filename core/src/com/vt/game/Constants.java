@@ -26,8 +26,8 @@ public class Constants {
     public static final float VIEW_BUTTON_HEIGHT = 100.0f;
     public static final float VIEW_BUTTON_MARGIN_X = 20.0f;
     public static final float VIEW_BUTTON_MARGIN_Y = -20.0f;
-    public static final float PAUSE_BUTTON_WIDTH = 100.0f;
-    public static final float PAUSE_BUTTON_HEIGHT = 100.0f;
+    public static final float PAUSE_BUTTON_WIDTH = 75.0f;
+    public static final float PAUSE_BUTTON_HEIGHT = 75.0f;
     public static final float PAUSE_BUTTON_MARGIN_X = VIEW_BUTTON_MARGIN_X + VIEW_BUTTON_WIDTH + 20.0f;
     public static final float PAUSE_BUTTON_MARGIN_Y = -20.0f;
     // ------------------------------------------------------------------------
@@ -73,5 +73,7 @@ public class Constants {
 
     public final static float PLAYER_ARRIVAL_TOLERANCE = 0.02f;
     public final static float PLAYER_ARRIVAL_DECELERATION_RADIUS = 1.6f;
+    public final static float CAMERA_ARRIVAL_TOLERANCE = 0.02f;
+    public final static float CAMERA_ARRIVAL_DECELERATION_RADIUS = 1.6f;
     // ------------------------------------------------------------------------
 }

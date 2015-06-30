@@ -1,4 +1,5 @@
-Add pause and button for it
+ViewPointer in one group with PlayerObject
 Add Wall tile
 Add wall collision check
 Add shooting and button for it
+Skeletal animation with interpolation

@@ -15,8 +15,8 @@ public class Panel extends GameObject {
         float width = height / Constants.GUI_PANEL_HEIGHT * Constants.GUI_PANEL_WIDTH;
         setSize(width, height);
         setOrigin(Align.topLeft);
-        setTexture(Assets.getInstance().gui.buttonUp);
-        this.setName(Constants.GUI_BUTTON_ACTOR_NAME);
+        setTexture(Assets.getInstance().gui.viewButtonUp);
+        this.setName(Constants.VIEW_BUTTON_ACTOR_NAME);
         this.setActive(true);
     }
 }

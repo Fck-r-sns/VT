@@ -14,8 +14,10 @@ import com.vt.game.Constants;
  */
 public class Assets implements Disposable, AssetErrorListener {
     public class Gui {
-        public TextureAtlas.AtlasRegion buttonUp;
-        public TextureAtlas.AtlasRegion buttonDown;
+        public TextureAtlas.AtlasRegion viewButtonUp;
+        public TextureAtlas.AtlasRegion viewButtonDown;
+        public TextureAtlas.AtlasRegion pauseButtonUp;
+        public TextureAtlas.AtlasRegion pauseButtonDown;
     }
 
     public class GameEntities {
@@ -67,8 +69,10 @@ public class Assets implements Disposable, AssetErrorListener {
             t.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         gui = new Gui();
-        gui.buttonUp = atlas.findRegion(Constants.BUTTON_UP_ASSET_NAME);
-        gui.buttonDown = atlas.findRegion(Constants.BUTTON_DOWN_ASSET_NAME);
+        gui.viewButtonUp = atlas.findRegion(Constants.VIEW_BUTTON_UP_ASSET_NAME);
+        gui.viewButtonDown = atlas.findRegion(Constants.VIEW_BUTTON_DOWN_ASSET_NAME);
+        gui.pauseButtonUp = atlas.findRegion(Constants.PAUSE_BUTTON_UP_ASSET_NAME);
+        gui.pauseButtonDown = atlas.findRegion(Constants.PAUSE_BUTTON_DOWN_ASSET_NAME);
 
         atlas = m_assetsManager.get(Constants.TERRAIN_ATLAS_PACK);
         for (Texture t : atlas.getTextures())

@@ -17,21 +17,27 @@ public class Constants {
     public static final float VIEW_POINTER_WIDTH = 0.5f;
     public static final float VIEW_POINTER_HEIGHT = 0.5f;
 
+    public static final float TILE_SIZE = 1.0f;
+
     public static final float GUI_VIEWPORT_WIDTH = 1000.0f;
     public static final float GUI_PANEL_WIDTH = 500;
     public static final float GUI_PANEL_HEIGHT = 1200;
-    public static final float BUTTON_WIDTH = 100.0f;
-    public static final float BUTTON_HEIGHT = 100.0f;
-    public static final float BUTTON_MARGIN_X = 20.0f;
-    public static final float BUTTON_MARGIN_Y = -20.0f;
-
-    public static final float TILE_SIZE = 1.0f;
+    public static final float VIEW_BUTTON_WIDTH = 100.0f;
+    public static final float VIEW_BUTTON_HEIGHT = 100.0f;
+    public static final float VIEW_BUTTON_MARGIN_X = 20.0f;
+    public static final float VIEW_BUTTON_MARGIN_Y = -20.0f;
+    public static final float PAUSE_BUTTON_WIDTH = 100.0f;
+    public static final float PAUSE_BUTTON_HEIGHT = 100.0f;
+    public static final float PAUSE_BUTTON_MARGIN_X = VIEW_BUTTON_MARGIN_X + VIEW_BUTTON_WIDTH + 20.0f;
+    public static final float PAUSE_BUTTON_MARGIN_Y = -20.0f;
     // ------------------------------------------------------------------------
 
     // resources --------------------------------------------------------------
     public static final String GUI_ATLAS_PACK = "gui.pack";
-    public static final String BUTTON_UP_ASSET_NAME = "buttonUp";
-    public static final String BUTTON_DOWN_ASSET_NAME = "buttonDown";
+    public static final String VIEW_BUTTON_UP_ASSET_NAME = "buttonUp";
+    public static final String VIEW_BUTTON_DOWN_ASSET_NAME = "buttonDown";
+    public static final String PAUSE_BUTTON_UP_ASSET_NAME = "buttonUp";
+    public static final String PAUSE_BUTTON_DOWN_ASSET_NAME = "buttonDown";
     public static final String GUI_SKIN = "gui.json";
 
     public static final String TEXTURE_ATLAS_PACK = "VT.pack";
@@ -52,7 +58,8 @@ public class Constants {
     public final static String VIEW_POINTER_ACTOR_NAME = "vp";
     public final static String CAMERA_TARGET_ACTOR_NAME = "ct";
 
-    public final static String GUI_BUTTON_ACTOR_NAME = "button";
+    public final static String VIEW_BUTTON_ACTOR_NAME = "vb";
+    public final static String PAUSE_BUTTON_ACTOR_NAME = "pb";
     // ------------------------------------------------------------------------
 
     // physics ----------------------------------------------------------------

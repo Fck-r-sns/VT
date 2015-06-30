@@ -19,7 +19,8 @@ import com.vt.gameobjects.GameObject;
 import com.vt.gameobjects.MovementPointer;
 import com.vt.gameobjects.PlayerObject;
 import com.vt.gameobjects.ViewPointer;
-import com.vt.gameobjects.gui.Button;
+import com.vt.gameobjects.gui.PauseButton;
+import com.vt.gameobjects.gui.ViewButton;
 import com.vt.gameobjects.terrain.Level;
 import com.vt.gameobjects.terrain.StubLevel;
 import com.vt.resources.Assets;
@@ -38,7 +39,9 @@ public class GameScreen implements Screen {
     private MovementPointer m_movementPointer;
     private ViewPointer m_viewPointer;
     private CameraTarget m_cameraTarget;
-    private Button m_button;
+    private ViewButton m_viewButton;
+    private PauseButton m_pauseButton;
+    boolean m_pause = false;
 
     private Level m_level;
 
@@ -88,14 +91,15 @@ public class GameScreen implements Screen {
         m_stage.getRoot().addListener(m_viewPointer.getController().setActive(false));
 
         Group gui = new Group();
-        m_button = new Button();
-        gui.addActor(m_button);
-        m_button.setPosition(
-                Constants.BUTTON_MARGIN_X + 0,
-                Constants.BUTTON_MARGIN_Y + m_cameraGui.viewportHeight,
+        m_stageGui.addActor(gui);
+        m_viewButton = new ViewButton();
+        gui.addActor(m_viewButton);
+        m_viewButton.setPosition(
+                Constants.VIEW_BUTTON_MARGIN_X + 0,
+                Constants.VIEW_BUTTON_MARGIN_Y + m_cameraGui.viewportHeight,
                 Align.topLeft
         );
-        m_button.addCaptureListener(new InputListener() {
+        m_viewButton.addCaptureListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 event.stop();
@@ -111,7 +115,22 @@ public class GameScreen implements Screen {
                 m_movementPointer.getController().setActive(true);
             }
         });
-        m_stageGui.addActor(gui);
+
+        m_pauseButton = new PauseButton();
+        gui.addActor(m_pauseButton);
+        m_pauseButton.setPosition(
+                Constants.PAUSE_BUTTON_MARGIN_X + 0,
+                Constants.PAUSE_BUTTON_MARGIN_Y + m_cameraGui.viewportHeight,
+                Align.topLeft
+        );
+        m_pauseButton.addCaptureListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                togglePause();
+                return true;
+            }
+        });
+
         Gdx.input.setInputProcessor(
                 new InputIntegrator()
                         .addInputProcessor(m_stageGui)
@@ -125,7 +144,12 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        m_cameraHelper.update(delta);
+        if (!isPaused()) {
+            m_cameraHelper.update(delta);
+            m_stage.act(delta);
+            m_stageGui.act(delta);
+        }
+
         m_camera.update(false);
         m_spriteBatch.setProjectionMatrix(m_camera.combined);
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -133,12 +157,10 @@ public class GameScreen implements Screen {
         m_spriteBatch.begin();
         m_level.draw(m_spriteBatch);
         m_spriteBatch.end();
-        m_stage.act(delta);
         m_stage.draw();
 
         m_cameraGui.update(false);
         m_spriteBatch.setProjectionMatrix(m_cameraGui.combined);
-        m_stageGui.act(delta);
         m_stageGui.draw();
     }
 
@@ -177,5 +199,17 @@ public class GameScreen implements Screen {
         m_stage.dispose();
         m_spriteBatch.dispose();
         Assets.getInstance().dispose();
+    }
+
+    public boolean isPaused() {
+        return m_pause;
+    }
+
+    public void setPause(boolean pause) {
+        m_pause = pause;
+    }
+
+    public void togglePause() {
+        m_pause = !m_pause;
     }
 }

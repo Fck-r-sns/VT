@@ -11,10 +11,7 @@ import com.vt.resources.Assets;
 
 public class Button extends GameObject {
     public Button() {
-        setSize(Constants.BUTTON_WIDTH, Constants.BUTTON_HEIGHT);
         setOrigin(Align.topLeft);
-        setTexture(Assets.getInstance().gui.buttonUp);
-        this.setName(Constants.GUI_BUTTON_ACTOR_NAME);
         this.setActive(true);
     }
 }

@@ -78,7 +78,7 @@ public class GameScreen implements Screen {
         m_stage.addActor(this.m_viewPointer);
 
         m_player = new PlayerObject(m_movementPointer, m_viewPointer);
-        m_player.setPosition((m_camera.viewportWidth - m_player.getWidth()) / 2,
+        m_player.setInitialPosition((m_camera.viewportWidth - m_player.getWidth()) / 2,
                 (m_camera.viewportHeight - m_player.getHeight()) / 2);
         m_stage.addActor(this.m_player);
 

@@ -2,6 +2,7 @@ package com.vt.gameobjects;
 
 import com.badlogic.gdx.ai.steer.behaviors.Arrive;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.vt.game.Constants;
 import com.vt.resources.Assets;
 
@@ -11,8 +12,11 @@ import com.vt.resources.Assets;
 public class PlayerObject extends ActingGameObject {
     private MovementPointer m_movementPointer;
     private ViewPointer m_viewPointer;
+    private Vector2 m_lastPosition;
+    private boolean m_keepRotation = true;
 
     public PlayerObject(MovementPointer mp, ViewPointer vp) {
+        m_lastPosition = new Vector2(0, 0);
         m_movementPointer = mp;
         m_viewPointer = vp;
 
@@ -29,6 +33,11 @@ public class PlayerObject extends ActingGameObject {
         );
     }
 
+    public void setInitialPosition(float x, float y) {
+        setPosition(x, y, Align.center);
+        updateLastPosition();
+    }
+
     @Override
     protected void update(float delta) {
         super.update(delta);
@@ -37,7 +46,22 @@ public class PlayerObject extends ActingGameObject {
             m_linearVelocity.set(0, 0);
         }
 
-        if (m_viewPointer.isActive())
+        if (m_viewPointer.isActive()) {
             setRotation(m_viewPointer.getPosition().sub(getPosition()).angle());
+            if (m_keepRotation) {
+                float newViewX = m_viewPointer.getX(Align.center) + getX(Align.center) - getLastPosition().x;
+                float newViewY = m_viewPointer.getY(Align.center) + getY(Align.center) - getLastPosition().y;
+                m_viewPointer.setPosition(newViewX, newViewY, Align.center);
+            }
+        }
+        updateLastPosition();
+    }
+
+    private void updateLastPosition() {
+        m_lastPosition.set(getX(Align.center), getY(Align.center));
+    }
+
+    private Vector2 getLastPosition() {
+        return m_lastPosition;
     }
 }

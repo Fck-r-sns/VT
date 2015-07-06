@@ -13,7 +13,7 @@ public class PlayerObject extends ActingGameObject {
     private MovementPointer m_movementPointer;
     private ViewPointer m_viewPointer;
     private Vector2 m_lastPosition;
-    private boolean m_keepRotation = true;
+    private boolean m_keepOrientation = true;
 
     public PlayerObject(MovementPointer mp, ViewPointer vp) {
         m_lastPosition = new Vector2(0, 0);
@@ -40,21 +40,22 @@ public class PlayerObject extends ActingGameObject {
 
     @Override
     protected void update(float delta) {
-        super.update(delta);
         if (m_movementPointer.getPosition().dst(getPosition()) < Constants.PLAYER_ARRIVAL_TOLERANCE) {
             m_movementPointer.setActive(false);
             m_linearVelocity.set(0, 0);
         }
 
         if (m_viewPointer.isActive()) {
-            setRotation(m_viewPointer.getPosition().sub(getPosition()).angle());
-            if (m_keepRotation) {
+            setRotationDeltaRelativeToCurrent(m_viewPointer.getPosition().sub(getPosition()).angle());
+            if (m_keepOrientation) {
                 float newViewX = m_viewPointer.getX(Align.center) + getX(Align.center) - getLastPosition().x;
                 float newViewY = m_viewPointer.getY(Align.center) + getY(Align.center) - getLastPosition().y;
                 m_viewPointer.setPosition(newViewX, newViewY, Align.center);
             }
         }
+
         updateLastPosition();
+        super.update(delta);
     }
 
     private void updateLastPosition() {

@@ -13,9 +13,10 @@ import com.vt.game.Constants;
  */
 public class ActingGameObject extends GameObject implements Steerable<Vector2> {
     protected Vector2 m_linearVelocity = new Vector2(); // pixels per second
-    protected float m_angularVelocity;
+    protected float m_angularVelocity = 0.0f;
     protected float m_boundingRadius;
     protected boolean m_tagged;
+    protected float m_rotationDelta = 0.0f;
 
     protected float m_maxLinearSpeed = Constants.MAX_LINEAR_SPEED_DEFAULT;
     protected float m_maxLinearAcceleration = Constants.MAX_LINEAR_ACCELERATION_DEFAULT;
@@ -40,8 +41,37 @@ public class ActingGameObject extends GameObject implements Steerable<Vector2> {
             setPosition(pos.x, pos.y, Align.center);
             m_linearVelocity.mulAdd(m_acceleration.linear, delta).limit(getMaxLinearSpeed());
 
-            setRotation(m_linearVelocity.angle());
+//            setRotation(m_linearVelocity.angle());
         }
+
+        if (Math.abs(m_rotationDelta) > 1) {
+            float signum = Math.signum(m_rotationDelta);
+            m_angularVelocity += getMaxAngularAcceleration() * delta * signum;
+            if (Math.abs(m_angularVelocity) > getMaxAngularSpeed())
+                m_angularVelocity = getMaxAngularSpeed() * signum;
+            float increment = Math.min(Math.abs(m_angularVelocity), Math.abs(m_rotationDelta)) * signum;
+            float rotation = getRotation();
+            rotation += increment;
+            setRotation(rotation);
+            m_rotationDelta -= increment;
+        } else {
+            m_angularVelocity = 0.0f;
+        }
+    }
+
+    public void setRotationDelta(float rotation) {
+        m_rotationDelta = rotation;
+    }
+
+    public void setRotationDeltaRelativeToCurrent(float rotation) {
+        float newRotationDelta = rotation - getRotation();
+        if (Math.abs(newRotationDelta) > 180)
+            newRotationDelta = Math.signum(newRotationDelta) * (Math.abs(newRotationDelta) - 360);
+        setRotationDelta(newRotationDelta);
+    }
+
+    public float getRotationDelta() {
+        return m_rotationDelta;
     }
 
     @Override

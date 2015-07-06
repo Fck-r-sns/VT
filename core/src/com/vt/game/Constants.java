@@ -26,8 +26,8 @@ public class Constants {
     public static final float VIEW_BUTTON_HEIGHT = 100.0f;
     public static final float VIEW_BUTTON_MARGIN_X = 20.0f;
     public static final float VIEW_BUTTON_MARGIN_Y = -20.0f;
-    public static final float PAUSE_BUTTON_WIDTH = 75.0f;
-    public static final float PAUSE_BUTTON_HEIGHT = 75.0f;
+    public static final float PAUSE_BUTTON_WIDTH = 100.0f;
+    public static final float PAUSE_BUTTON_HEIGHT = 100.0f;
     public static final float PAUSE_BUTTON_MARGIN_X = VIEW_BUTTON_MARGIN_X + VIEW_BUTTON_WIDTH + 20.0f;
     public static final float PAUSE_BUTTON_MARGIN_Y = -20.0f;
     // ------------------------------------------------------------------------
@@ -65,8 +65,8 @@ public class Constants {
     // physics ----------------------------------------------------------------
     public final static float MAX_LINEAR_SPEED_DEFAULT = 5;
     public final static float MAX_LINEAR_ACCELERATION_DEFAULT = 10;
-    public final static float MAX_ANGULAR_SPEED_DEFAULT = 5;
-    public final static float MAX_ANGULAR_ACCELERATION_DEFAULT = 10;
+    public final static float MAX_ANGULAR_SPEED_DEFAULT = 30;
+    public final static float MAX_ANGULAR_ACCELERATION_DEFAULT = 30;
 
     public final static float MAX_CAMERA_LINEAR_SPEED_DEFAULT = 8;
     public final static float MAX_CAMERA_LINEAR_ACCELERATION_DEFAULT = 14;

@@ -50,6 +50,9 @@ public class Constants {
     public static final String PLAIN_FLOOR_WITH_DOTS_LIGHT_ASSET_NAME = "tile2";
     public static final String PLAIN_FLOOR_DARK_ASSET_NAME = "tile16";
     public static final String PLAIN_FLOOR_WITH_DOTS_DARK_ASSET_NAME = "tile17";
+    public static final String WALL_STRIPED_CLEAN = "tile10";
+    public static final String WALL_STRIPED_DIRTY = "tile8";
+    public static final String WALL_ROCKY = "tile19";
     // ------------------------------------------------------------------------
 
     // actors -----------------------------------------------------------------

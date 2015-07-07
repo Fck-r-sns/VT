@@ -31,6 +31,9 @@ public class Assets implements Disposable, AssetErrorListener {
         public TextureAtlas.AtlasRegion plainFloorWithDotsLight;
         public TextureAtlas.AtlasRegion plainFloorDark;
         public TextureAtlas.AtlasRegion plainFloorWithDotsDark;
+        public TextureAtlas.AtlasRegion wallStripedClean;
+        public TextureAtlas.AtlasRegion wallStripedDirty;
+        public TextureAtlas.AtlasRegion wallRocky;
     }
 
     public GameEntities gameEntities;
@@ -83,6 +86,9 @@ public class Assets implements Disposable, AssetErrorListener {
         terrain.plainFloorWithDotsLight = atlas.findRegion(Constants.PLAIN_FLOOR_WITH_DOTS_LIGHT_ASSET_NAME);
         terrain.plainFloorDark = atlas.findRegion(Constants.PLAIN_FLOOR_DARK_ASSET_NAME);
         terrain.plainFloorWithDotsDark = atlas.findRegion(Constants.PLAIN_FLOOR_WITH_DOTS_DARK_ASSET_NAME);
+        terrain.wallStripedClean = atlas.findRegion(Constants.WALL_STRIPED_CLEAN);
+        terrain.wallStripedDirty = atlas.findRegion(Constants.WALL_STRIPED_DIRTY);
+        terrain.wallRocky = atlas.findRegion(Constants.WALL_ROCKY);
     }
 
     @Override

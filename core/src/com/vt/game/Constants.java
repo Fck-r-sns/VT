@@ -38,7 +38,6 @@ public class Constants {
     public static final String VIEW_BUTTON_DOWN_ASSET_NAME = "buttonDown";
     public static final String PAUSE_BUTTON_UP_ASSET_NAME = "buttonUp";
     public static final String PAUSE_BUTTON_DOWN_ASSET_NAME = "buttonDown";
-    public static final String GUI_SKIN = "gui.json";
 
     public static final String TEXTURE_ATLAS_PACK = "VT.pack";
     public static final String PLAYER_ASSET_NAME = "marine_rifle";
@@ -53,6 +52,10 @@ public class Constants {
     public static final String WALL_STRIPED_CLEAN = "tile10";
     public static final String WALL_STRIPED_DIRTY = "tile8";
     public static final String WALL_ROCKY = "tile19";
+    public static final String BOX_GREY_ROWS = "tile7";
+    public static final String BOX_GREY_CROSS = "tile6";
+    public static final String BOX_BROWN_ROWS = "tile4";
+    public static final String BOX_BROWN_CROSS = "tile3";
     // ------------------------------------------------------------------------
 
     // actors -----------------------------------------------------------------

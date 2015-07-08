@@ -5,6 +5,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -13,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.vt.game.CameraHelper;
 import com.vt.game.Constants;
+import com.vt.game.Environment;
 import com.vt.game.InputIntegrator;
 import com.vt.gameobjects.CameraTarget;
 import com.vt.gameobjects.GameObject;
@@ -23,6 +26,7 @@ import com.vt.gameobjects.gui.PauseButton;
 import com.vt.gameobjects.gui.ViewButton;
 import com.vt.gameobjects.terrain.AbstractLevel;
 import com.vt.gameobjects.terrain.LevelFactory;
+import com.vt.physics.CollisionManager;
 import com.vt.resources.Assets;
 
 /**
@@ -42,6 +46,8 @@ public class GameScreen implements Screen {
     private ViewButton m_viewButton;
     private PauseButton m_pauseButton;
     boolean m_pause = false;
+
+    private ShapeRenderer renderer = new ShapeRenderer();
 
     private AbstractLevel m_level;
 
@@ -145,7 +151,10 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        Environment.getInstance().globalTime += delta;
+
         if (!isPaused()) {
+            CollisionManager.getInstance().update(delta);
             m_cameraHelper.update(delta);
             m_stage.act(delta);
             m_stageGui.act(delta);
@@ -163,6 +172,17 @@ public class GameScreen implements Screen {
         m_cameraGui.update(false);
         m_spriteBatch.setProjectionMatrix(m_cameraGui.combined);
         m_stageGui.draw();
+
+        if (Environment.getInstance().debugMode) {
+            renderer.setProjectionMatrix(m_camera.combined);
+            Circle c = m_player.getBoundingShape();
+            renderer.begin(ShapeRenderer.ShapeType.Line);
+            renderer.setColor(1, 1, 1, 1);
+            renderer.rect(m_player.getX(), m_player.getY(), m_player.getOriginX(), m_player.getOriginY(),
+                    m_player.getWidth(), m_player.getHeight(), 1, 1, m_player.getRotation());
+            renderer.circle(c.x, c.y, c.radius, 20);
+            renderer.end();
+        }
     }
 
     @Override
@@ -178,7 +198,6 @@ public class GameScreen implements Screen {
                 Constants.GUI_VIEWPORT_WIDTH,
                 Constants.GUI_VIEWPORT_WIDTH * Constants.SCREEN_RATIO);
         m_cameraGui.update();
-
     }
 
     @Override

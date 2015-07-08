@@ -53,6 +53,14 @@ public abstract class Tile {
         return m_position;
     }
 
+    public float getPositionCenterX() {
+        return m_position.x + m_size.x / 2.0f;
+    }
+
+    public float getPositionCenterY() {
+        return m_position.y + m_size.y / 2.0f;
+    }
+
     public void setBoundinRect(Vector2 rect) {
         m_boundingRect = rect;
     }

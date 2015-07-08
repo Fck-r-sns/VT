@@ -34,6 +34,11 @@ public class Assets implements Disposable, AssetErrorListener {
         public TextureAtlas.AtlasRegion wallStripedClean;
         public TextureAtlas.AtlasRegion wallStripedDirty;
         public TextureAtlas.AtlasRegion wallRocky;
+        public TextureAtlas.AtlasRegion boxGreyRows;
+        public TextureAtlas.AtlasRegion boxGreyCross;
+        public TextureAtlas.AtlasRegion boxBrownRows;
+        public TextureAtlas.AtlasRegion boxBrownCross;
+
     }
 
     public GameEntities gameEntities;
@@ -89,6 +94,10 @@ public class Assets implements Disposable, AssetErrorListener {
         terrain.wallStripedClean = atlas.findRegion(Constants.WALL_STRIPED_CLEAN);
         terrain.wallStripedDirty = atlas.findRegion(Constants.WALL_STRIPED_DIRTY);
         terrain.wallRocky = atlas.findRegion(Constants.WALL_ROCKY);
+        terrain.boxGreyRows = atlas.findRegion(Constants.BOX_GREY_ROWS);
+        terrain.boxGreyCross = atlas.findRegion(Constants.BOX_GREY_CROSS);
+        terrain.boxBrownRows = atlas.findRegion(Constants.BOX_BROWN_ROWS);
+        terrain.boxBrownCross = atlas.findRegion(Constants.BOX_BROWN_CROSS);
     }
 
     @Override

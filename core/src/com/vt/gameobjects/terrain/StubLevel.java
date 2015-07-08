@@ -15,5 +15,6 @@ public class StubLevel extends AbstractLevel {
                 m_tiles.put(new Vector2(column, row), tile);
             }
         }
+        setPlayerPosition(width * Constants.TILE_SIZE / 2.0f, height * Constants.TILE_SIZE / 2.0f);
     }
 }

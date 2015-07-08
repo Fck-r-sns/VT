@@ -89,6 +89,7 @@ public class Constants {
 
         public final static int FLOOR_CODE = '0';
         public final static int WALL_CODE = '1';
+        public final static int PLAYER_START_POS_CODE = 'S';
     }
     // ------------------------------------------------------------------------
 }

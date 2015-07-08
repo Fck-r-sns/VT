@@ -75,18 +75,15 @@ public class GameScreen implements Screen {
         m_level = LevelFactory.createFromTextFile(Constants.Level.LEVEL_TEST_FILE);
 
         m_movementPointer = new MovementPointer();
-        m_movementPointer.setPosition((m_camera.viewportWidth - m_movementPointer.getWidth()) / 2,
-                (m_camera.viewportHeight - m_movementPointer.getHeight()) / 2);
         m_stage.addActor(this.m_movementPointer);
 
         m_viewPointer = new ViewPointer();
-        m_viewPointer.setPosition((m_camera.viewportWidth - m_viewPointer.getWidth()) / 2,
-                (m_camera.viewportHeight - m_viewPointer.getHeight()) / 2);
         m_stage.addActor(this.m_viewPointer);
 
         m_player = new PlayerObject(m_movementPointer, m_viewPointer);
-        m_player.setInitialPosition((m_camera.viewportWidth - m_player.getWidth()) / 2,
-                (m_camera.viewportHeight - m_player.getHeight()) / 2);
+        m_player.setInitialPosition(m_level.getPlayerPosition().x, m_level.getPlayerPosition().y);
+        m_movementPointer.setPosition(m_player.getX(Align.center), m_player.getY(Align.center));
+        m_viewPointer.setPosition(m_player.getX(Align.center), m_player.getY(Align.center));
         m_stage.addActor(this.m_player);
 
         m_cameraTarget = new CameraTarget(new GameObject[]{m_player, m_viewPointer});

@@ -30,6 +30,10 @@ public class LevelFactory {
             for (char symbol : row.toCharArray()) {
                 Tile tile = null;
                 switch (symbol) {
+                    case Constants.Level.PLAYER_START_POS_CODE:
+                        tile = TileFactory.create(Tile.Type.Floor);
+                        level.setPlayerPosition((xPos + 0.5f ) * Constants.TILE_SIZE, (yPos + 0.5f ) * Constants.TILE_SIZE);
+                        break;
                     case Constants.Level.FLOOR_CODE:
                         tile = TileFactory.create(Tile.Type.Floor);
                         break;

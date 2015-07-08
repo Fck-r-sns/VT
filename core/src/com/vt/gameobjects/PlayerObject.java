@@ -34,7 +34,7 @@ public class PlayerObject extends ActingGameObject {
                         .setDecelerationRadius(Constants.PLAYER_ARRIVAL_DECELERATION_RADIUS)
         );
 
-        m_boundingRadius = 0.375f;
+        m_boundingRadius = Constants.PLAYER_BOUNDING_RADIUS;
         CollisionManager.getInstance().registerDynamicCollidableObject(this);
     }
 

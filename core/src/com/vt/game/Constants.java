@@ -10,6 +10,7 @@ public class Constants {
     public static final float VIEWPORT_WIDTH = 10.0f;
     public static final float PLAYER_WIDTH = 0.75f;
     public static final float PLAYER_HEIGHT = 0.75f;
+    public static final float PLAYER_BOUNDING_RADIUS = 0.375f;
     public static final float PLAYER_ORIGIN_X = 0.25f; // in % of width
     public static final float PLAYER_ORIGIN_Y = 0.50f; // in % of height
     public static final float MOVEMENT_POINTER_HEIGHT = 0.5f;

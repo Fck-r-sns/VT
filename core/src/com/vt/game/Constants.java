@@ -79,4 +79,13 @@ public class Constants {
     public final static float CAMERA_ARRIVAL_TOLERANCE = 0.02f;
     public final static float CAMERA_ARRIVAL_DECELERATION_RADIUS = 1.6f;
     // ------------------------------------------------------------------------
+
+    // terrain ----------------------------------------------------------------
+    static public class Level {
+        public final static String LEVEL_TEST_FILE = "levels/test";
+
+        public final static int FLOOR_CODE = '0';
+        public final static int WALL_CODE = '1';
+    }
+    // ------------------------------------------------------------------------
 }

@@ -21,8 +21,8 @@ import com.vt.gameobjects.PlayerObject;
 import com.vt.gameobjects.ViewPointer;
 import com.vt.gameobjects.gui.PauseButton;
 import com.vt.gameobjects.gui.ViewButton;
-import com.vt.gameobjects.terrain.Level;
-import com.vt.gameobjects.terrain.StubLevel;
+import com.vt.gameobjects.terrain.AbstractLevel;
+import com.vt.gameobjects.terrain.LevelFactory;
 import com.vt.resources.Assets;
 
 /**
@@ -43,7 +43,7 @@ public class GameScreen implements Screen {
     private PauseButton m_pauseButton;
     boolean m_pause = false;
 
-    private Level m_level;
+    private AbstractLevel m_level;
 
     public GameScreen() {
         Constants.SCREEN_RATIO = (float) Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth();
@@ -65,7 +65,8 @@ public class GameScreen implements Screen {
 
         Assets.getInstance().init();
 
-        m_level = new StubLevel(10, 10);
+//        m_level = LevelFactory.createStub(10, 10);
+        m_level = LevelFactory.createFromTextFile(Constants.Level.LEVEL_TEST_FILE);
 
         m_movementPointer = new MovementPointer();
         m_movementPointer.setPosition((m_camera.viewportWidth - m_movementPointer.getWidth()) / 2,

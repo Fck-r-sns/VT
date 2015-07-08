@@ -9,9 +9,9 @@ public interface Spatial {
     public Vector2 getPosition();
     public void setPosition(float x, float y);
     public float getX();
-    public float getX(int align);
+    public float getX(int alignment);
     public float getY();
-    public float getY(int align);
+    public float getY(int alignment);
     public float getWidth();
     public float getHeight();
 }

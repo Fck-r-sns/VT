@@ -31,10 +31,10 @@ public class LevelFactory {
                 Tile tile = null;
                 switch (symbol) {
                     case Constants.Level.FLOOR_CODE:
-                        tile = new Floor();
+                        tile = TileFactory.create(Tile.Type.Floor);
                         break;
                     case Constants.Level.WALL_CODE:
-                        tile = new Wall();
+                        tile = TileFactory.create(Tile.Type.Wall);
                         break;
                     default:
                         break;

@@ -8,8 +8,8 @@ import com.vt.physics.colliders.Collidable;
  */
 public class CollisionManager {
     private static CollisionManager instance = null;
-    private Array<Collidable> m_staticCollidables;
-    private Array<Collidable> m_dynamicCollidables;
+    private Array<Collidable> m_staticCollidables = new Array<Collidable>(32);
+    private Array<Collidable> m_dynamicCollidables = new Array<Collidable>(32);
 
     public static CollisionManager getInstance() {
         if (instance == null)
@@ -18,8 +18,6 @@ public class CollisionManager {
     }
 
     private CollisionManager() {
-        m_staticCollidables = new Array<Collidable>(32);
-        m_dynamicCollidables = new Array<Collidable>(32);
     }
 
     public void update(float delta) {

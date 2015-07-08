@@ -1,20 +1,16 @@
 package com.vt.gameobjects;
 
 import com.badlogic.gdx.ai.steer.behaviors.Arrive;
-import com.badlogic.gdx.math.Circle;
-import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.vt.game.Constants;
-import com.vt.physics.colliders.Collidable;
 import com.vt.physics.CollisionManager;
 import com.vt.resources.Assets;
 
 /**
  * Created by Fck.r.sns on 16.05.2015.
  */
-public class PlayerObject extends ActingGameObject implements Collidable {
+public class PlayerObject extends ActingGameObject {
     private MovementPointer m_movementPointer;
     private ViewPointer m_viewPointer;
     private Vector2 m_lastPosition;
@@ -73,94 +69,5 @@ public class PlayerObject extends ActingGameObject implements Collidable {
 
     private Vector2 getLastPosition() {
         return m_lastPosition;
-    }
-
-    @Override
-    public Type getColliderType() {
-        return Type.ActingObject;
-    }
-
-    @Override
-    public Circle getBoundingShape() {
-        return new Circle(getX() + getOriginX(), getY() + getOriginY(), getBoundingRadius());
-//        return new Circle(getX(), getY(), getBoundingRadius());
-    }
-
-    @Override
-    public void onCollision(Collidable other) {
-        switch (other.getColliderType()) {
-            case Wall: {
-                float otherLeft = other.getCenterX() - other.getWidth() / 2.0f;
-                float otherRight = other.getCenterX() + other.getWidth() / 2.0f;
-                float otherTop = other.getCenterY() + other.getHeight() / 2.0f;
-                float otherBottom = other.getCenterY() - other.getHeight() / 2.0f;
-                final float offset = other.getWidth() * 0.05f;
-                final float offset2 = other.getWidth() * 0.2f;
-                final float vel = 0.0f;
-
-                if (Intersector.intersectSegmentCircle(
-                        new Vector2(otherLeft - offset2, otherBottom + offset),
-                        new Vector2(otherLeft - offset2, otherTop - offset),
-                        new Vector2(getCenterX(), getCenterY()),
-                        getBoundingRadius() * getBoundingRadius()
-                )
-                        && m_linearVelocity.x > 0)
-                    m_linearVelocity.x = -vel;
-
-                else if (Intersector.intersectSegmentCircle(
-                        new Vector2(otherRight + offset2, otherBottom + offset),
-                        new Vector2(otherRight + offset2, otherTop - offset),
-                        new Vector2(getCenterX(), getCenterY()),
-                        getBoundingRadius() * getBoundingRadius()
-                )
-                        && m_linearVelocity.x < 0)
-                    m_linearVelocity.x = vel;
-
-                if (Intersector.intersectSegmentCircle(
-                        new Vector2(otherLeft + offset, otherBottom - offset2),
-                        new Vector2(otherRight - offset, otherBottom - offset2),
-                        new Vector2(getCenterX(), getCenterY()),
-                        getBoundingRadius() * getBoundingRadius()
-                )
-                        && m_linearVelocity.y > 0)
-                    m_linearVelocity.y = -vel;
-                else if (Intersector.intersectSegmentCircle(
-                        new Vector2(otherLeft + offset, otherTop + offset2),
-                        new Vector2(otherRight - offset, otherTop + offset2),
-                        new Vector2(getCenterX(), getCenterY()),
-                        getBoundingRadius() * getBoundingRadius()
-                )
-                        && m_linearVelocity.y < 0)
-                    m_linearVelocity.y = vel;
-            }
-            break;
-            default:
-                break;
-        }
-    }
-
-    @Override
-    public boolean checkCollision(Collidable other) {
-        return other.checkShapeCollision(getBoundingShape());
-    }
-
-    @Override
-    public boolean checkShapeCollision(Circle circle) {
-        return Intersector.overlaps(getBoundingShape(), circle);
-    }
-
-    @Override
-    public boolean checkShapeCollision(Rectangle rectangle) {
-        return Intersector.overlaps(getBoundingShape(), rectangle);
-    }
-
-    @Override
-    public float getCenterX() {
-        return getX(Align.center);
-    }
-
-    @Override
-    public float getCenterY() {
-        return getY(Align.center);
     }
 }

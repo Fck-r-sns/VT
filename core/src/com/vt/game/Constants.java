@@ -6,6 +6,7 @@ package com.vt.game;
 public class Constants {
     // game geometry ----------------------------------------------------------
     public static float SCREEN_RATIO = 1.0f;
+    public static final int ALIGN_ORIGIN = -1;
 
     public static final float VIEWPORT_WIDTH = 10.0f;
     public static final float PLAYER_WIDTH = 0.75f;

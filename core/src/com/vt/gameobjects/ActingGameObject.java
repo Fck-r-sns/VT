@@ -42,7 +42,7 @@ public class ActingGameObject extends GameObject implements Steerable<Vector2>, 
 
             Vector2 pos = getPosition();
             pos.mulAdd(m_linearVelocity, delta);
-            setPosition(pos.x, pos.y, Align.center);
+            setPosition(pos.x, pos.y, Constants.ALIGN_ORIGIN);
             m_linearVelocity.mulAdd(m_acceleration.linear, delta).limit(getMaxLinearSpeed());
 
 //            setRotation(m_linearVelocity.angle());
@@ -80,7 +80,23 @@ public class ActingGameObject extends GameObject implements Steerable<Vector2>, 
 
     @Override
     public Vector2 getPosition() {
-        return new Vector2(getX(Align.center), getY(Align.center));
+        return new Vector2(getX() + getOriginX(), getY() + getOriginY());
+    }
+
+    @Override
+    public void setPosition(float x, float y, int alignment) {
+        if (alignment == Constants.ALIGN_ORIGIN) {
+            x -= getOriginX();
+            y -= getOriginY();
+            super.setPosition(x, y);
+        } else {
+            super.setPosition(x, y, alignment);
+        }
+    }
+
+    @Override
+    public void setPosition(float x, float y) {
+        setPosition(x, y, Constants.ALIGN_ORIGIN);
     }
 
     @Override

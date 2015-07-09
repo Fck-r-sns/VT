@@ -46,7 +46,7 @@ public class PlayerObject extends ActingGameObject {
 
     @Override
     protected void update(float delta) {
-        if (m_movementPointer.getPosition().dst(getOriginX(), getOriginY()) < Constants.PLAYER_ARRIVAL_TOLERANCE) {
+        if (m_movementPointer.getPosition().dst(getPosition()) < Constants.PLAYER_ARRIVAL_TOLERANCE) {
             m_movementPointer.setActive(false);
             m_linearVelocity.set(0, 0);
         }

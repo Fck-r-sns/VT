@@ -66,6 +66,6 @@ public abstract class GameObject extends Actor implements Spatial {
 
     @Override
     public Vector2 getPosition() {
-        return new Vector2(getX(), getY());
+        return new Vector2(getX() + getOriginX(), getY() + getOriginY());
     }
 }

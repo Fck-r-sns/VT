@@ -23,8 +23,12 @@ public class PlayerObject extends ActingGameObject {
         m_movementPointer = mp;
         m_viewPointer = vp;
 
+        m_maxLinearSpeed = Constants.MAX_PLAYER_LINEAR_SPEED;
+        m_maxLinearAcceleration = Constants.MAX_PLAYER_LINEAR_ACCELERATION;
+        m_maxAngularSpeed = Constants.MAX_PLAYER_ANGULAR_SPEED;
+        m_maxAngularAcceleration = Constants.MAX_PLAYER_ANGULAR_ACCELERATION;
+
         setSize(Constants.PLAYER_WIDTH, Constants.PLAYER_HEIGHT);
-//        setOrigin(Align.center);
         setOrigin(Constants.PLAYER_ORIGIN_X * Constants.PLAYER_WIDTH,
                 Constants.PLAYER_ORIGIN_Y * Constants.PLAYER_HEIGHT);
         setTexture(Assets.getInstance().gameEntities.player);

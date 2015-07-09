@@ -71,7 +71,6 @@ public class GameScreen implements Screen {
 
         Assets.getInstance().init();
 
-//        m_level = LevelFactory.createStub(10, 10);
         m_level = LevelFactory.createFromTextFile(Constants.Level.LEVEL_TEST_FILE);
 
         m_movementPointer = new MovementPointer();

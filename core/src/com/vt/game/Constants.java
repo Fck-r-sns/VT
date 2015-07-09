@@ -10,7 +10,7 @@ public class Constants {
     public static final float VIEWPORT_WIDTH = 10.0f;
     public static final float PLAYER_WIDTH = 0.75f;
     public static final float PLAYER_HEIGHT = 0.75f;
-    public static final float PLAYER_BOUNDING_RADIUS = 0.375f;
+    public static final float PLAYER_BOUNDING_RADIUS = 0.3f;
     public static final float PLAYER_ORIGIN_X = 0.25f; // in % of width
     public static final float PLAYER_ORIGIN_Y = 0.50f; // in % of height
     public static final float MOVEMENT_POINTER_HEIGHT = 0.5f;
@@ -70,8 +70,8 @@ public class Constants {
     // ------------------------------------------------------------------------
 
     // physics ----------------------------------------------------------------
-    public final static float MAX_LINEAR_SPEED_DEFAULT = 5;
-    public final static float MAX_LINEAR_ACCELERATION_DEFAULT = 10;
+    public final static float MAX_LINEAR_SPEED_DEFAULT = 2.5f;
+    public final static float MAX_LINEAR_ACCELERATION_DEFAULT = 4.0f;
     public final static float MAX_ANGULAR_SPEED_DEFAULT = 30;
     public final static float MAX_ANGULAR_ACCELERATION_DEFAULT = 30;
 
@@ -79,7 +79,7 @@ public class Constants {
     public final static float MAX_CAMERA_LINEAR_ACCELERATION_DEFAULT = 14;
 
     public final static float PLAYER_ARRIVAL_TOLERANCE = 0.02f;
-    public final static float PLAYER_ARRIVAL_DECELERATION_RADIUS = 1.6f;
+    public final static float PLAYER_ARRIVAL_DECELERATION_RADIUS = 1.0f;
     public final static float CAMERA_ARRIVAL_TOLERANCE = 0.02f;
     public final static float CAMERA_ARRIVAL_DECELERATION_RADIUS = 1.6f;
     // ------------------------------------------------------------------------

@@ -1,4 +1,4 @@
-package com.vt.gameobjects;
+package com.vt.gameobjects.pointers;
 
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 

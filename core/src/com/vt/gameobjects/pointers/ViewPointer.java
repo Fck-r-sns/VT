@@ -1,4 +1,4 @@
-package com.vt.gameobjects;
+package com.vt.gameobjects.pointers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.vt.game.Constants;
+import com.vt.gameobjects.GameObject;
 import com.vt.resources.Assets;
 
 /**

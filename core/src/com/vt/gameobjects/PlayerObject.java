@@ -1,12 +1,12 @@
 package com.vt.gameobjects;
 
-import com.badlogic.gdx.ai.steer.behaviors.Arrive;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.vt.game.Constants;
 import com.vt.gameobjects.pointers.MovementPointer;
 import com.vt.gameobjects.pointers.ViewPointer;
 import com.vt.physics.CollisionManager;
+import com.vt.physics.behavior.CustomArrive;
 import com.vt.resources.Assets;
 
 /**
@@ -35,7 +35,7 @@ public class PlayerObject extends ActingGameObject {
         this.setName(Constants.PLAYER_ACTOR_NAME);
 
         setBehavior(
-                new Arrive<Vector2>(this, m_movementPointer)
+                new CustomArrive(this, m_movementPointer)
                         .setDecelerationRadius(Constants.PLAYER_ARRIVAL_DECELERATION_RADIUS)
         );
 

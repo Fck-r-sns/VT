@@ -81,8 +81,8 @@ public class Constants {
     public final static float MAX_PLAYER_ANGULAR_SPEED = 30;
     public final static float MAX_PLAYER_ANGULAR_ACCELERATION = 30;
 
-    public final static float PLAYER_ARRIVAL_TOLERANCE = 0.02f;
-    public final static float PLAYER_ARRIVAL_DECELERATION_RADIUS = 1.0f;
+    public final static float PLAYER_ARRIVAL_TOLERANCE = 0.08f;
+    public final static float PLAYER_ARRIVAL_DECELERATION_RADIUS = 1.6f;
 
     public final static float MAX_CAMERA_LINEAR_SPEED_DEFAULT = 8;
     public final static float MAX_CAMERA_LINEAR_ACCELERATION_DEFAULT = 14;

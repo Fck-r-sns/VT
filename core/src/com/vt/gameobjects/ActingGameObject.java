@@ -182,46 +182,42 @@ public class ActingGameObject extends GameObject implements Steerable<Vector2>, 
     public void onCollision(Collidable other) {
         switch (other.getColliderType()) {
             case Wall: {
-                float otherLeft = other.getX(Align.center) - other.getWidth() / 2.0f;
-                float otherRight = other.getX(Align.center) + other.getWidth() / 2.0f;
-                float otherTop = other.getY(Align.center) + other.getHeight() / 2.0f;
-                float otherBottom = other.getY(Align.center) - other.getHeight() / 2.0f;
-                final float offset = other.getWidth() * 0.05f;
-                final float offset2 = other.getWidth() * 0.2f;
+                Circle c = getBoundingShape();
+                float x = c.x;
+                float y = c.y;
+                float r = c.radius;
+                float otherLeft = other.getX(Align.left);
+                float otherRight = other.getX(Align.right);
+                float otherTop = other.getY(Align.top);
+                float otherBottom = other.getY(Align.bottom);
+                final float offset = other.getWidth() * 0.1f;
+                final float offset2 = other.getWidth() * 0.3f;
                 final float vel = 0.0f;
 
                 if (Intersector.intersectSegmentCircle(
                         new Vector2(otherLeft - offset2, otherBottom + offset),
                         new Vector2(otherLeft - offset2, otherTop - offset),
-                        new Vector2(getX(Align.center), getY(Align.center)),
-                        getBoundingRadius() * getBoundingRadius()
-                )
+                        new Vector2(x, y), r*r)
                         && m_linearVelocity.x > 0)
                     m_linearVelocity.x = -vel;
 
                 else if (Intersector.intersectSegmentCircle(
                         new Vector2(otherRight + offset2, otherBottom + offset),
                         new Vector2(otherRight + offset2, otherTop - offset),
-                        new Vector2(getX(Align.center), getY(Align.center)),
-                        getBoundingRadius() * getBoundingRadius()
-                )
+                        new Vector2(x, y), r*r)
                         && m_linearVelocity.x < 0)
                     m_linearVelocity.x = vel;
 
                 if (Intersector.intersectSegmentCircle(
                         new Vector2(otherLeft + offset, otherBottom - offset2),
                         new Vector2(otherRight - offset, otherBottom - offset2),
-                        new Vector2(getX(Align.center), getY(Align.center)),
-                        getBoundingRadius() * getBoundingRadius()
-                )
+                        new Vector2(x, y), r*r)
                         && m_linearVelocity.y > 0)
                     m_linearVelocity.y = -vel;
                 else if (Intersector.intersectSegmentCircle(
                         new Vector2(otherLeft + offset, otherTop + offset2),
                         new Vector2(otherRight - offset, otherTop + offset2),
-                        new Vector2(getX(Align.center), getY(Align.center)),
-                        getBoundingRadius() * getBoundingRadius()
-                )
+                        new Vector2(x, y), r*r)
                         && m_linearVelocity.y < 0)
                     m_linearVelocity.y = vel;
             }

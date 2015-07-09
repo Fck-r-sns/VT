@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.vt.game.Constants;
 import com.vt.physics.colliders.Collidable;
 
@@ -97,6 +98,16 @@ public class Tile implements Collidable {
     @Override
     public float getHeight() {
         return m_size.y;
+    }
+
+    @Override
+    public float getOriginX() {
+        return getX(Align.center);
+    }
+
+    @Override
+    public float getOriginY() {
+        return getY(Align.center);
     }
 
     @Override

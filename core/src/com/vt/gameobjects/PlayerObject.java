@@ -4,6 +4,8 @@ import com.badlogic.gdx.ai.steer.behaviors.Arrive;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.vt.game.Constants;
+import com.vt.gameobjects.pointers.MovementPointer;
+import com.vt.gameobjects.pointers.ViewPointer;
 import com.vt.physics.CollisionManager;
 import com.vt.resources.Assets;
 
@@ -22,10 +24,9 @@ public class PlayerObject extends ActingGameObject {
         m_viewPointer = vp;
 
         setSize(Constants.PLAYER_WIDTH, Constants.PLAYER_HEIGHT);
-        setOrigin(Align.center);
-//        setOrigin(Constants.PLAYER_ORIGIN_X * Constants.PLAYER_WIDTH,
-//                Constants.PLAYER_ORIGIN_Y * Constants.PLAYER_HEIGHT);
-        setUsePositionCorrection(false);
+//        setOrigin(Align.center);
+        setOrigin(Constants.PLAYER_ORIGIN_X * Constants.PLAYER_WIDTH,
+                Constants.PLAYER_ORIGIN_Y * Constants.PLAYER_HEIGHT);
         setTexture(Assets.getInstance().gameEntities.player);
         this.setName(Constants.PLAYER_ACTOR_NAME);
 
@@ -45,7 +46,7 @@ public class PlayerObject extends ActingGameObject {
 
     @Override
     protected void update(float delta) {
-        if (m_movementPointer.getPosition().dst(getPosition()) < Constants.PLAYER_ARRIVAL_TOLERANCE) {
+        if (m_movementPointer.getPosition().dst(getOriginX(), getOriginY()) < Constants.PLAYER_ARRIVAL_TOLERANCE) {
             m_movementPointer.setActive(false);
             m_linearVelocity.set(0, 0);
         }

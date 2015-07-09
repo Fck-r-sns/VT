@@ -14,4 +14,6 @@ public interface Spatial {
     public float getY(int alignment);
     public float getWidth();
     public float getHeight();
+    public float getOriginX();
+    public float getOriginY();
 }

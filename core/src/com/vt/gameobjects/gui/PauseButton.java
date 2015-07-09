@@ -9,7 +9,9 @@ import com.vt.resources.Assets;
 public class PauseButton extends Button {
     public PauseButton() {
         setSize(Constants.PAUSE_BUTTON_WIDTH, Constants.PAUSE_BUTTON_HEIGHT);
-        setTexture(Assets.getInstance().gui.pauseButtonUp);
+        m_textureDown = Assets.getInstance().gui.pauseButtonDown;
+        m_textureUp = Assets.getInstance().gui.pauseButtonUp;
         this.setName(Constants.PAUSE_BUTTON_ACTOR_NAME);
+        release();
     }
 }

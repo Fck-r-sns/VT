@@ -9,7 +9,9 @@ import com.vt.resources.Assets;
 public class ViewButton extends Button {
     public ViewButton() {
         setSize(Constants.VIEW_BUTTON_WIDTH, Constants.VIEW_BUTTON_HEIGHT);
-        setTexture(Assets.getInstance().gui.viewButtonUp);
+        m_textureDown = Assets.getInstance().gui.viewButtonDown;
+        m_textureUp = Assets.getInstance().gui.viewButtonUp;
         this.setName(Constants.VIEW_BUTTON_ACTOR_NAME);
+        release();
     }
 }

@@ -106,6 +106,7 @@ public class GameScreen implements Screen {
         m_viewButton.addCaptureListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                m_viewButton.push();
                 event.stop();
                 m_viewPointer.getController().setActive(true);
                 m_movementPointer.getController().setActive(false);
@@ -114,6 +115,7 @@ public class GameScreen implements Screen {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                m_viewButton.release();
                 event.stop();
                 m_viewPointer.getController().setActive(false);
                 m_movementPointer.getController().setActive(true);
@@ -130,8 +132,14 @@ public class GameScreen implements Screen {
         m_pauseButton.addCaptureListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                m_pauseButton.push();
                 togglePause();
                 return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                m_pauseButton.release();
             }
         });
 

@@ -1,4 +1,4 @@
-package com.vt.gameobjects.terrain;
+package com.vt.gameobjects.terrain.tiles;
 
 import com.vt.physics.CollisionManager;
 import com.vt.physics.colliders.Collidable;

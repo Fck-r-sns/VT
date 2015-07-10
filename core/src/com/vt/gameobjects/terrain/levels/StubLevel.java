@@ -1,7 +1,9 @@
-package com.vt.gameobjects.terrain;
+package com.vt.gameobjects.terrain.levels;
 
 import com.badlogic.gdx.math.Vector2;
 import com.vt.game.Constants;
+import com.vt.gameobjects.terrain.tiles.Floor;
+import com.vt.gameobjects.terrain.tiles.Tile;
 
 /**
  * Created by Fck.r.sns on 26.06.2015.

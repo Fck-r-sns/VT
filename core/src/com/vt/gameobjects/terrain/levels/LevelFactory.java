@@ -1,9 +1,11 @@
-package com.vt.gameobjects.terrain;
+package com.vt.gameobjects.terrain.levels;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector2;
 import com.vt.game.Constants;
+import com.vt.gameobjects.terrain.tiles.Tile;
+import com.vt.gameobjects.terrain.tiles.TileFactory;
 
 /**
  * Created by Fck.r.sns on 08.07.2015.

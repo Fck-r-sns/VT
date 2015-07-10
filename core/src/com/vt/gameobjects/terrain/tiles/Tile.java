@@ -1,4 +1,4 @@
-package com.vt.gameobjects.terrain;
+package com.vt.gameobjects.terrain.tiles;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;

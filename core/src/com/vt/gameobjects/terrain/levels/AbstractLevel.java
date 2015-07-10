@@ -1,7 +1,8 @@
-package com.vt.gameobjects.terrain;
+package com.vt.gameobjects.terrain.levels;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.vt.gameobjects.terrain.tiles.Tile;
 
 import java.util.HashMap;
 import java.util.Map;

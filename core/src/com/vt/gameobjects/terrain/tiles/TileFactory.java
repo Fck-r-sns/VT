@@ -1,4 +1,4 @@
-package com.vt.gameobjects.terrain;
+package com.vt.gameobjects.terrain.tiles;
 
 /**
  * Created by Fck.r.sns on 07.07.2015.

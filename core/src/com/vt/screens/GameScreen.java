@@ -24,8 +24,8 @@ import com.vt.gameobjects.gui.Button;
 import com.vt.gameobjects.characters.CharacterObject;
 import com.vt.gameobjects.gui.ButtonAction;
 import com.vt.gameobjects.gui.ButtonFactory;
-import com.vt.gameobjects.terrain.AbstractLevel;
-import com.vt.gameobjects.terrain.LevelFactory;
+import com.vt.gameobjects.terrain.levels.AbstractLevel;
+import com.vt.gameobjects.terrain.levels.LevelFactory;
 import com.vt.physics.CollisionManager;
 import com.vt.resources.Assets;
 

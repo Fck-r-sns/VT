@@ -1,5 +1,6 @@
 package com.vt.gameobjects.characters;
 
+import com.badlogic.gdx.ai.steer.behaviors.Arrive;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
@@ -8,7 +9,6 @@ import com.vt.gameobjects.ActingGameObject;
 import com.vt.gameobjects.pointers.MovementPointer;
 import com.vt.gameobjects.pointers.ViewPointer;
 import com.vt.physics.CollisionManager;
-import com.vt.physics.behavior.CustomArrive;
 import com.vt.resources.Assets;
 
 /**
@@ -41,7 +41,7 @@ public class CharacterObject extends ActingGameObject implements ControllableCha
         this.setName(Constants.PLAYER_ACTOR_NAME);
 
         setBehavior(
-                new CustomArrive(this, m_movementPointer)
+                new Arrive<Vector2>(this, m_movementPointer)
                         .setDecelerationRadius(Constants.PLAYER_ARRIVAL_DECELERATION_RADIUS)
         );
 

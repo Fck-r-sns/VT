@@ -80,7 +80,10 @@ public class CharacterObject extends ActingGameObject implements ControllableCha
 
     @Override
     public void shoot() {
-        // TODO: implement
+        Vector2 shotStart = getShootingPoint()
+                .rotate(getDirection().angle())
+                .add(getX(Constants.ALIGN_ORIGIN), getY(Constants.ALIGN_ORIGIN));
+        // TODO: run projectile from shotStart
     }
 
     @Override

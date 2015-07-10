@@ -3,13 +3,14 @@ package com.vt.gameobjects;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.vt.game.Constants;
 import com.vt.physics.Spatial;
 
 /**
  * Created by Fck.r.sns on 04.05.2015.
  */
-public abstract class GameObject extends Actor implements Spatial {
+public abstract class GameObject extends Group implements Spatial {
     boolean m_active;
     private TextureRegion m_texture;
 
@@ -67,5 +68,21 @@ public abstract class GameObject extends Actor implements Spatial {
     @Override
     public Vector2 getPosition() {
         return new Vector2(getX() + getOriginX(), getY() + getOriginY());
+    }
+
+    @Override
+    public float getX(int alignment) {
+        if (alignment == Constants.ALIGN_ORIGIN)
+            return getX() + getOriginX();
+        else
+            return super.getX(alignment);
+    }
+
+    @Override
+    public float getY(int alignment) {
+        if (alignment == Constants.ALIGN_ORIGIN)
+            return getY() + getOriginY();
+        else
+            return super.getY(alignment);
     }
 }

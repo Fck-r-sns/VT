@@ -19,8 +19,9 @@ import com.vt.game.Environment;
 import com.vt.game.InputIntegrator;
 import com.vt.gameobjects.CameraTarget;
 import com.vt.gameobjects.GameObject;
+import com.vt.gameobjects.characters.ManualController;
 import com.vt.gameobjects.pointers.MovementPointer;
-import com.vt.gameobjects.characters.PlayerObject;
+import com.vt.gameobjects.characters.CharacterObject;
 import com.vt.gameobjects.pointers.ViewPointer;
 import com.vt.gameobjects.gui.PauseButton;
 import com.vt.gameobjects.gui.ViewButton;
@@ -39,9 +40,8 @@ public class GameScreen implements Screen {
     private SpriteBatch m_spriteBatch;
     private Stage m_stage;
     private Stage m_stageGui;
-    private PlayerObject m_player;
-    private MovementPointer m_movementPointer;
-    private ViewPointer m_viewPointer;
+    private CharacterObject m_player;
+    private ManualController m_playerController;
     private CameraTarget m_cameraTarget;
     private ViewButton m_viewButton;
     private PauseButton m_pauseButton;
@@ -73,25 +73,31 @@ public class GameScreen implements Screen {
 
         m_level = LevelFactory.createFromTextFile(Constants.Level.LEVEL_TEST_FILE);
 
-        m_movementPointer = new MovementPointer();
-        m_stage.addActor(this.m_movementPointer);
 
-        m_viewPointer = new ViewPointer();
-        m_stage.addActor(this.m_viewPointer);
-
-        m_player = new PlayerObject(m_movementPointer, m_viewPointer);
+        m_player = new CharacterObject();
         m_player.setInitialPosition(m_level.getPlayerPosition().x, m_level.getPlayerPosition().y);
-        m_movementPointer.setPosition(m_player.getX(Align.center), m_player.getY(Align.center));
-        m_viewPointer.setPosition(m_player.getX(Align.center), m_player.getY(Align.center));
+
+        m_playerController = new ManualController(m_player);
+
         m_stage.addActor(this.m_player);
 
-        m_cameraTarget = new CameraTarget(new GameObject[]{m_player, m_viewPointer});
+        m_cameraTarget = new CameraTarget(new GameObject[]{m_player, m_player.getViewPointer()});
         m_cameraTarget.setPosition(m_player.getX(Align.center), m_player.getY(Align.center));
         m_cameraHelper.setTarget(m_cameraTarget);
         m_stage.addActor(m_cameraTarget);
 
-        m_stage.getRoot().addListener(m_movementPointer.getController().setActive(true));
-        m_stage.getRoot().addListener(m_viewPointer.getController().setActive(false));
+        m_stage.getRoot().addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                m_playerController.setPointerPosition(x, y);
+                return true;
+            }
+
+            @Override
+            public void touchDragged(InputEvent event, float x, float y, int pointer) {
+                m_playerController.setPointerPosition(x, y);
+            }
+        });
 
         Group gui = new Group();
         m_stageGui.addActor(gui);
@@ -107,8 +113,7 @@ public class GameScreen implements Screen {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 m_viewButton.push();
                 event.stop();
-                m_viewPointer.getController().setActive(true);
-                m_movementPointer.getController().setActive(false);
+                m_playerController.setCurrentPointerToView();
                 return true;
             }
 
@@ -116,8 +121,7 @@ public class GameScreen implements Screen {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 m_viewButton.release();
                 event.stop();
-                m_viewPointer.getController().setActive(false);
-                m_movementPointer.getController().setActive(true);
+                m_playerController.setCurrentPointerToMovement();
             }
         });
 

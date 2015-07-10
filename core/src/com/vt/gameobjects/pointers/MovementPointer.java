@@ -12,43 +12,17 @@ import com.vt.resources.Assets;
  * Created by Fck.r.sns on 10.05.2015.
  */
 public class MovementPointer extends GameObject implements Steerable<Vector2> {
-    class Controller extends PointerController {
-        @Override
-        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-            if (this.isActive()) {
-                MovementPointer.this.setActive(true);
-                setPosition(x, y, Align.center);
-            }
-            return true;
-        }
-
-        @Override
-        public void touchDragged(InputEvent event, float x, float y, int pointer) {
-            if (this.isActive()) {
-                MovementPointer.this.setActive(true);
-                setPosition(x, y, Align.center);
-            }
-        }
-    }
-
-    private Controller m_controller;
-    
     public MovementPointer() {
         setSize(Constants.MOVEMENT_POINTER_WIDTH, Constants.MOVEMENT_POINTER_HEIGHT);
         setOrigin(Align.center);
         setTexture(Assets.getInstance().gameEntities.movementPointer);
         this.setName(Constants.MOVEMENT_POINTER_ACTOR_NAME);
         this.setActive(false);
-        m_controller = new Controller();
     }
 
     @Override
     protected void update(float delta) {
         super.update(delta);
-    }
-
-    public PointerController getController() {
-        return m_controller;
     }
 
     @Override

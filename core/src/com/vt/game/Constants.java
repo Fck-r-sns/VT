@@ -12,8 +12,8 @@ public class Constants {
     public static final float PLAYER_WIDTH = 0.75f;
     public static final float PLAYER_HEIGHT = 0.75f;
     public static final float PLAYER_BOUNDING_RADIUS = 0.3f;
-    public static final float PLAYER_ORIGIN_X = 0.25f; // in % of width
-    public static final float PLAYER_ORIGIN_Y = 0.50f; // in % of height
+    public static final float PLAYER_ORIGIN_RELATIVE_X = 0.25f; // in % of width
+    public static final float PLAYER_ORIGIN_RELATIVE_Y = 0.50f; // in % of height
     public static final float MOVEMENT_POINTER_HEIGHT = 0.5f;
     public static final float MOVEMENT_POINTER_WIDTH = 0.5f;
     public static final float VIEW_POINTER_WIDTH = 0.5f;

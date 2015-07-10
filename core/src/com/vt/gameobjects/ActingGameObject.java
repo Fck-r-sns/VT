@@ -1,4 +1,4 @@
-package com.vt.gameobjects.characters;
+package com.vt.gameobjects;
 
 import com.badlogic.gdx.ai.steer.Steerable;
 import com.badlogic.gdx.ai.steer.SteeringAcceleration;

@@ -47,6 +47,7 @@ public class GameScreen implements Screen {
     private CameraTarget m_cameraTarget;
     private Button m_viewButton;
     private Button m_pauseButton;
+    private Button m_shootButton;
     boolean m_pause = false;
 
     private ShapeRenderer renderer = new ShapeRenderer();
@@ -143,6 +144,20 @@ public class GameScreen implements Screen {
             }
         });
 
+        m_shootButton = ButtonFactory.create(ButtonFactory.ButtonType.Shoot);
+        gui.addActor(m_shootButton);
+        m_shootButton.setPosition(
+                Constants.SHOOT_BUTTON_MARGIN_X + 0,
+                Constants.SHOOT_BUTTON_MARGIN_Y + m_cameraGui.viewportHeight,
+                Align.topLeft
+        );
+        m_shootButton.setPushAction(new ButtonAction() {
+            @Override
+            public void run() {
+                m_playerController.shoot();
+            }
+        });
+
         Gdx.input.setInputProcessor(
                 new InputIntegrator()
                         .addInputProcessor(m_stageGui)
@@ -156,6 +171,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        delta = 1 / 60.0f;
         Environment.getInstance().globalTime += delta;
 
         if (!isPaused()) {

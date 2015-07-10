@@ -18,8 +18,8 @@ public class Constants {
     public static final float MOVEMENT_POINTER_WIDTH = 0.5f;
     public static final float VIEW_POINTER_WIDTH = 0.5f;
     public static final float VIEW_POINTER_HEIGHT = 0.5f;
-    public static final float RIFLE_SHOOTING_POINT_X = 0.75f;
-    public static final float RIFLE_SHOOTING_POINT_Y = 0.28125f;
+    public static final float RIFLE_SHOOTING_POINT_X = 0.75f - PLAYER_ORIGIN_RELATIVE_X * PLAYER_WIDTH;
+    public static final float RIFLE_SHOOTING_POINT_Y = 0.28125f - PLAYER_ORIGIN_RELATIVE_Y * PLAYER_HEIGHT;
 
     public static final float TILE_SIZE = 1.0f;
 
@@ -34,6 +34,10 @@ public class Constants {
     public static final float PAUSE_BUTTON_HEIGHT = 100.0f;
     public static final float PAUSE_BUTTON_MARGIN_X = VIEW_BUTTON_MARGIN_X + VIEW_BUTTON_WIDTH + 20.0f;
     public static final float PAUSE_BUTTON_MARGIN_Y = -20.0f;
+    public static final float SHOOT_BUTTON_WIDTH = 100.0f;
+    public static final float SHOOT_BUTTON_HEIGHT = 100.0f;
+    public static final float SHOOT_BUTTON_MARGIN_X = 20.0f;
+    public static final float SHOOT_BUTTON_MARGIN_Y = VIEW_BUTTON_MARGIN_Y - VIEW_BUTTON_HEIGHT - 20.0f;
     // ------------------------------------------------------------------------
 
     // resources --------------------------------------------------------------
@@ -42,6 +46,8 @@ public class Constants {
     public static final String VIEW_BUTTON_DOWN_ASSET_NAME = "buttonDown";
     public static final String PAUSE_BUTTON_UP_ASSET_NAME = "buttonUp";
     public static final String PAUSE_BUTTON_DOWN_ASSET_NAME = "buttonDown";
+    public static final String SHOOT_BUTTON_UP_ASSET_NAME = "buttonUp";
+    public static final String SHOOT_BUTTON_DOWN_ASSET_NAME = "buttonDown";
 
     public static final String TEXTURE_ATLAS_PACK = "entities.pack";
     public static final String PLAYER_ASSET_NAME = "marine_rifle";
@@ -71,6 +77,7 @@ public class Constants {
 
     public final static String VIEW_BUTTON_ACTOR_NAME = "vb";
     public final static String PAUSE_BUTTON_ACTOR_NAME = "pb";
+    public final static String SHOOT_BUTTON_ACTOR_NAME = "sb";
     // ------------------------------------------------------------------------
 
     // physics ----------------------------------------------------------------

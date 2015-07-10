@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.vt.game.Constants;
+import com.vt.gameobjects.characters.ActingGameObject;
 
 /**
  * Created by Fck.r.sns on 27.06.2015.

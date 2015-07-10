@@ -20,7 +20,7 @@ import com.vt.game.InputIntegrator;
 import com.vt.gameobjects.CameraTarget;
 import com.vt.gameobjects.GameObject;
 import com.vt.gameobjects.pointers.MovementPointer;
-import com.vt.gameobjects.PlayerObject;
+import com.vt.gameobjects.characters.PlayerObject;
 import com.vt.gameobjects.pointers.ViewPointer;
 import com.vt.gameobjects.gui.PauseButton;
 import com.vt.gameobjects.gui.ViewButton;

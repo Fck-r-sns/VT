@@ -1,4 +1,4 @@
-package com.vt.gameobjects;
+package com.vt.gameobjects.characters;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;

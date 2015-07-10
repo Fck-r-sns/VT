@@ -60,6 +60,7 @@ public class GameScreen implements Screen {
         m_camera = new OrthographicCamera();
         m_cameraHelper = new CameraHelper(m_camera);
         m_stage = new Stage(new ScreenViewport(m_camera), m_spriteBatch); // stage overwrites camera's viewport
+        Environment.getInstance().currentStage = m_stage;
         m_camera.setToOrtho(false,
                 Constants.VIEWPORT_WIDTH,
                 Constants.VIEWPORT_WIDTH * Constants.SCREEN_RATIO);
@@ -78,7 +79,6 @@ public class GameScreen implements Screen {
 
         m_player = new CharacterObject();
         m_player.setInitialPosition(m_level.getPlayerPosition().x, m_level.getPlayerPosition().y);
-        m_stage.addActor(m_player);
         m_playerController = new ManualController(m_player);
 
         m_enemies = new Array<CharacterObject>(16);

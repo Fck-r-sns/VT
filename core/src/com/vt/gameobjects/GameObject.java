@@ -3,14 +3,14 @@ package com.vt.gameobjects;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.vt.game.Constants;
 import com.vt.physics.Spatial;
 
 /**
  * Created by Fck.r.sns on 04.05.2015.
  */
-public abstract class GameObject extends Group implements Spatial {
+public abstract class GameObject extends Actor implements Spatial {
     boolean m_active;
     private TextureRegion m_texture;
 
@@ -33,9 +33,7 @@ public abstract class GameObject extends Group implements Spatial {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        if (m_texture == null)
-            return;
-        if (isVisible())
+        if (m_texture != null)
             batch.draw(
                     m_texture,
                     getX(), getY(),

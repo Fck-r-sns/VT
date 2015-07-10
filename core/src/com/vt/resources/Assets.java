@@ -27,7 +27,7 @@ public class Assets implements Disposable, AssetErrorListener {
         public TextureAtlas.AtlasRegion player;
         public TextureAtlas.AtlasRegion movementPointer;
         public TextureAtlas.AtlasRegion viewPointer;
-        public TextureAtlas.AtlasRegion rifle;
+        public TextureAtlas.AtlasRegion projectile;
     }
 
     public class Terrain {
@@ -75,7 +75,7 @@ public class Assets implements Disposable, AssetErrorListener {
         gameEntities.player = atlas.findRegion(Constants.PLAYER_ASSET_NAME);
         gameEntities.movementPointer = atlas.findRegion(Constants.MOVEMENT_POINTER_ASSET_NAME);
         gameEntities.viewPointer = atlas.findRegion(Constants.VIEW_POINTER_ASSET_NAME);
-        gameEntities.rifle = atlas.findRegion(Constants.RIFLE_ASSET_NAME);
+        gameEntities.projectile = atlas.findRegion(Constants.PROJECTILE_ASSET_NAME);
 
         atlas = m_assetsManager.get(Constants.GUI_ATLAS_PACK);
         for (Texture t : atlas.getTextures())

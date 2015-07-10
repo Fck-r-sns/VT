@@ -5,9 +5,11 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.vt.game.Constants;
+import com.vt.game.Environment;
 import com.vt.gameobjects.ActingGameObject;
 import com.vt.gameobjects.pointers.MovementPointer;
 import com.vt.gameobjects.pointers.ViewPointer;
+import com.vt.gameobjects.weapons.Projectile;
 import com.vt.gameobjects.weapons.Shootable;
 import com.vt.physics.CollisionManager;
 import com.vt.resources.Assets;
@@ -25,10 +27,11 @@ public class CharacterObject extends ActingGameObject implements ControllableCha
         m_lastPosition = new Vector2(0, 0);
 
         m_movementPointer = new MovementPointer();
-        addActor(m_movementPointer);
-
         m_viewPointer = new ViewPointer();
-        addActor(m_viewPointer);
+
+        Environment.getInstance().currentStage.addActor(m_movementPointer);
+        Environment.getInstance().currentStage.addActor(m_viewPointer);
+        Environment.getInstance().currentStage.addActor(this);
 
         m_maxLinearSpeed = Constants.MAX_PLAYER_LINEAR_SPEED;
         m_maxLinearAcceleration = Constants.MAX_PLAYER_LINEAR_ACCELERATION;
@@ -80,10 +83,16 @@ public class CharacterObject extends ActingGameObject implements ControllableCha
 
     @Override
     public void shoot() {
+        float angle = getDirection().angle();
         Vector2 shotStart = getShootingPoint()
-                .rotate(getDirection().angle())
+                .rotate(angle)
                 .add(getX(Constants.ALIGN_ORIGIN), getY(Constants.ALIGN_ORIGIN));
-        // TODO: run projectile from shotStart
+        // TODO: run projectile from shotStart in target direction
+        Projectile p = new Projectile();
+        p.setPosition(shotStart.x, shotStart.y, Constants.ALIGN_ORIGIN);
+        p.setStartingAngle(angle);
+        p.setStartingVelocity(15);
+        Environment.getInstance().currentStage.addActor(p);
     }
 
     @Override
@@ -130,8 +139,8 @@ public class CharacterObject extends ActingGameObject implements ControllableCha
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        m_movementPointer.draw(batch, parentAlpha);
-        m_viewPointer.draw(batch, parentAlpha);
+//        m_movementPointer.draw(batch, parentAlpha);
+//        m_viewPointer.draw(batch, parentAlpha);
         super.draw(batch, parentAlpha);
 
     }

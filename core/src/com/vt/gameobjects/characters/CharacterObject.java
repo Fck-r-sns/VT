@@ -66,11 +66,13 @@ public class CharacterObject extends ActingGameObject implements ControllableCha
 
     @Override
     public void setMovementPointerPosition(float x, float y) {
+        m_movementPointer.setActive(true);
         m_movementPointer.setPosition(x, y, Align.center);
     }
 
     @Override
     public void setViewPointerPosition(float x, float y) {
+        m_viewPointer.setActive(true);
         m_viewPointer.setPosition(x, y, Align.center);
     }
 
@@ -109,6 +111,7 @@ public class CharacterObject extends ActingGameObject implements ControllableCha
         m_movementPointer.draw(batch, parentAlpha);
         m_viewPointer.draw(batch, parentAlpha);
         super.draw(batch, parentAlpha);
+
     }
 
     private void updateLastPosition() {

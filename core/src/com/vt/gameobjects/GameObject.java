@@ -35,14 +35,15 @@ public abstract class GameObject extends Group implements Spatial {
     public void draw(Batch batch, float parentAlpha) {
         if (m_texture == null)
             return;
-        batch.draw(
-                m_texture,
-                getX(), getY(),
-                getOriginX(), getOriginY(),
-                getWidth(), getHeight(),
-                getScaleX(), getScaleY(),
-                getRotation()
-        );
+        if (isVisible())
+            batch.draw(
+                    m_texture,
+                    getX(), getY(),
+                    getOriginX(), getOriginY(),
+                    getWidth(), getHeight(),
+                    getScaleX(), getScaleY(),
+                    getRotation()
+            );
     }
 
     @Override

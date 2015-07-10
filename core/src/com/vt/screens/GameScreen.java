@@ -169,7 +169,7 @@ public class GameScreen implements Screen {
         m_spriteBatch.setProjectionMatrix(m_cameraGui.combined);
         m_stageGui.draw();
 
-        if (Environment.getInstance().debugMode) {
+        if (Environment.getInstance().debugDrawings) {
             renderer.setProjectionMatrix(m_camera.combined);
             Circle c = m_player.getBoundingShape();
             renderer.begin(ShapeRenderer.ShapeType.Line);

@@ -5,7 +5,7 @@ package com.vt.game;
  */
 public class Environment {
     private static Environment instance = null;
-    public boolean debugMode = true;
+    public boolean debugDrawings = true;
     public float globalTime = 0.0f;
 
     public static Environment getInstance() {

@@ -18,6 +18,8 @@ public class Constants {
     public static final float MOVEMENT_POINTER_WIDTH = 0.5f;
     public static final float VIEW_POINTER_WIDTH = 0.5f;
     public static final float VIEW_POINTER_HEIGHT = 0.5f;
+    public static final float RIFLE_SHOOTING_POINT_X = 0.75f;
+    public static final float RIFLE_SHOOTING_POINT_Y = 0.28125f;
 
     public static final float TILE_SIZE = 1.0f;
 
@@ -41,10 +43,11 @@ public class Constants {
     public static final String PAUSE_BUTTON_UP_ASSET_NAME = "buttonUp";
     public static final String PAUSE_BUTTON_DOWN_ASSET_NAME = "buttonDown";
 
-    public static final String TEXTURE_ATLAS_PACK = "VT.pack";
+    public static final String TEXTURE_ATLAS_PACK = "entities.pack";
     public static final String PLAYER_ASSET_NAME = "marine_rifle";
     public static final String MOVEMENT_POINTER_ASSET_NAME = "movementPointer";
     public static final String VIEW_POINTER_ASSET_NAME = "viewPointer";
+    public static final String RIFLE_ASSET_NAME = "rifle";
 
     public static final String TERRAIN_ATLAS_PACK = "tiles.pack";
     public static final String PLAIN_FLOOR_LIGHT_ASSET_NAME = "tile1";
@@ -98,6 +101,7 @@ public class Constants {
         public final static int FLOOR_CODE = '0';
         public final static int WALL_CODE = '1';
         public final static int PLAYER_START_POS_CODE = 'S';
+        public final static int ENEMY_START_POS_CODE = 'E';
     }
     // ------------------------------------------------------------------------
 }

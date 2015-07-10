@@ -8,13 +8,14 @@ import com.vt.game.Constants;
 import com.vt.gameobjects.ActingGameObject;
 import com.vt.gameobjects.pointers.MovementPointer;
 import com.vt.gameobjects.pointers.ViewPointer;
+import com.vt.gameobjects.weapons.Shootable;
 import com.vt.physics.CollisionManager;
 import com.vt.resources.Assets;
 
 /**
  * Created by Fck.r.sns on 16.05.2015.
  */
-public class CharacterObject extends ActingGameObject implements ControllableCharacter {
+public class CharacterObject extends ActingGameObject implements ControllableCharacter, Shootable {
     private MovementPointer m_movementPointer;
     private ViewPointer m_viewPointer;
     private Vector2 m_lastPosition;
@@ -51,8 +52,9 @@ public class CharacterObject extends ActingGameObject implements ControllableCha
 
     public void setInitialPosition(float x, float y) {
         setPosition(x, y, Constants.ALIGN_ORIGIN);
-        m_movementPointer.setPosition(getX(Constants.ALIGN_ORIGIN), getY(Constants.ALIGN_ORIGIN));
-        m_viewPointer.setPosition(getX(Constants.ALIGN_ORIGIN), getY(Constants.ALIGN_ORIGIN));
+        m_movementPointer.setPosition(getX(Constants.ALIGN_ORIGIN), getY(Constants.ALIGN_ORIGIN), Align.center);
+        m_viewPointer.setPosition(getX(Constants.ALIGN_ORIGIN), getY(Constants.ALIGN_ORIGIN), Align.center);
+        m_viewPointer.setActive(false);
         updateLastPosition();
     }
 
@@ -77,8 +79,22 @@ public class CharacterObject extends ActingGameObject implements ControllableCha
     }
 
     @Override
-    public void shot() {
-        // TODO: implement shooting
+    public void shoot() {
+        // TODO: implement
+    }
+
+    @Override
+    public void reload() {
+    }
+
+    @Override
+    public Vector2 getDirection() {
+        return new Vector2(1, 0).rotate(getRotation());
+    }
+
+    @Override
+    public Vector2 getShootingPoint() {
+        return new Vector2(Constants.RIFLE_SHOOTING_POINT_X, Constants.RIFLE_SHOOTING_POINT_Y);
     }
 
     @Override
@@ -100,6 +116,9 @@ public class CharacterObject extends ActingGameObject implements ControllableCha
                 float newViewY = m_viewPointer.getY(Align.center) + getY(Align.center) - getLastPosition().y;
                 m_viewPointer.setPosition(newViewX, newViewY, Align.center);
             }
+        } else {
+            if (m_linearVelocity.len2() != 0.0f)
+                setRotationDeltaRelativeToCurrent(m_linearVelocity.angle());
         }
 
         updateLastPosition();

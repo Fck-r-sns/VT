@@ -7,11 +7,13 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.vt.game.CameraHelper;
 import com.vt.game.Constants;
@@ -41,6 +43,7 @@ public class GameScreen implements Screen {
     private Stage m_stageGui;
     private CharacterObject m_player;
     private ManualController m_playerController;
+    private Array<CharacterObject> m_enemies;
     private CameraTarget m_cameraTarget;
     private Button m_viewButton;
     private Button m_pauseButton;
@@ -72,13 +75,19 @@ public class GameScreen implements Screen {
 
         m_level = LevelFactory.createFromTextFile(Constants.Level.LEVEL_TEST_FILE);
 
-
         m_player = new CharacterObject();
         m_player.setInitialPosition(m_level.getPlayerPosition().x, m_level.getPlayerPosition().y);
-
+        m_stage.addActor(m_player);
         m_playerController = new ManualController(m_player);
 
-        m_stage.addActor(this.m_player);
+        m_enemies = new Array<CharacterObject>(16);
+        for (int i = 0; i < m_level.getEnemiesCount(); ++i) {
+            CharacterObject enemy = new CharacterObject();
+            Vector2 pos = m_level.getEnemyPosition(i);
+            enemy.setInitialPosition(pos.x, pos.y);
+            m_stage.addActor(enemy);
+            m_enemies.add(enemy);
+        }
 
         m_cameraTarget = new CameraTarget(new GameObject[]{m_player, m_player.getViewPointer()});
         m_cameraTarget.setPosition(m_player.getX(Align.center), m_player.getY(Align.center));

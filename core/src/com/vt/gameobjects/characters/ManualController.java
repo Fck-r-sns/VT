@@ -37,8 +37,8 @@ public class ManualController {
         }
     }
 
-    public void shot() {
-        m_controllable.shot();
+    public void shoot() {
+        m_controllable.shoot();
     }
 
     public void activateAbility() {

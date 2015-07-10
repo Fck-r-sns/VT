@@ -1,33 +1,40 @@
 
-VT.png
+entities.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 movementPointer
   rotate: false
-  xy: 1, 131
+  xy: 1, 140
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 viewPointer
   rotate: false
-  xy: 259, 131
+  xy: 259, 140
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 circleWithPointer_white
   rotate: false
-  xy: 1, 1
+  xy: 1, 10
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 marine_rifle
   rotate: false
-  xy: 517, 355
+  xy: 517, 364
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 1
+rifle
+  rotate: false
+  xy: 1, 1
+  size: 18, 7
+  orig: 18, 7
+  offset: 0, 0
+  index: -1

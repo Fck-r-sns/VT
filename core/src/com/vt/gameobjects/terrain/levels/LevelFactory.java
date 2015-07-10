@@ -36,6 +36,10 @@ public class LevelFactory {
                         tile = TileFactory.create(Tile.Type.Floor);
                         level.setPlayerPosition((xPos + 0.5f ) * Constants.TILE_SIZE, (yPos + 0.5f ) * Constants.TILE_SIZE);
                         break;
+                    case Constants.Level.ENEMY_START_POS_CODE:
+                        tile = TileFactory.create(Tile.Type.Floor);
+                        level.addEnemyPosition((xPos + 0.5f ) * Constants.TILE_SIZE, (yPos + 0.5f ) * Constants.TILE_SIZE);
+                        break;
                     case Constants.Level.FLOOR_CODE:
                         tile = TileFactory.create(Tile.Type.Floor);
                         break;

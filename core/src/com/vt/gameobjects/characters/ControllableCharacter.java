@@ -6,6 +6,6 @@ package com.vt.gameobjects.characters;
 public interface ControllableCharacter {
     void setMovementPointerPosition(float x, float y);
     void setViewPointerPosition(float x, float y);
-    void shot();
+    void shoot();
     void activateAbility();
 }

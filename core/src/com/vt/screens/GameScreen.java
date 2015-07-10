@@ -20,11 +20,10 @@ import com.vt.game.InputIntegrator;
 import com.vt.gameobjects.CameraTarget;
 import com.vt.gameobjects.GameObject;
 import com.vt.gameobjects.characters.ManualController;
-import com.vt.gameobjects.pointers.MovementPointer;
+import com.vt.gameobjects.gui.Button;
 import com.vt.gameobjects.characters.CharacterObject;
-import com.vt.gameobjects.pointers.ViewPointer;
-import com.vt.gameobjects.gui.PauseButton;
-import com.vt.gameobjects.gui.ViewButton;
+import com.vt.gameobjects.gui.ButtonAction;
+import com.vt.gameobjects.gui.ButtonFactory;
 import com.vt.gameobjects.terrain.AbstractLevel;
 import com.vt.gameobjects.terrain.LevelFactory;
 import com.vt.physics.CollisionManager;
@@ -43,8 +42,8 @@ public class GameScreen implements Screen {
     private CharacterObject m_player;
     private ManualController m_playerController;
     private CameraTarget m_cameraTarget;
-    private ViewButton m_viewButton;
-    private PauseButton m_pauseButton;
+    private Button m_viewButton;
+    private Button m_pauseButton;
     boolean m_pause = false;
 
     private ShapeRenderer renderer = new ShapeRenderer();
@@ -101,48 +100,37 @@ public class GameScreen implements Screen {
 
         Group gui = new Group();
         m_stageGui.addActor(gui);
-        m_viewButton = new ViewButton();
+        m_viewButton = ButtonFactory.create(ButtonFactory.ButtonType.View);
         gui.addActor(m_viewButton);
         m_viewButton.setPosition(
                 Constants.VIEW_BUTTON_MARGIN_X + 0,
                 Constants.VIEW_BUTTON_MARGIN_Y + m_cameraGui.viewportHeight,
                 Align.topLeft
         );
-        m_viewButton.addCaptureListener(new InputListener() {
+        m_viewButton.setPushAction(new ButtonAction() {
             @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                m_viewButton.push();
-                event.stop();
+            public void run() {
                 m_playerController.setCurrentPointerToView();
-                return true;
             }
-
+        });
+        m_viewButton.setReleaseAction(new ButtonAction() {
             @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                m_viewButton.release();
-                event.stop();
+            public void run() {
                 m_playerController.setCurrentPointerToMovement();
             }
         });
 
-        m_pauseButton = new PauseButton();
+        m_pauseButton = ButtonFactory.create(ButtonFactory.ButtonType.Pause);
         gui.addActor(m_pauseButton);
         m_pauseButton.setPosition(
                 Constants.PAUSE_BUTTON_MARGIN_X + 0,
                 Constants.PAUSE_BUTTON_MARGIN_Y + m_cameraGui.viewportHeight,
                 Align.topLeft
         );
-        m_pauseButton.addCaptureListener(new InputListener() {
+        m_pauseButton.setPushAction(new ButtonAction() {
             @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                m_pauseButton.push();
+            public void run() {
                 togglePause();
-                return true;
-            }
-
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                m_pauseButton.release();
             }
         });
 

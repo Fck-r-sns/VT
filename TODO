@@ -1,3 +1,5 @@
+Speed selection: walk and run
+Collision between walls and projectiles
 Add stub enemies
-Add shooting and button for it
 Skeletal animation with interpolation
+Global message system

@@ -52,7 +52,7 @@ public class CameraTarget extends ActingGameObject {
     }
 
     @Override
-    protected void update(float delta) {
+    public void update(float delta) {
         super.update(delta);
         if (m_posUpdater.getPosition().dst(getPosition()) < Constants.CAMERA_ARRIVAL_TOLERANCE) {
             m_linearVelocity.set(0, 0);

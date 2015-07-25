@@ -21,7 +21,7 @@ public class MovementPointer extends GameObject implements Steerable<Vector2> {
     }
 
     @Override
-    protected void update(float delta) {
+    public void update(float delta) {
         super.update(delta);
     }
 

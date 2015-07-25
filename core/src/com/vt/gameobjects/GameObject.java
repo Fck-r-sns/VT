@@ -61,7 +61,7 @@ public abstract class GameObject extends Actor implements Spatial {
         }
     }
 
-    protected void update(float delta) {
+    public void update(float delta) {
     }
 
     @Override

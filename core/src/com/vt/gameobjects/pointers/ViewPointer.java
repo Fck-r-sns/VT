@@ -23,7 +23,7 @@ public class ViewPointer extends GameObject {
     }
 
     @Override
-    protected void update(float delta) {
+    public void update(float delta) {
         super.update(delta);
     }
 }

@@ -53,6 +53,6 @@ public abstract class AbstractLevel {
 
     public void draw(SpriteBatch spriteBatch) {
         for (Map.Entry tile : m_tiles.entrySet())
-            ((Tile)tile.getValue()).draw(spriteBatch);
+            ((Tile)tile.getValue()).draw(spriteBatch, 0.0f);
     }
 }

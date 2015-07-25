@@ -115,7 +115,7 @@ public class CharacterObject extends ActingGameObject implements ControllableCha
     }
 
     @Override
-    protected void update(float delta) {
+    public void update(float delta) {
         if (m_movementPointer.getPosition().dst(getPosition()) < Constants.PLAYER_ARRIVAL_TOLERANCE) {
             m_movementPointer.setActive(false);
             m_linearVelocity.set(0, 0);

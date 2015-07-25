@@ -19,96 +19,21 @@ import static com.badlogic.gdx.scenes.scene2d.utils.Align.top;
 /**
  * Created by Fck.r.sns on 22.06.2015.
  */
-public class Tile implements Collidable {
+public class Tile extends GameObject implements Collidable {
     public enum Type {
         Unknown,
         Floor,
         Wall
     }
 
-    private Vector2 m_position;
-    private Vector2 m_size;
     private Vector2 m_boundingRect;
-    private TextureRegion m_texture;
     private Type m_type;
 
     protected Tile() {
-        m_size = new Vector2(Constants.TILE_SIZE, Constants.TILE_SIZE);
-        m_position = new Vector2(0, 0);
+        setSize(Constants.TILE_SIZE, Constants.TILE_SIZE);
+        setPosition(0, 0);
+        setOrigin(Align.center);
         m_boundingRect = new Vector2(Constants.TILE_SIZE, Constants.TILE_SIZE);
-    }
-
-    public void update(float delta) {
-    }
-
-    public void draw(SpriteBatch batch) {
-        if (m_texture == null)
-            return;
-        batch.draw(m_texture, getX(), getY(), getWidth(), getHeight());
-    }
-
-    protected void setTexture(TextureRegion texture) {
-        m_texture = texture;
-    }
-
-    @Override
-    public Vector2 getPosition() {
-        return m_position;
-    }
-
-    @Override
-    public void setPosition(float x, float y) {
-        m_position.set(x, y);
-    }
-
-    @Override
-    public float getX() {
-        return m_position.x;
-    }
-
-    @Override
-    public float getX(int alignment) {
-        float x = getX();
-        if ((alignment & right) != 0)
-            x += getWidth();
-        else if ((alignment & left) == 0)
-            x += getWidth() / 2;
-        return x;
-    }
-
-    @Override
-    public float getY() {
-        return m_position.y;
-    }
-
-    @Override
-    public float getY(int alignment) {
-        float y = getY();
-        if ((alignment & top) != 0)
-            y += getHeight();
-        else if ((alignment & bottom) == 0)
-            y += getHeight() / 2;
-        return y;
-    }
-
-    @Override
-    public float getWidth() {
-        return m_size.x;
-    }
-
-    @Override
-    public float getHeight() {
-        return m_size.y;
-    }
-
-    @Override
-    public float getOriginX() {
-        return getX(Align.center);
-    }
-
-    @Override
-    public float getOriginY() {
-        return getY(Align.center);
     }
 
     @Override

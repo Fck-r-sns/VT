@@ -22,6 +22,10 @@ public class Constants {
     public static final float RIFLE_SHOOTING_POINT_Y = 0.23f - PLAYER_ORIGIN_RELATIVE_Y * PLAYER_HEIGHT;
     public static final float PROJECTILE_WIDTH = 0.2f;
     public static final float PROJECTILE_HEIGHT = 0.1f;
+    public static final float PROJECTILE_BOUNDING_RADIUS = 0.5f * PROJECTILE_HEIGHT;
+    public static final float PROJECTILE_ORIGIN_RELATIVE_X = 0.77f;
+    public static final float PROJECTILE_ORIGIN_RELATIVE_Y = 0.5f;
+
 
     public static final float TILE_SIZE = 1.0f;
 

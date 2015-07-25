@@ -96,15 +96,31 @@ public class GameScreen implements Screen {
         m_stage.addActor(m_cameraTarget);
 
         m_stage.getRoot().addListener(new InputListener() {
+            int m_firstTouchPointer = -1;
+
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                m_playerController.setPointerPosition(x, y);
+                // in case of touchUp skipping m_firstTouchPointer can be locked on not actual value
+                // for that case added check for pointer == 0
+                if (m_firstTouchPointer == -1 || pointer == 0) // 0 is always first touch
+                    m_firstTouchPointer = pointer;
+                if (pointer == m_firstTouchPointer)
+                    m_playerController.setPointerPosition(x, y);
+                else
+                    m_playerController.shoot();
                 return true;
             }
 
             @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                if (pointer == m_firstTouchPointer)
+                    m_firstTouchPointer = -1;
+            }
+
+            @Override
             public void touchDragged(InputEvent event, float x, float y, int pointer) {
-                m_playerController.setPointerPosition(x, y);
+                if (pointer == m_firstTouchPointer)
+                    m_playerController.setPointerPosition(x, y);
             }
         });
 

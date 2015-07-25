@@ -96,7 +96,7 @@ public class GameScreen implements Screen {
         m_stage.addActor(m_cameraTarget);
 
         m_stage.getRoot().addListener(new InputListener() {
-            int m_firstTouchPointer = -1;
+            private int m_firstTouchPointer = -1;
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {

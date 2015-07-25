@@ -56,8 +56,7 @@ public class CharacterObject extends ActingObject implements ControllableCharact
     public void setInitialPosition(float x, float y) {
         setPosition(x, y, Constants.ALIGN_ORIGIN);
         m_movementPointer.setPosition(getX(Constants.ALIGN_ORIGIN), getY(Constants.ALIGN_ORIGIN), Align.center);
-        m_viewPointer.setPosition(getX(Constants.ALIGN_ORIGIN), getY(Constants.ALIGN_ORIGIN), Align.center);
-        m_viewPointer.setActive(false);
+        m_viewPointer.setPosition(getX(Constants.ALIGN_ORIGIN) + 1.0f, getY(Constants.ALIGN_ORIGIN), Align.center);
         updateLastPosition();
     }
 
@@ -139,8 +138,6 @@ public class CharacterObject extends ActingObject implements ControllableCharact
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-//        m_movementPointer.draw(batch, parentAlpha);
-//        m_viewPointer.draw(batch, parentAlpha);
         super.draw(batch, parentAlpha);
 
     }

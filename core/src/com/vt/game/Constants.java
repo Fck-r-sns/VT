@@ -36,12 +36,12 @@ public class Constants {
     public static final float VIEW_BUTTON_HEIGHT = 100.0f;
     public static final float VIEW_BUTTON_MARGIN_X = 20.0f;
     public static final float VIEW_BUTTON_MARGIN_Y = -20.0f;
-    public static final float PAUSE_BUTTON_WIDTH = 100.0f;
-    public static final float PAUSE_BUTTON_HEIGHT = 100.0f;
+    public static final float PAUSE_BUTTON_WIDTH = 75.0f;
+    public static final float PAUSE_BUTTON_HEIGHT = 75.0f;
     public static final float PAUSE_BUTTON_MARGIN_X = VIEW_BUTTON_MARGIN_X + VIEW_BUTTON_WIDTH + 20.0f;
     public static final float PAUSE_BUTTON_MARGIN_Y = -20.0f;
-    public static final float SHOOT_BUTTON_WIDTH = 100.0f;
-    public static final float SHOOT_BUTTON_HEIGHT = 100.0f;
+    public static final float SHOOT_BUTTON_WIDTH = 75.0f;
+    public static final float SHOOT_BUTTON_HEIGHT = 75.0f;
     public static final float SHOOT_BUTTON_MARGIN_X = 20.0f;
     public static final float SHOOT_BUTTON_MARGIN_Y = VIEW_BUTTON_MARGIN_Y - VIEW_BUTTON_HEIGHT - 20.0f;
     // ------------------------------------------------------------------------

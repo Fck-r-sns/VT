@@ -176,6 +176,7 @@ public class GameScreen implements Screen {
 
         if (!isPaused()) {
             CollisionManager.getInstance().update(delta);
+            m_level.update(delta);
             m_cameraHelper.update(delta);
             m_stage.act(delta);
             m_stageGui.act(delta);

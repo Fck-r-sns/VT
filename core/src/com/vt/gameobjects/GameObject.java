@@ -4,13 +4,14 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.vt.game.Constants;
 import com.vt.physics.Spatial;
 
 /**
  * Created by Fck.r.sns on 04.05.2015.
  */
-public abstract class GameObject extends Actor implements Spatial {
+public abstract class GameObject extends Group implements Spatial {
     static private int m_idGenerator = 0;
     private Integer m_id;
     private boolean m_active;
@@ -49,6 +50,7 @@ public abstract class GameObject extends Actor implements Spatial {
                     getScaleX(), getScaleY(),
                     getRotation()
             );
+        drawChildren(batch, parentAlpha);
     }
 
     @Override

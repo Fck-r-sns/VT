@@ -19,7 +19,7 @@ public interface Collidable extends Spatial {
     }
     public Type getColliderType();
     public Shape2D getBoundingShape();
-    public void onCollision(Collidable other);
+    public void onCollision(Collidable other); // process effect on this by other object
 
     public boolean checkCollision(Collidable other);
     public boolean checkShapeCollision(Circle circle);

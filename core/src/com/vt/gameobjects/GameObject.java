@@ -11,7 +11,7 @@ import com.vt.physics.Spatial;
  * Created by Fck.r.sns on 04.05.2015.
  */
 public abstract class GameObject extends Actor implements Spatial {
-    boolean m_active;
+    private boolean m_active;
     private TextureRegion m_texture;
 
     public GameObject() {
@@ -45,7 +45,7 @@ public abstract class GameObject extends Actor implements Spatial {
     }
 
     @Override
-    public void act(float delta) {
+    public final void act(float delta) {
         update(delta);
         super.act(delta);
     }

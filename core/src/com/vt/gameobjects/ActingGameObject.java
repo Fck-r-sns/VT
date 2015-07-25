@@ -10,7 +10,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.vt.game.Constants;
-import com.vt.gameobjects.GameObject;
 import com.vt.physics.colliders.Collidable;
 
 /**
@@ -198,47 +197,11 @@ public class ActingGameObject extends GameObject implements Steerable<Vector2>, 
     @Override
     public void onCollision(Collidable other) {
         switch (other.getColliderType()) {
-            case Wall: {
-                Circle c = getBoundingShape();
-                float x = c.x;
-                float y = c.y;
-                float r = c.radius;
-                float otherLeft = other.getX(Align.left);
-                float otherRight = other.getX(Align.right);
-                float otherTop = other.getY(Align.top);
-                float otherBottom = other.getY(Align.bottom);
-                final float offset = other.getWidth() * 0.1f;
-                final float offset2 = other.getWidth() * 0.3f;
-                final float vel = 0.0f;
-
-                if (Intersector.intersectSegmentCircle(
-                        new Vector2(otherLeft - offset2, otherBottom + offset),
-                        new Vector2(otherLeft - offset2, otherTop - offset),
-                        new Vector2(x, y), r*r)
-                        && m_linearVelocity.x > 0)
-                    m_linearVelocity.x = -vel;
-
-                else if (Intersector.intersectSegmentCircle(
-                        new Vector2(otherRight + offset2, otherBottom + offset),
-                        new Vector2(otherRight + offset2, otherTop - offset),
-                        new Vector2(x, y), r*r)
-                        && m_linearVelocity.x < 0)
-                    m_linearVelocity.x = vel;
-
-                if (Intersector.intersectSegmentCircle(
-                        new Vector2(otherLeft + offset, otherBottom - offset2),
-                        new Vector2(otherRight - offset, otherBottom - offset2),
-                        new Vector2(x, y), r*r)
-                        && m_linearVelocity.y > 0)
-                    m_linearVelocity.y = -vel;
-                else if (Intersector.intersectSegmentCircle(
-                        new Vector2(otherLeft + offset, otherTop + offset2),
-                        new Vector2(otherRight - offset, otherTop + offset2),
-                        new Vector2(x, y), r*r)
-                        && m_linearVelocity.y < 0)
-                    m_linearVelocity.y = vel;
-            }
-            break;
+            case Wall:
+                processCollisionWithWall(other);
+                break;
+            case Projectile:
+                break;
             default:
                 break;
         }
@@ -257,5 +220,47 @@ public class ActingGameObject extends GameObject implements Steerable<Vector2>, 
     @Override
     public boolean checkShapeCollision(Rectangle rectangle) {
         return Intersector.overlaps(getBoundingShape(), rectangle);
+    }
+
+    protected void processCollisionWithWall(Collidable wall) {
+        Circle c = getBoundingShape();
+        float x = c.x;
+        float y = c.y;
+        float r = c.radius;
+        float otherLeft = wall.getX(Align.left);
+        float otherRight = wall.getX(Align.right);
+        float otherTop = wall.getY(Align.top);
+        float otherBottom = wall.getY(Align.bottom);
+        final float offset = wall.getWidth() * 0.1f;
+        final float offset2 = wall.getWidth() * 0.3f;
+        final float vel = 0.0f;
+
+        // check collision with left and right sides of wall tile
+        if (Intersector.intersectSegmentCircle(
+                new Vector2(otherLeft - offset2, otherBottom + offset),
+                new Vector2(otherLeft - offset2, otherTop - offset),
+                new Vector2(x, y), r * r)
+                && m_linearVelocity.x > 0)
+            m_linearVelocity.x = -vel;
+        else if (Intersector.intersectSegmentCircle(
+                new Vector2(otherRight + offset2, otherBottom + offset),
+                new Vector2(otherRight + offset2, otherTop - offset),
+                new Vector2(x, y), r * r)
+                && m_linearVelocity.x < 0)
+            m_linearVelocity.x = vel;
+
+        // check collision with top and bottom sides of wall tile
+        if (Intersector.intersectSegmentCircle(
+                new Vector2(otherLeft + offset, otherBottom - offset2),
+                new Vector2(otherRight - offset, otherBottom - offset2),
+                new Vector2(x, y), r * r)
+                && m_linearVelocity.y > 0)
+            m_linearVelocity.y = -vel;
+        else if (Intersector.intersectSegmentCircle(
+                new Vector2(otherLeft + offset, otherTop + offset2),
+                new Vector2(otherRight - offset, otherTop + offset2),
+                new Vector2(x, y), r * r)
+                && m_linearVelocity.y < 0)
+            m_linearVelocity.y = vel;
     }
 }

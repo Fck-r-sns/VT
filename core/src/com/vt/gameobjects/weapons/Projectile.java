@@ -2,6 +2,7 @@ package com.vt.gameobjects.weapons;
 
 import com.vt.game.Constants;
 import com.vt.gameobjects.ActingGameObject;
+import com.vt.physics.colliders.Collidable;
 import com.vt.resources.Assets;
 
 /**
@@ -24,5 +25,11 @@ public class Projectile extends ActingGameObject {
         if (m_linearVelocity.len2() == 0.0f)
             m_linearVelocity.set(1, 0);
         m_linearVelocity.rotate(angle);
+    }
+
+    @Override
+    protected void processCollisionWithWall(Collidable wall) {
+        m_linearVelocity.setZero();
+        setVisible(false);
     }
 }

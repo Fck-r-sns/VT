@@ -11,11 +11,18 @@ import com.vt.physics.Spatial;
  * Created by Fck.r.sns on 04.05.2015.
  */
 public abstract class GameObject extends Actor implements Spatial {
+    static private int m_idGenerator = 0;
+    private Integer m_id;
     private boolean m_active;
     private TextureRegion m_texture;
 
     public GameObject() {
+        m_id = ++m_idGenerator;
         setActive(true);
+    }
+
+    public final Integer getId() {
+        return m_id;
     }
 
     public void setTexture(TextureRegion texture) {

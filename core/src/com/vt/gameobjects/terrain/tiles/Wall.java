@@ -10,7 +10,7 @@ import com.vt.resources.Assets;
 public class Wall extends Tile {
     public Wall() {
         setTexture(Assets.getInstance().terrain.boxGreyCross);
-        CollisionManager.getInstance().registerStaticCollidableObject(this);
+        CollisionManager.getInstance().registerStaticCollidableObject(getId(), this);
     }
 
     @Override

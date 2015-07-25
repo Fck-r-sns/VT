@@ -9,10 +9,8 @@ import com.vt.physics.colliders.Collidable;
  */
 public class CollisionManager {
     private static CollisionManager instance = null;
-    private Array<Collidable> m_staticCollidables = new Array<Collidable>(32);
-    //    private ObjectMap<Integer, Collidable> m_staticCollidables;
-    private Array<Collidable> m_dynamicCollidables = new Array<Collidable>(32);
-    //    private ObjectMap<Integer, Collidable> m_dynamicCollidables;
+    private ObjectMap<Integer, Collidable> m_staticCollidables;
+    private ObjectMap<Integer, Collidable> m_dynamicCollidables;
 
     public static CollisionManager getInstance() {
         if (instance == null)
@@ -21,24 +19,23 @@ public class CollisionManager {
     }
 
     private CollisionManager() {
-//        m_staticCollidables = new ObjectMap<Integer, Collidable>(32);
-//        m_dynamicCollidables = new ObjectMap<Integer, Collidable>(32);
+        m_staticCollidables = new ObjectMap<Integer, Collidable>(32);
+        m_dynamicCollidables = new ObjectMap<Integer, Collidable>(32);
     }
 
     public void update(float delta) {
-        int sizeStatics = m_staticCollidables.size;
         int sizeDynamics = m_dynamicCollidables.size;
+        Array<Collidable> dynamicCollidablesArray = m_dynamicCollidables.values().toArray();
         for (int firstIdx = 0; firstIdx < sizeDynamics; ++firstIdx) {
-            Collidable first = m_dynamicCollidables.get(firstIdx);
+            Collidable first = dynamicCollidablesArray.get(firstIdx);
             for (int secondIdx = firstIdx + 1; secondIdx < sizeDynamics; ++secondIdx) {
-                Collidable second = m_dynamicCollidables.get(secondIdx);
+                Collidable second = dynamicCollidablesArray.get(secondIdx);
                 if (first.checkCollision(second)) {
                     first.onCollision(second);
                     second.onCollision(first);
                 }
             }
-            for (int secondIdx = 0; secondIdx < sizeStatics; ++secondIdx) {
-                Collidable second = m_staticCollidables.get(secondIdx);
+            for (Collidable second : m_staticCollidables.values()) {
                 if (first.checkCollision(second)) {
                     first.onCollision(second);
                     second.onCollision(first);
@@ -47,11 +44,19 @@ public class CollisionManager {
         }
     }
 
-    public void registerStaticCollidableObject(Collidable object) {
-        m_staticCollidables.add(object);
+    public void registerStaticCollidableObject(Integer key, Collidable object) {
+        m_staticCollidables.put(key, object);
     }
 
-    public void registerDynamicCollidableObject(Collidable object) {
-        m_dynamicCollidables.add(object);
+    public void removeStaticCollidableObject(Integer key) {
+        m_staticCollidables.remove(key);
+    }
+
+    public void registerDynamicCollidableObject(Integer key, Collidable object) {
+        m_dynamicCollidables.put(key, object);
+    }
+
+    public void removeDynamicCollidableObject(Integer key) {
+        m_dynamicCollidables.remove(key);
     }
 }

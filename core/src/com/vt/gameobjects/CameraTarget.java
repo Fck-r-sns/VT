@@ -10,7 +10,7 @@ import com.vt.game.Constants;
 /**
  * Created by Fck.r.sns on 27.06.2015.
  */
-public class CameraTarget extends ActingGameObject {
+public class CameraTarget extends ActingObject {
     private class PositionUpdater extends SteerableAdapter<Vector2> {
         private Array<GameObject> m_objects;
 

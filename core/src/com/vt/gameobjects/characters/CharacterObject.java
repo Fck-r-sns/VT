@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.vt.game.Constants;
 import com.vt.game.Environment;
-import com.vt.gameobjects.ActingGameObject;
+import com.vt.gameobjects.ActingObject;
 import com.vt.gameobjects.pointers.MovementPointer;
 import com.vt.gameobjects.pointers.ViewPointer;
 import com.vt.gameobjects.weapons.Projectile;
@@ -17,7 +17,7 @@ import com.vt.resources.Assets;
 /**
  * Created by Fck.r.sns on 16.05.2015.
  */
-public class CharacterObject extends ActingGameObject implements ControllableCharacter, Shootable {
+public class CharacterObject extends ActingObject implements ControllableCharacter, Shootable {
     private MovementPointer m_movementPointer;
     private ViewPointer m_viewPointer;
     private Vector2 m_lastPosition;
@@ -49,8 +49,8 @@ public class CharacterObject extends ActingGameObject implements ControllableCha
                         .setDecelerationRadius(Constants.PLAYER_ARRIVAL_DECELERATION_RADIUS)
         );
 
-        m_boundingRadius = Constants.PLAYER_BOUNDING_RADIUS;
-        CollisionManager.getInstance().registerDynamicCollidableObject(this);
+        setBoundingRadius(Constants.PLAYER_BOUNDING_RADIUS);
+        CollisionManager.getInstance().registerDynamicCollidableObject(getId(), this);
     }
 
     public void setInitialPosition(float x, float y) {

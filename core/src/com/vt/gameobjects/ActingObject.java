@@ -15,7 +15,7 @@ import com.vt.physics.colliders.Collidable;
 /**
  * Created by Fck.r.sns on 10.05.2015.
  */
-public class ActingGameObject extends GameObject implements Steerable<Vector2>, Collidable {
+public class ActingObject extends GameObject implements Steerable<Vector2>, Collidable {
     protected Vector2 m_linearVelocity = new Vector2(); // pixels per second
     protected float m_angularVelocity = 0.0f;
     protected float m_boundingRadius;
@@ -117,6 +117,10 @@ public class ActingGameObject extends GameObject implements Steerable<Vector2>, 
     @Override
     public float getBoundingRadius() {
         return m_boundingRadius;
+    }
+
+    public void setBoundingRadius(float radius) {
+        m_boundingRadius = radius;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.vt.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -18,7 +19,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.vt.game.CameraHelper;
 import com.vt.game.Constants;
 import com.vt.game.Environment;
-import com.vt.game.InputIntegrator;
 import com.vt.gameobjects.CameraTarget;
 import com.vt.gameobjects.GameObject;
 import com.vt.gameobjects.characters.ManualController;
@@ -75,7 +75,8 @@ public class GameScreen implements Screen {
 
         Assets.getInstance().init();
 
-        m_level = LevelFactory.createFromTextFile(Constants.Level.LEVEL_TEST_FILE);
+//        m_level = LevelFactory.createFromTextFile(Constants.Level.LEVEL_TEST_FILE);
+        m_level = LevelFactory.createStub(1, 1);
 
         m_player = new CharacterObject();
         m_player.setInitialPosition(m_level.getPlayerPosition().x, m_level.getPlayerPosition().y);
@@ -174,11 +175,7 @@ public class GameScreen implements Screen {
             }
         });
 
-        Gdx.input.setInputProcessor(
-                new InputIntegrator()
-                        .addInputProcessor(m_stageGui)
-                        .addInputProcessor(m_stage)
-        );
+        Gdx.input.setInputProcessor(new InputMultiplexer(m_stageGui, m_stage));
     }
 
     @Override

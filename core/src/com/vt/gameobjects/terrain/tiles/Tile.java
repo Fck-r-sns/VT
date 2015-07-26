@@ -1,7 +1,5 @@
 package com.vt.gameobjects.terrain.tiles;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
@@ -10,11 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.vt.game.Constants;
 import com.vt.gameobjects.GameObject;
 import com.vt.physics.colliders.Collidable;
-
-import static com.badlogic.gdx.scenes.scene2d.utils.Align.bottom;
-import static com.badlogic.gdx.scenes.scene2d.utils.Align.left;
-import static com.badlogic.gdx.scenes.scene2d.utils.Align.right;
-import static com.badlogic.gdx.scenes.scene2d.utils.Align.top;
 
 /**
  * Created by Fck.r.sns on 22.06.2015.

@@ -3,7 +3,6 @@ package com.vt.gameobjects;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.vt.game.Constants;
 import com.vt.physics.Spatial;
@@ -92,5 +91,16 @@ public abstract class GameObject extends Group implements Spatial {
             return getY() + getOriginY();
         else
             return super.getY(alignment);
+    }
+
+    @Override
+    public void setPosition(float x, float y, int alignment) {
+        if (alignment == Constants.ALIGN_ORIGIN) {
+            x -= getOriginX();
+            y -= getOriginY();
+            super.setPosition(x, y);
+        } else {
+            super.setPosition(x, y, alignment);
+        }
     }
 }

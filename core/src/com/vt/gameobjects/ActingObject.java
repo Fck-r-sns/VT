@@ -79,22 +79,6 @@ public class ActingObject extends GameObject implements Steerable<Vector2>, Coll
     }
 
     @Override
-    public Vector2 getPosition() {
-        return new Vector2(getX() + getOriginX(), getY() + getOriginY());
-    }
-
-    @Override
-    public void setPosition(float x, float y, int alignment) {
-        if (alignment == Constants.ALIGN_ORIGIN) {
-            x -= getOriginX();
-            y -= getOriginY();
-            super.setPosition(x, y);
-        } else {
-            super.setPosition(x, y, alignment);
-        }
-    }
-
-    @Override
     public void setPosition(float x, float y) {
         setPosition(x, y, Constants.ALIGN_ORIGIN);
     }

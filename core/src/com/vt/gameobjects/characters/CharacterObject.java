@@ -9,19 +9,20 @@ import com.vt.game.Environment;
 import com.vt.gameobjects.ActingObject;
 import com.vt.gameobjects.pointers.MovementPointer;
 import com.vt.gameobjects.pointers.ViewPointer;
-import com.vt.gameobjects.weapons.Projectile;
-import com.vt.gameobjects.weapons.Shootable;
+import com.vt.gameobjects.weapons.AbstractWeapon;
+import com.vt.gameobjects.weapons.Rifle;
 import com.vt.physics.CollisionManager;
 import com.vt.resources.Assets;
 
 /**
  * Created by Fck.r.sns on 16.05.2015.
  */
-public class CharacterObject extends ActingObject implements ControllableCharacter, Shootable {
+public class CharacterObject extends ActingObject implements ControllableCharacter {
     private MovementPointer m_movementPointer;
     private ViewPointer m_viewPointer;
     private Vector2 m_lastPosition;
     private boolean m_keepOrientation = true;
+    private AbstractWeapon m_weapon;
 
     public CharacterObject() {
         m_lastPosition = new Vector2(0, 0);
@@ -51,6 +52,8 @@ public class CharacterObject extends ActingObject implements ControllableCharact
 
         setBoundingRadius(Constants.PLAYER_BOUNDING_RADIUS);
         CollisionManager.getInstance().registerDynamicCollidableObject(getId(), this);
+
+        m_weapon = new Rifle();
     }
 
     public void setInitialPosition(float x, float y) {
@@ -82,30 +85,11 @@ public class CharacterObject extends ActingObject implements ControllableCharact
 
     @Override
     public void shoot() {
-        float angle = getDirection().angle();
-        Vector2 shotStart = getShootingPoint()
-                .rotate(angle)
-                .add(getX(Constants.ALIGN_ORIGIN), getY(Constants.ALIGN_ORIGIN));
-        // TODO: run projectile from shotStart in target direction
-        Projectile p = new Projectile();
-        p.setPosition(shotStart.x, shotStart.y, Constants.ALIGN_ORIGIN);
-        p.setStartingAngle(angle);
-        p.setStartingVelocity(15);
-        Environment.getInstance().currentStage.addActor(p);
+        if (m_weapon != null)
+            m_weapon.shoot();
     }
 
-    @Override
     public void reload() {
-    }
-
-    @Override
-    public Vector2 getDirection() {
-        return new Vector2(1, 0).rotate(getRotation());
-    }
-
-    @Override
-    public Vector2 getShootingPoint() {
-        return new Vector2(Constants.RIFLE_SHOOTING_POINT_X, Constants.RIFLE_SHOOTING_POINT_Y);
     }
 
     @Override
@@ -132,6 +116,14 @@ public class CharacterObject extends ActingObject implements ControllableCharact
                 setRotationDeltaRelativeToCurrent(m_linearVelocity.angle());
         }
 
+        if (m_weapon != null) {
+            m_weapon.setPosition(
+                    getX(Constants.ALIGN_ORIGIN),
+                    getY(Constants.ALIGN_ORIGIN),
+                    Constants.ALIGN_ORIGIN
+            );
+            m_weapon.setRotation(getRotation());
+        }
         updateLastPosition();
         super.update(delta);
     }

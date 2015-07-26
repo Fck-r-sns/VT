@@ -1,6 +1,5 @@
 package com.vt.gameobjects.weapons;
 
-import com.badlogic.gdx.math.Vector2;
 import com.vt.game.Constants;
 import com.vt.game.Environment;
 

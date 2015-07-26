@@ -75,8 +75,8 @@ public class GameScreen implements Screen {
 
         Assets.getInstance().init();
 
-//        m_level = LevelFactory.createFromTextFile(Constants.Level.LEVEL_TEST_FILE);
-        m_level = LevelFactory.createStub(1, 1);
+        m_level = LevelFactory.createFromTextFile(Constants.Level.LEVEL_TEST_FILE);
+//        m_level = LevelFactory.createStub(1, 1);
 
         m_player = new CharacterObject();
         m_player.setInitialPosition(m_level.getPlayerPosition().x, m_level.getPlayerPosition().y);
@@ -189,7 +189,7 @@ public class GameScreen implements Screen {
 
         if (!isPaused()) {
             CollisionManager.getInstance().update(delta);
-            m_level.update(delta);
+//            m_level.update(delta);
             m_cameraHelper.update(delta);
             m_stage.act(delta);
             m_stageGui.act(delta);

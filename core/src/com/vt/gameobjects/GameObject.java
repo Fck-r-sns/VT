@@ -67,6 +67,7 @@ public abstract class GameObject extends Group implements Spatial {
         } else {
             super.setRotation(degrees);
         }
+        rotationChanged();
     }
 
     public void update(float delta) {
@@ -102,5 +103,9 @@ public abstract class GameObject extends Group implements Spatial {
         } else {
             super.setPosition(x, y, alignment);
         }
+    }
+
+    protected void rotationChanged() {
+
     }
 }

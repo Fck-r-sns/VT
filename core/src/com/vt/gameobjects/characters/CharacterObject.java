@@ -116,14 +116,6 @@ public class CharacterObject extends ActingObject implements ControllableCharact
                 setRotationDeltaRelativeToCurrent(m_linearVelocity.angle());
         }
 
-        if (m_weapon != null) {
-            m_weapon.setPosition(
-                    getX(Constants.ALIGN_ORIGIN),
-                    getY(Constants.ALIGN_ORIGIN),
-                    Constants.ALIGN_ORIGIN
-            );
-            m_weapon.setRotation(getRotation());
-        }
         updateLastPosition();
         super.update(delta);
     }
@@ -140,5 +132,28 @@ public class CharacterObject extends ActingObject implements ControllableCharact
 
     private Vector2 getLastPosition() {
         return m_lastPosition;
+    }
+
+    @Override
+    protected void positionChanged() {
+        super.positionChanged();
+        updateWeaponLocation();
+    }
+
+    @Override
+    protected void rotationChanged() {
+        super.rotationChanged();
+        updateWeaponLocation();
+    }
+
+    private void updateWeaponLocation() {
+        if (m_weapon != null) {
+            m_weapon.setPosition(
+                    getX(Constants.ALIGN_ORIGIN),
+                    getY(Constants.ALIGN_ORIGIN),
+                    Constants.ALIGN_ORIGIN
+            );
+            m_weapon.rotate(getRotation());
+        }
     }
 }

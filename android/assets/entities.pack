@@ -5,28 +5,35 @@ filter: Nearest,Nearest
 repeat: none
 movementPointer
   rotate: false
-  xy: 1, 35
+  xy: 1, 48
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 viewPointer
   rotate: false
-  xy: 259, 35
+  xy: 259, 48
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
+marine_pistol
+  rotate: false
+  xy: 1, 14
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 1
 marine_rifle
   rotate: false
-  xy: 1, 1
+  xy: 517, 272
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 1
 projectile
   rotate: false
-  xy: 517, 280
+  xy: 1, 1
   size: 22, 11
   orig: 22, 11
   offset: 0, 0

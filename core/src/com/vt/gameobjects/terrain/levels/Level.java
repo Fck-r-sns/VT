@@ -5,5 +5,6 @@ package com.vt.gameobjects.terrain.levels;
  */
 public class Level extends AbstractLevel {
     protected Level() {
+
     }
 }

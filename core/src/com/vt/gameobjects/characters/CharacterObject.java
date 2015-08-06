@@ -10,6 +10,7 @@ import com.vt.gameobjects.ActingObject;
 import com.vt.gameobjects.pointers.MovementPointer;
 import com.vt.gameobjects.pointers.ViewPointer;
 import com.vt.gameobjects.weapons.AbstractWeapon;
+import com.vt.gameobjects.weapons.Pistol;
 import com.vt.gameobjects.weapons.Rifle;
 import com.vt.physics.CollisionManager;
 import com.vt.resources.Assets;
@@ -53,7 +54,8 @@ public class CharacterObject extends ActingObject implements ControllableCharact
         setBoundingRadius(Constants.PLAYER_BOUNDING_RADIUS);
         CollisionManager.getInstance().registerDynamicCollidableObject(getId(), this);
 
-        m_weapon = new Rifle();
+//        m_weapon = new Rifle();
+        m_weapon = new Pistol();
     }
 
     public void setInitialPosition(float x, float y) {

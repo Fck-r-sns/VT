@@ -18,14 +18,15 @@ public class Constants {
     public static final float MOVEMENT_POINTER_WIDTH = 0.5f;
     public static final float VIEW_POINTER_WIDTH = 0.5f;
     public static final float VIEW_POINTER_HEIGHT = 0.5f;
-    public static final float RIFLE_SHOOTING_POINT_X = 0.75f - PLAYER_ORIGIN_RELATIVE_X * PLAYER_WIDTH;
+    public static final float RIFLE_SHOOTING_POINT_X = 0.7f - PLAYER_ORIGIN_RELATIVE_X * PLAYER_WIDTH;
     public static final float RIFLE_SHOOTING_POINT_Y = 0.23f - PLAYER_ORIGIN_RELATIVE_Y * PLAYER_HEIGHT;
+    public static final float PISTOL_SHOOTING_POINT_X = 0.7f - PLAYER_ORIGIN_RELATIVE_X * PLAYER_WIDTH;
+    public static final float PISTOL_SHOOTING_POINT_Y = 0.0f; // relative to origin
     public static final float PROJECTILE_WIDTH = 0.2f;
     public static final float PROJECTILE_HEIGHT = 0.1f;
     public static final float PROJECTILE_BOUNDING_RADIUS = 0.5f * PROJECTILE_HEIGHT;
     public static final float PROJECTILE_ORIGIN_RELATIVE_X = 0.77f;
     public static final float PROJECTILE_ORIGIN_RELATIVE_Y = 0.5f;
-
 
     public static final float TILE_SIZE = 1.0f;
 
@@ -56,7 +57,7 @@ public class Constants {
     public static final String SHOOT_BUTTON_DOWN_ASSET_NAME = "buttonDown";
 
     public static final String TEXTURE_ATLAS_PACK = "entities.pack";
-    public static final String PLAYER_ASSET_NAME = "marine_rifle";
+    public static final String PLAYER_ASSET_NAME = "marine_pistol";
     public static final String MOVEMENT_POINTER_ASSET_NAME = "movementPointer";
     public static final String VIEW_POINTER_ASSET_NAME = "viewPointer";
     public static final String PROJECTILE_ASSET_NAME = "projectile";

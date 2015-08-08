@@ -64,8 +64,8 @@ public class Constants {
     public static final String PROJECTILE_ASSET_NAME = "projectile";
 
     public static final float PLAYER_ANIMATION_FRAME_TIME_BASE = 0.35f;
-    public static final float PLAYER_SHOOTING_ANIMATION_FRAME_TIME = 0.25f;
-    public static final float PLAYER_SHOOTING_ANIMATION_DURATION = 0.6f;
+    public static final float PLAYER_SHOOTING_ANIMATION_FRAME_TIME = 0.2f;
+    public static final float PLAYER_SHOOTING_ANIMATION_DURATION = 0.5f;
 
     public static final String TERRAIN_ATLAS_PACK = "tiles.pack";
     public static final String PLAIN_FLOOR_LIGHT_ASSET_NAME = "tile1";

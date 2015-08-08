@@ -13,6 +13,7 @@ import com.vt.gameobjects.pointers.ViewPointer;
 import com.vt.gameobjects.weapons.AbstractWeapon;
 import com.vt.gameobjects.weapons.Pistol;
 import com.vt.physics.CollisionManager;
+import com.vt.resources.AnimationWrapper;
 import com.vt.resources.Assets;
 import com.vt.timedriven.DelayedAction;
 import com.vt.timedriven.TimeDrivenExecutor;
@@ -28,10 +29,10 @@ public class CharacterObject extends ActingObject implements ControllableCharact
     private Vector2 m_lastPosition;
     private boolean m_keepOrientation = true;
     private AbstractWeapon m_weapon;
-    private Animation m_animationMove;
-    private Animation m_animationShoot;
-    private Animation m_animationStand;
-    private float m_shootTime = 0;
+    private AnimationWrapper m_animationCurrent;
+    private AnimationWrapper m_animationMove;
+    private AnimationWrapper m_animationShoot;
+    private AnimationWrapper m_animationStand;
     private DelayedAction m_shootingAction;
 
     protected enum State {
@@ -63,22 +64,28 @@ public class CharacterObject extends ActingObject implements ControllableCharact
                 Constants.PLAYER_ORIGIN_RELATIVE_Y * Constants.PLAYER_HEIGHT);
         setTexture(Assets.getInstance().gameEntities.player);
 
-        m_animationMove = new Animation(
-                Constants.PLAYER_ANIMATION_FRAME_TIME_BASE,
-                Assets.getInstance().gameEntities.playerAnimationMove,
-                Animation.PlayMode.LOOP
+        m_animationMove = new AnimationWrapper(
+                new Animation(
+                        Constants.PLAYER_ANIMATION_FRAME_TIME_BASE,
+                        Assets.getInstance().gameEntities.playerAnimationMove,
+                        Animation.PlayMode.LOOP
+                )
         );
 
-        m_animationStand = new Animation(
-                Constants.PLAYER_ANIMATION_FRAME_TIME_BASE,
-                Assets.getInstance().gameEntities.playerAnimationStand,
-                Animation.PlayMode.LOOP
+        m_animationStand = new AnimationWrapper(
+                new Animation(
+                        Constants.PLAYER_ANIMATION_FRAME_TIME_BASE,
+                        Assets.getInstance().gameEntities.playerAnimationStand,
+                        Animation.PlayMode.LOOP
+                )
         );
 
-        m_animationShoot = new Animation(
-                Constants.PLAYER_SHOOTING_ANIMATION_FRAME_TIME,
-                Assets.getInstance().gameEntities.playerAnimationShoot,
-                Animation.PlayMode.NORMAL
+        m_animationShoot = new AnimationWrapper(
+                new Animation(
+                        Constants.PLAYER_SHOOTING_ANIMATION_FRAME_TIME,
+                        Assets.getInstance().gameEntities.playerAnimationShoot,
+                        Animation.PlayMode.NORMAL
+                )
         );
 
         this.setName(Constants.PLAYER_ACTOR_NAME);
@@ -130,20 +137,22 @@ public class CharacterObject extends ActingObject implements ControllableCharact
     public void shoot() {
         if (m_weapon != null) {
             setState(State.Shoot);
-            m_shootTime = Environment.getInstance().globalTime;
-            if (m_shootingAction == null)
+            m_animationShoot.restart();
+            if (m_shootingAction == null) {
                 m_shootingAction = new DelayedAction(
                         Constants.PLAYER_SHOOTING_ANIMATION_DURATION,
                         new Runnable() {
                             @Override
                             public void run() {
                                 setState(State.Stand);
+                                m_shootingAction = null;
                             }
                         }
                 );
-            else
+                m_actionsManager.addAction(m_shootingAction);
+            } else {
                 m_shootingAction.restart();
-            m_actionsManager.addAction(m_shootingAction);
+            }
             m_weapon.shoot();
         }
     }
@@ -225,24 +234,28 @@ public class CharacterObject extends ActingObject implements ControllableCharact
     }
 
     private void manageAnimation() {
-        Animation animationCurrent;
         switch (m_state) {
             case Stand:
-                animationCurrent = m_animationStand;
+                changeAnimation(m_animationStand);
                 break;
             case Move:
-                animationCurrent = m_animationMove;
+                changeAnimation(m_animationMove);
                 break;
             case Shoot:
-                animationCurrent = m_animationShoot;
+                changeAnimation(m_animationShoot);
                 break;
             default:
-                animationCurrent = m_animationStand;
+                changeAnimation(m_animationStand);
                 break;
         }
-        if (animationCurrent != null) {
-            float animationTime = Environment.getInstance().globalTime - m_shootTime;
-            setTexture(animationCurrent.getKeyFrame(animationTime));
+        if (m_animationCurrent != null)
+            setTexture(m_animationCurrent.getCurrentFrame());
+    }
+
+    private void changeAnimation(AnimationWrapper a) {
+        if (m_animationCurrent != a) {
+            m_animationCurrent = a;
+            m_animationCurrent.restart();
         }
     }
 }

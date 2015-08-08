@@ -6,6 +6,7 @@ import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.vt.game.Constants;
 
@@ -20,11 +21,13 @@ public class Assets implements Disposable, AssetErrorListener {
         public TextureAtlas.AtlasRegion pauseButtonDown;
         public TextureAtlas.AtlasRegion shootButtonUp;
         public TextureAtlas.AtlasRegion shootButtonDown;
-
     }
 
     public class GameEntities {
         public TextureAtlas.AtlasRegion player;
+        public Array<TextureAtlas.AtlasRegion> playerAnimationStand;
+        public Array<TextureAtlas.AtlasRegion> playerAnimationMove;
+        public Array<TextureAtlas.AtlasRegion> playerAnimationShoot;
         public TextureAtlas.AtlasRegion movementPointer;
         public TextureAtlas.AtlasRegion viewPointer;
         public TextureAtlas.AtlasRegion projectile;
@@ -73,6 +76,16 @@ public class Assets implements Disposable, AssetErrorListener {
 
         gameEntities = new GameEntities();
         gameEntities.player = atlas.findRegion(Constants.PLAYER_ASSET_NAME);
+
+        gameEntities.playerAnimationStand = new Array<TextureAtlas.AtlasRegion>(1);
+        gameEntities.playerAnimationStand.add(atlas.findRegion(Constants.PLAYER_ASSET_NAME));
+
+        gameEntities.playerAnimationMove = atlas.findRegions(Constants.PLAYER_ASSET_NAME);
+
+        gameEntities.playerAnimationShoot = new Array<TextureAtlas.AtlasRegion>(2);
+        gameEntities.playerAnimationShoot.add(atlas.findRegion(Constants.PLAYER_SHOOTING_ASSET_NAME));
+        gameEntities.playerAnimationShoot.add(atlas.findRegion(Constants.PLAYER_ASSET_NAME));
+
         gameEntities.movementPointer = atlas.findRegion(Constants.MOVEMENT_POINTER_ASSET_NAME);
         gameEntities.viewPointer = atlas.findRegion(Constants.VIEW_POINTER_ASSET_NAME);
         gameEntities.projectile = atlas.findRegion(Constants.PROJECTILE_ASSET_NAME);

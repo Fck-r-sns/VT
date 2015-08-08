@@ -1,6 +1,7 @@
 package com.vt.gameobjects.characters;
 
 import com.badlogic.gdx.ai.steer.behaviors.Arrive;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
@@ -11,21 +12,38 @@ import com.vt.gameobjects.pointers.MovementPointer;
 import com.vt.gameobjects.pointers.ViewPointer;
 import com.vt.gameobjects.weapons.AbstractWeapon;
 import com.vt.gameobjects.weapons.Pistol;
-import com.vt.gameobjects.weapons.Rifle;
 import com.vt.physics.CollisionManager;
 import com.vt.resources.Assets;
+import com.vt.timedriven.DelayedAction;
+import com.vt.timedriven.TimeDrivenExecutor;
 
 /**
  * Created by Fck.r.sns on 16.05.2015.
  */
 public class CharacterObject extends ActingObject implements ControllableCharacter {
+    private static final String TAG = CharacterObject.class.getName();
+    private TimeDrivenExecutor m_actionsManager;
     private MovementPointer m_movementPointer;
     private ViewPointer m_viewPointer;
     private Vector2 m_lastPosition;
     private boolean m_keepOrientation = true;
     private AbstractWeapon m_weapon;
+    private Animation m_animationMove;
+    private Animation m_animationShoot;
+    private Animation m_animationStand;
+    private float m_shootTime = 0;
+    private DelayedAction m_shootingAction;
+
+    protected enum State {
+        Stand,
+        Move,
+        Shoot
+    }
+
+    private State m_state = State.Stand;
 
     public CharacterObject() {
+        m_actionsManager = new TimeDrivenExecutor();
         m_lastPosition = new Vector2(0, 0);
 
         m_movementPointer = new MovementPointer();
@@ -44,6 +62,25 @@ public class CharacterObject extends ActingObject implements ControllableCharact
         setOrigin(Constants.PLAYER_ORIGIN_RELATIVE_X * Constants.PLAYER_WIDTH,
                 Constants.PLAYER_ORIGIN_RELATIVE_Y * Constants.PLAYER_HEIGHT);
         setTexture(Assets.getInstance().gameEntities.player);
+
+        m_animationMove = new Animation(
+                Constants.PLAYER_ANIMATION_FRAME_TIME_BASE,
+                Assets.getInstance().gameEntities.playerAnimationMove,
+                Animation.PlayMode.LOOP
+        );
+
+        m_animationStand = new Animation(
+                Constants.PLAYER_ANIMATION_FRAME_TIME_BASE,
+                Assets.getInstance().gameEntities.playerAnimationStand,
+                Animation.PlayMode.LOOP
+        );
+
+        m_animationShoot = new Animation(
+                Constants.PLAYER_SHOOTING_ANIMATION_FRAME_TIME,
+                Assets.getInstance().gameEntities.playerAnimationShoot,
+                Animation.PlayMode.NORMAL
+        );
+
         this.setName(Constants.PLAYER_ACTOR_NAME);
 
         setBehavior(
@@ -73,6 +110,10 @@ public class CharacterObject extends ActingObject implements ControllableCharact
         return m_viewPointer;
     }
 
+    public void setState(State state) {
+        m_state = state;
+    }
+
     @Override
     public void setMovementPointerPosition(float x, float y) {
         m_movementPointer.setActive(true);
@@ -87,8 +128,24 @@ public class CharacterObject extends ActingObject implements ControllableCharact
 
     @Override
     public void shoot() {
-        if (m_weapon != null)
+        if (m_weapon != null) {
+            setState(State.Shoot);
+            m_shootTime = Environment.getInstance().globalTime;
+            if (m_shootingAction == null)
+                m_shootingAction = new DelayedAction(
+                        Constants.PLAYER_SHOOTING_ANIMATION_DURATION,
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                setState(State.Stand);
+                            }
+                        }
+                );
+            else
+                m_shootingAction.restart();
+            m_actionsManager.addAction(m_shootingAction);
             m_weapon.shoot();
+        }
     }
 
     public void reload() {
@@ -101,6 +158,8 @@ public class CharacterObject extends ActingObject implements ControllableCharact
 
     @Override
     public void update(float delta) {
+        m_actionsManager.execute();
+
         if (m_movementPointer.getPosition().dst(getPosition()) < Constants.PLAYER_ARRIVAL_TOLERANCE) {
             m_movementPointer.setActive(false);
             m_linearVelocity.set(0, 0);
@@ -119,13 +178,19 @@ public class CharacterObject extends ActingObject implements ControllableCharact
         }
 
         updateLastPosition();
+        manageAnimation();
+        if (m_state != State.Shoot) {
+            if (m_linearVelocity.len2() > m_maxLinearSpeed * m_maxLinearSpeed * 0.25f)
+                m_state = State.Move;
+            else
+                m_state = State.Stand;
+        }
         super.update(delta);
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-
     }
 
     private void updateLastPosition() {
@@ -156,6 +221,28 @@ public class CharacterObject extends ActingObject implements ControllableCharact
                     Constants.ALIGN_ORIGIN
             );
             m_weapon.rotate(getRotation());
+        }
+    }
+
+    private void manageAnimation() {
+        Animation animationCurrent;
+        switch (m_state) {
+            case Stand:
+                animationCurrent = m_animationStand;
+                break;
+            case Move:
+                animationCurrent = m_animationMove;
+                break;
+            case Shoot:
+                animationCurrent = m_animationShoot;
+                break;
+            default:
+                animationCurrent = m_animationStand;
+                break;
+        }
+        if (animationCurrent != null) {
+            float animationTime = Environment.getInstance().globalTime - m_shootTime;
+            setTexture(animationCurrent.getKeyFrame(animationTime));
         }
     }
 }

@@ -58,9 +58,14 @@ public class Constants {
 
     public static final String TEXTURE_ATLAS_PACK = "entities.pack";
     public static final String PLAYER_ASSET_NAME = "marine_pistol";
+    public static final String PLAYER_SHOOTING_ASSET_NAME = "marine_pistol_fire";
     public static final String MOVEMENT_POINTER_ASSET_NAME = "movementPointer";
     public static final String VIEW_POINTER_ASSET_NAME = "viewPointer";
     public static final String PROJECTILE_ASSET_NAME = "projectile";
+
+    public static final float PLAYER_ANIMATION_FRAME_TIME_BASE = 0.35f;
+    public static final float PLAYER_SHOOTING_ANIMATION_FRAME_TIME = 0.25f;
+    public static final float PLAYER_SHOOTING_ANIMATION_DURATION = 0.6f;
 
     public static final String TERRAIN_ATLAS_PACK = "tiles.pack";
     public static final String PLAIN_FLOOR_LIGHT_ASSET_NAME = "tile1";
@@ -93,13 +98,13 @@ public class Constants {
     public final static float MAX_ANGULAR_SPEED_DEFAULT = 30;
     public final static float MAX_ANGULAR_ACCELERATION_DEFAULT = 30;
 
-    public final static float MAX_PLAYER_LINEAR_SPEED = 4.0f; // meters per second (4 m/s = 14.4 km/h)
+    public final static float MAX_PLAYER_LINEAR_SPEED = 2.0f; // meters per second (4 m/s = 14.4 km/h)
     public final static float MAX_PLAYER_LINEAR_ACCELERATION = 6.0f;
     public final static float MAX_PLAYER_ANGULAR_SPEED = 30;
     public final static float MAX_PLAYER_ANGULAR_ACCELERATION = 30;
 
     public final static float PLAYER_ARRIVAL_TOLERANCE = 0.08f;
-    public final static float PLAYER_ARRIVAL_DECELERATION_RADIUS = 1.6f;
+    public final static float PLAYER_ARRIVAL_DECELERATION_RADIUS = 1.0f;
 
     public final static float MAX_CAMERA_LINEAR_SPEED_DEFAULT = 8;
     public final static float MAX_CAMERA_LINEAR_ACCELERATION_DEFAULT = 14;

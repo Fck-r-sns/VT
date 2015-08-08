@@ -40,15 +40,19 @@ public abstract class GameObject extends Group implements Spatial {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        if (m_texture != null)
+        if (m_texture != null) {
+            float height = getHeight();
+            float width = m_texture.getRegionWidth() * height / m_texture.getRegionHeight();
             batch.draw(
                     m_texture,
                     getX(), getY(),
                     getOriginX(), getOriginY(),
-                    getWidth(), getHeight(),
+//                    getWidth(), getHeight(),
+                    width, height,
                     getScaleX(), getScaleY(),
                     getRotation()
             );
+        }
         drawChildren(batch, parentAlpha);
     }
 

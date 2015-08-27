@@ -6,17 +6,26 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.vt.game.Constants;
 import com.vt.physics.Spatial;
+import com.vt.serialization.RestorableValue;
+import com.vt.serialization.ValuesChangeHistory;
+
+import static com.badlogic.gdx.scenes.scene2d.utils.Align.bottom;
+import static com.badlogic.gdx.scenes.scene2d.utils.Align.left;
+import static com.badlogic.gdx.scenes.scene2d.utils.Align.right;
+import static com.badlogic.gdx.scenes.scene2d.utils.Align.top;
 
 /**
  * Created by Fck.r.sns on 04.05.2015.
  */
 public abstract class GameObject extends Group implements Spatial {
     static private int m_idGenerator = 0;
+    public ValuesChangeHistory m_valuesHistory;
     private Integer m_id;
     private boolean m_active;
     private TextureRegion m_texture;
 
     public GameObject() {
+        m_valuesHistory = new ValuesChangeHistory();
         m_id = ++m_idGenerator;
         setActive(true);
     }
@@ -99,13 +108,50 @@ public abstract class GameObject extends Group implements Spatial {
     }
 
     @Override
+    public void setPosition(float x, float y) {
+        if (getX() != x || getY() != y)
+            m_valuesHistory.addValue(new RestorableValue() {
+                private float x = getX();
+                private float y = getY();
+
+                @Override
+                public void restore() {
+                    setPosition(x, y);
+                }
+            });
+        super.setPosition(x, y);
+    }
+
+    @Override
     public void setPosition(float x, float y, int alignment) {
         if (alignment == Constants.ALIGN_ORIGIN) {
             x -= getOriginX();
             y -= getOriginY();
-            super.setPosition(x, y);
         } else {
-            super.setPosition(x, y, alignment);
+            if ((alignment & right) != 0)
+                x -= getWidth();
+            else if ((alignment & left) == 0) //
+                x -= getWidth() / 2;
+
+            if ((alignment & top) != 0)
+                y -= getHeight();
+            else if ((alignment & bottom) == 0) //
+                y -= getHeight() / 2;
+        }
+
+        if (getX() != x || getY() != y) {
+            m_valuesHistory.addValue(new RestorableValue() {
+                private float x = getX();
+                private float y = getY();
+
+                @Override
+                public void restore() {
+                    setPosition(x, y);
+                }
+            });
+
+            super.setPosition(x, y);
+            positionChanged();
         }
     }
 

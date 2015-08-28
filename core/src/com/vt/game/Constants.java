@@ -45,6 +45,10 @@ public class Constants {
     public static final float SHOOT_BUTTON_HEIGHT = 75.0f;
     public static final float SHOOT_BUTTON_MARGIN_X = 20.0f;
     public static final float SHOOT_BUTTON_MARGIN_Y = VIEW_BUTTON_MARGIN_Y - VIEW_BUTTON_HEIGHT - 20.0f;
+    public static final float REWIND_BUTTON_WIDTH = 75.0f;
+    public static final float REWIND_BUTTON_HEIGHT = 75.0f;
+    public static final float REWIND_BUTTON_MARGIN_X = PAUSE_BUTTON_MARGIN_X + PAUSE_BUTTON_WIDTH + 20.0f;;
+    public static final float REWIND_BUTTON_MARGIN_Y = -20.0f;
     // ------------------------------------------------------------------------
 
     // resources --------------------------------------------------------------
@@ -55,6 +59,8 @@ public class Constants {
     public static final String PAUSE_BUTTON_DOWN_ASSET_NAME = "buttonDown";
     public static final String SHOOT_BUTTON_UP_ASSET_NAME = "buttonUp";
     public static final String SHOOT_BUTTON_DOWN_ASSET_NAME = "buttonDown";
+    public static final String REWIND_BUTTON_UP_ASSET_NAME = "buttonUp";
+    public static final String REWIND_BUTTON_DOWN_ASSET_NAME = "buttonDown";
 
     public static final String TEXTURE_ATLAS_PACK = "entities.pack";
     public static final String PLAYER_ASSET_NAME = "marine_pistol";
@@ -90,6 +96,7 @@ public class Constants {
     public final static String VIEW_BUTTON_ACTOR_NAME = "vb";
     public final static String PAUSE_BUTTON_ACTOR_NAME = "pb";
     public final static String SHOOT_BUTTON_ACTOR_NAME = "sb";
+    public final static String REWIND_BUTTON_ACTOR_NAME = "rb";
     // ------------------------------------------------------------------------
 
     // physics ----------------------------------------------------------------
@@ -100,16 +107,18 @@ public class Constants {
 
     public final static float MAX_PLAYER_LINEAR_SPEED = 2.0f; // meters per second (4 m/s = 14.4 km/h)
     public final static float MAX_PLAYER_LINEAR_ACCELERATION = 6.0f;
-    public final static float MAX_PLAYER_ANGULAR_SPEED = 30;
-    public final static float MAX_PLAYER_ANGULAR_ACCELERATION = 30;
+    public final static float MAX_PLAYER_ANGULAR_SPEED = 1;
+    public final static float MAX_PLAYER_ANGULAR_ACCELERATION = 1;
 
     public final static float PLAYER_ARRIVAL_TOLERANCE = 0.08f;
+    public final static float PLAYER_ARRIVAL_TOLERANCE_POW_2 = PLAYER_ARRIVAL_TOLERANCE * PLAYER_ARRIVAL_TOLERANCE;
     public final static float PLAYER_ARRIVAL_DECELERATION_RADIUS = 1.0f;
 
     public final static float MAX_CAMERA_LINEAR_SPEED_DEFAULT = 8;
     public final static float MAX_CAMERA_LINEAR_ACCELERATION_DEFAULT = 14;
 
     public final static float CAMERA_ARRIVAL_TOLERANCE = 0.02f;
+    public final static float CAMERA_ARRIVAL_TOLERANCE_POW_2 = CAMERA_ARRIVAL_TOLERANCE * CAMERA_ARRIVAL_TOLERANCE;
     public final static float CAMERA_ARRIVAL_DECELERATION_RADIUS = 1.6f;
     // ------------------------------------------------------------------------
 

@@ -28,6 +28,8 @@ import com.vt.gameobjects.gui.ButtonAction;
 import com.vt.gameobjects.gui.ButtonFactory;
 import com.vt.gameobjects.terrain.levels.AbstractLevel;
 import com.vt.gameobjects.terrain.levels.LevelFactory;
+import com.vt.messages.MessageDispatcher;
+import com.vt.messages.RewindContext;
 import com.vt.physics.CollisionManager;
 import com.vt.resources.Assets;
 
@@ -48,6 +50,7 @@ public class GameScreen implements Screen {
     private Button m_viewButton;
     private Button m_pauseButton;
     private Button m_shootButton;
+    private Button m_rewindButton;
     boolean m_pause = false;
 
     private ShapeRenderer renderer = new ShapeRenderer();
@@ -161,6 +164,22 @@ public class GameScreen implements Screen {
             }
         });
 
+        m_rewindButton = ButtonFactory.create(ButtonFactory.ButtonType.Rewind);
+        gui.addActor(m_rewindButton);
+        m_rewindButton.setPosition(
+                Constants.REWIND_BUTTON_MARGIN_X + 0,
+                Constants.REWIND_BUTTON_MARGIN_Y + m_cameraGui.viewportHeight,
+                Align.topLeft
+        );
+        m_rewindButton.setPushAction(new ButtonAction() {
+            @Override
+            public void run() {
+                float rewindTime = 1.0f;
+                MessageDispatcher.getInstance().sendBroadcast(MessageDispatcher.BroadcastMessageType.Rewind, new RewindContext(rewindTime));
+                Environment.getInstance().globalTime -= Math.min(rewindTime, Environment.getInstance().globalTime);
+            }
+        });
+
         m_shootButton = ButtonFactory.create(ButtonFactory.ButtonType.Shoot);
         gui.addActor(m_shootButton);
         m_shootButton.setPosition(
@@ -189,7 +208,7 @@ public class GameScreen implements Screen {
 
         if (!isPaused()) {
             CollisionManager.getInstance().update(delta);
-//            m_level.update(delta);
+            m_level.update(delta);
             m_cameraHelper.update(delta);
             m_stage.act(delta);
             m_stageGui.act(delta);

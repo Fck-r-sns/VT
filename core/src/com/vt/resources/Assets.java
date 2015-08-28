@@ -21,6 +21,8 @@ public class Assets implements Disposable, AssetErrorListener {
         public TextureAtlas.AtlasRegion pauseButtonDown;
         public TextureAtlas.AtlasRegion shootButtonUp;
         public TextureAtlas.AtlasRegion shootButtonDown;
+        public TextureAtlas.AtlasRegion rewindButtonUp;
+        public TextureAtlas.AtlasRegion rewindButtonDown;
     }
 
     public class GameEntities {
@@ -101,6 +103,8 @@ public class Assets implements Disposable, AssetErrorListener {
         gui.pauseButtonDown = atlas.findRegion(Constants.PAUSE_BUTTON_DOWN_ASSET_NAME);
         gui.shootButtonUp = atlas.findRegion(Constants.SHOOT_BUTTON_UP_ASSET_NAME);
         gui.shootButtonDown = atlas.findRegion(Constants.SHOOT_BUTTON_DOWN_ASSET_NAME);
+        gui.rewindButtonUp = atlas.findRegion(Constants.REWIND_BUTTON_UP_ASSET_NAME);
+        gui.rewindButtonDown = atlas.findRegion(Constants.REWIND_BUTTON_DOWN_ASSET_NAME);
 
         atlas = m_assetsManager.get(Constants.TERRAIN_ATLAS_PACK);
         for (Texture t : atlas.getTextures())

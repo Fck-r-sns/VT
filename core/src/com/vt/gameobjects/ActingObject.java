@@ -11,24 +11,25 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.vt.game.Constants;
 import com.vt.physics.colliders.Collidable;
+import com.vt.serialization.RestorableValue;
 
 /**
  * Created by Fck.r.sns on 10.05.2015.
  */
 public class ActingObject extends GameObject implements Steerable<Vector2>, Collidable {
-    protected Vector2 m_linearVelocity = new Vector2(); // pixels per second
-    protected float m_angularVelocity = 0.0f;
-    protected float m_boundingRadius;
-    protected boolean m_tagged;
-    protected float m_rotationDelta = 0.0f;
+    private Vector2 m_linearVelocity = new Vector2(); // pixels per second
+    private float m_angularVelocity = 0.0f;
+    private float m_boundingRadius;
+    private boolean m_tagged;
+    private float m_rotationDelta = 0.0f;
 
     protected float m_maxLinearSpeed = Constants.MAX_LINEAR_SPEED_DEFAULT;
     protected float m_maxLinearAcceleration = Constants.MAX_LINEAR_ACCELERATION_DEFAULT;
     protected float m_maxAngularSpeed = Constants.MAX_ANGULAR_SPEED_DEFAULT;
     protected float m_maxAngularAcceleration = Constants.MAX_ANGULAR_ACCELERATION_DEFAULT;
 
-    protected SteeringAcceleration<Vector2> m_acceleration = new SteeringAcceleration<Vector2>(new Vector2(0, 0));
-    protected SteeringBehavior<Vector2> m_behavior;
+    private SteeringAcceleration<Vector2> m_acceleration = new SteeringAcceleration<Vector2>(new Vector2(0, 0));
+    private SteeringBehavior<Vector2> m_behavior;
 
     public void setBehavior(SteeringBehavior<Vector2> behavior) {
         m_behavior = behavior;
@@ -39,27 +40,30 @@ public class ActingObject extends GameObject implements Steerable<Vector2>, Coll
         super.update(delta);
 
         Vector2 pos = getPosition();
-        pos.mulAdd(m_linearVelocity, delta);
+        pos.mulAdd(getLinearVelocity(), delta);
         setPosition(pos.x, pos.y, Constants.ALIGN_ORIGIN);
 
         if (m_behavior != null) {
             m_behavior.calculateSteering(m_acceleration);
 
-            m_linearVelocity.mulAdd(m_acceleration.linear, delta).limit(getMaxLinearSpeed());
+            Vector2 vel = getLinearVelocity().cpy().mulAdd(m_acceleration.linear, delta).limit(getMaxLinearSpeed());
+            setLinearVelocityX(vel.x);
+            setLinearVelocityY(vel.y);
         }
 
         if (Math.abs(m_rotationDelta) > 1) {
-            float signum = Math.signum(m_rotationDelta);
-            m_angularVelocity += getMaxAngularAcceleration() * delta * signum;
+            float rotationDelta = getRotationDelta();
+            float sign = Math.signum(rotationDelta);
+            setAngularVelocity(getAngularVelocity() + getMaxAngularAcceleration() * delta * sign);
             if (Math.abs(m_angularVelocity) > getMaxAngularSpeed())
-                m_angularVelocity = getMaxAngularSpeed() * signum;
-            float increment = Math.min(Math.abs(m_angularVelocity), Math.abs(m_rotationDelta)) * signum;
+                setAngularVelocity(getMaxAngularSpeed() * sign);
+            float increment = Math.min(Math.abs(m_angularVelocity), Math.abs(rotationDelta)) * sign;
             float rotation = getRotation();
             rotation += increment;
             setRotation(rotation);
-            m_rotationDelta -= increment;
+            setRotationDelta(rotationDelta - increment);
         } else {
-            m_angularVelocity = 0.0f;
+            setAngularVelocity(0.0f);
         }
     }
 
@@ -93,9 +97,53 @@ public class ActingObject extends GameObject implements Steerable<Vector2>, Coll
         return m_linearVelocity;
     }
 
+    public void setLinearVelocityX(float x) {
+        if (m_linearVelocity.x != x) {
+            getValuesHistory().addValue(new RestorableValue() {
+                private float m_previousX = m_linearVelocity.x;
+
+                @Override
+                public void restore() {
+                    m_linearVelocity.x = m_previousX;
+                }
+            });
+
+            m_linearVelocity.x = x;
+        }
+    }
+
+    public void setLinearVelocityY(float y) {
+        if (m_linearVelocity.y != y) {
+            getValuesHistory().addValue(new RestorableValue() {
+                private float m_previousY = m_linearVelocity.y;
+
+                @Override
+                public void restore() {
+                    m_linearVelocity.y = m_previousY;
+                }
+            });
+
+            m_linearVelocity.y = y;
+        }
+    }
+
     @Override
     public float getAngularVelocity() {
         return m_angularVelocity;
+    }
+
+    public void setAngularVelocity(float vel) {
+        if (getAngularVelocity() != vel) {
+            getValuesHistory().addValue(new RestorableValue() {
+                float m_previousValue = getAngularVelocity();
+
+                @Override
+                public void restore() {
+                    m_angularVelocity = m_previousValue;
+                }
+            });
+            m_angularVelocity = vel;
+        }
     }
 
     @Override
@@ -228,27 +276,27 @@ public class ActingObject extends GameObject implements Steerable<Vector2>, Coll
                 new Vector2(otherLeft - offset2, otherBottom + offset),
                 new Vector2(otherLeft - offset2, otherTop - offset),
                 new Vector2(x, y), r * r)
-                && m_linearVelocity.x > 0)
-            m_linearVelocity.x = -vel;
+                && getLinearVelocity().x > 0)
+            setLinearVelocityX(-vel);
         else if (Intersector.intersectSegmentCircle(
                 new Vector2(otherRight + offset2, otherBottom + offset),
                 new Vector2(otherRight + offset2, otherTop - offset),
                 new Vector2(x, y), r * r)
-                && m_linearVelocity.x < 0)
-            m_linearVelocity.x = vel;
+                && getLinearVelocity().x < 0)
+            setLinearVelocityX(vel);
 
         // check collision with top and bottom sides of wall tile
         if (Intersector.intersectSegmentCircle(
                 new Vector2(otherLeft + offset, otherBottom - offset2),
                 new Vector2(otherRight - offset, otherBottom - offset2),
                 new Vector2(x, y), r * r)
-                && m_linearVelocity.y > 0)
-            m_linearVelocity.y = -vel;
+                && getLinearVelocity().y > 0)
+            setLinearVelocityY(-vel);
         else if (Intersector.intersectSegmentCircle(
                 new Vector2(otherLeft + offset, otherTop + offset2),
                 new Vector2(otherRight - offset, otherTop + offset2),
                 new Vector2(x, y), r * r)
-                && m_linearVelocity.y < 0)
-            m_linearVelocity.y = vel;
+                && getLinearVelocity().y < 0)
+            setLinearVelocityY(vel);
     }
 }

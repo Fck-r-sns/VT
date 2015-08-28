@@ -1,5 +1,6 @@
 package com.vt.gameobjects.weapons;
 
+import com.badlogic.gdx.math.Vector2;
 import com.vt.game.Constants;
 import com.vt.gameobjects.ActingObject;
 import com.vt.physics.CollisionManager;
@@ -20,21 +21,30 @@ public class Projectile extends ActingObject {
     }
 
     public void setStartingVelocity(float vel) {
-        if (m_linearVelocity.len2() == 0.0f)
-            m_linearVelocity.set(1, 0);
-        m_linearVelocity.nor().scl(vel);
+        if (getLinearVelocity().len2() == 0.0f) {
+            setLinearVelocityX(1);
+            setLinearVelocityY(0);
+        }
+        Vector2 velocity = getLinearVelocity().cpy().nor().scl(vel);
+        setLinearVelocityX(velocity.x);
+        setLinearVelocityY(velocity.y);
     }
 
     public void setStartingAngle(float angle) {
         setRotation(angle);
-        if (m_linearVelocity.len2() == 0.0f)
-            m_linearVelocity.set(1, 0);
-        m_linearVelocity.rotate(angle);
+        if (getLinearVelocity().len2() == 0.0f) {
+            setLinearVelocityX(1);
+            setLinearVelocityY(0);
+        }
+        Vector2 velocity = getLinearVelocity().cpy().rotate(angle);
+        setLinearVelocityX(velocity.x);
+        setLinearVelocityY(velocity.y);
     }
 
     @Override
     protected void processCollisionWithWall(Collidable wall) {
-        m_linearVelocity.setZero();
+        setLinearVelocityX(0);
+        setLinearVelocityY(0);
         CollisionManager.getInstance().removeDynamicCollidableObject(getId());
         remove();
     }

@@ -15,6 +15,7 @@ import com.vt.gameobjects.weapons.Pistol;
 import com.vt.physics.CollisionManager;
 import com.vt.resources.AnimationWrapper;
 import com.vt.resources.Assets;
+import com.vt.serialization.RestorableValue;
 import com.vt.timedriven.DelayedAction;
 import com.vt.timedriven.TimeDrivenExecutor;
 
@@ -109,6 +110,18 @@ public class CharacterObject extends ActingObject implements ControllableCharact
         updateLastPosition();
     }
 
+    @Override
+    public void setLinearVelocityX(float x) {
+        if (x == 0.0f || m_movementPointer.getPosition().dst2(getPosition()) >= Constants.PLAYER_ARRIVAL_TOLERANCE_POW_2)
+            super.setLinearVelocityX(x);
+    }
+
+    @Override
+    public void setLinearVelocityY(float y) {
+        if (y == 0.0f || m_movementPointer.getPosition().dst2(getPosition()) >= Constants.PLAYER_ARRIVAL_TOLERANCE_POW_2)
+            super.setLinearVelocityY(y);
+    }
+
     public MovementPointer getMovementPointer() {
         return m_movementPointer;
     }
@@ -169,9 +182,10 @@ public class CharacterObject extends ActingObject implements ControllableCharact
     public void update(float delta) {
         m_actionsManager.execute();
 
-        if (m_movementPointer.getPosition().dst(getPosition()) < Constants.PLAYER_ARRIVAL_TOLERANCE) {
+        if (m_movementPointer.getPosition().dst2(getPosition()) < Constants.PLAYER_ARRIVAL_TOLERANCE_POW_2) {
             m_movementPointer.setActive(false);
-            m_linearVelocity.set(0, 0);
+            setLinearVelocityX(0);
+            setLinearVelocityY(0);
         }
 
         if (m_viewPointer.isActive()) {
@@ -182,14 +196,14 @@ public class CharacterObject extends ActingObject implements ControllableCharact
                 m_viewPointer.setPosition(newViewX, newViewY, Align.center);
             }
         } else {
-            if (m_linearVelocity.len2() != 0.0f)
-                setRotationDeltaRelativeToCurrent(m_linearVelocity.angle());
+            if (getLinearVelocity().len2() != 0.0f)
+                setRotationDeltaRelativeToCurrent(getLinearVelocity().angle());
         }
 
         updateLastPosition();
         manageAnimation();
         if (m_state != State.Shoot) {
-            if (m_linearVelocity.len2() > m_maxLinearSpeed * m_maxLinearSpeed * 0.25f)
+            if (getLinearVelocity().len2() > m_maxLinearSpeed * m_maxLinearSpeed * 0.25f)
                 m_state = State.Move;
             else
                 m_state = State.Stand;
@@ -203,7 +217,31 @@ public class CharacterObject extends ActingObject implements ControllableCharact
     }
 
     private void updateLastPosition() {
-        m_lastPosition.set(getX(Align.center), getY(Align.center));
+        final float currentX = getX(Align.center);
+        if (m_lastPosition.x != currentX) {
+           getValuesHistory().addValue(new RestorableValue() {
+               private float m_previousX = m_lastPosition.x;
+
+               @Override
+               public void restore() {
+                   m_lastPosition.x = m_previousX;
+               }
+           });
+            m_lastPosition.x = currentX;
+        }
+
+        final float currentY = getY(Align.center);
+        if (m_lastPosition.y != currentY) {
+            getValuesHistory().addValue(new RestorableValue() {
+                private float m_previousY = m_lastPosition.y;
+
+                @Override
+                public void restore() {
+                    m_lastPosition.y = m_previousY;
+                }
+            });
+            m_lastPosition.y = currentY;
+        }
     }
 
     private Vector2 getLastPosition() {

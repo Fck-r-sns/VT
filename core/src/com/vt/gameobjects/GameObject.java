@@ -5,29 +5,42 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.vt.game.Constants;
+import com.vt.messages.Context;
+import com.vt.messages.MessageDispatcher;
+import com.vt.messages.MessageHandler;
+import com.vt.messages.RewindContext;
 import com.vt.physics.Spatial;
 import com.vt.serialization.RestorableValue;
 import com.vt.serialization.ValuesChangeHistory;
-
-import static com.badlogic.gdx.scenes.scene2d.utils.Align.bottom;
-import static com.badlogic.gdx.scenes.scene2d.utils.Align.left;
-import static com.badlogic.gdx.scenes.scene2d.utils.Align.right;
-import static com.badlogic.gdx.scenes.scene2d.utils.Align.top;
 
 /**
  * Created by Fck.r.sns on 04.05.2015.
  */
 public abstract class GameObject extends Group implements Spatial {
     static private int m_idGenerator = 0;
-    public ValuesChangeHistory m_valuesHistory;
-    private Integer m_id;
+    private ValuesChangeHistory m_valuesHistory;
+    private final Integer m_id;
     private boolean m_active;
     private TextureRegion m_texture;
 
     public GameObject() {
-        m_valuesHistory = new ValuesChangeHistory();
         m_id = ++m_idGenerator;
+        m_valuesHistory = new ValuesChangeHistory();
+        MessageDispatcher.getInstance().subscribeToBroadcast(
+                MessageDispatcher.BroadcastMessageType.Rewind,
+                new MessageHandler() {
+                    @Override
+                    public void onMessageReceived(Context ctx) {
+                        if (ctx != null && ctx instanceof RewindContext) {
+                            m_valuesHistory.rewindBack(((RewindContext) ctx).getRewindTime());
+                        }
+                    }
+                });
         setActive(true);
+    }
+
+    protected ValuesChangeHistory getValuesHistory() {
+        return m_valuesHistory;
     }
 
     public final Integer getId() {
@@ -43,6 +56,17 @@ public abstract class GameObject extends Group implements Spatial {
     }
 
     public void setActive(boolean active) {
+        if (isActive() != active)
+            m_valuesHistory.addValue(new RestorableValue() {
+                private boolean m_previousActiveValue = isActive();
+
+                @Override
+                public void restore() {
+                    GameObject.this.m_active = m_previousActiveValue;
+                    GameObject.this.setVisible(m_previousActiveValue);
+                }
+            });
+
         m_active = active;
         setVisible(m_active);
     }
@@ -56,7 +80,6 @@ public abstract class GameObject extends Group implements Spatial {
                     m_texture,
                     getX(), getY(),
                     getOriginX(), getOriginY(),
-//                    getWidth(), getHeight(),
                     width, height,
                     getScaleX(), getScaleY(),
                     getRotation()
@@ -71,16 +94,31 @@ public abstract class GameObject extends Group implements Spatial {
         super.act(delta);
     }
 
+    private void setRotationWithoutStoring(float degrees) {
+        super.setRotation(degrees);
+    }
+
     @Override
     public void setRotation(float degrees) {
         if (degrees > 360) {
-            super.setRotation(degrees - 360);
+            degrees -= 360;
         } else if (degrees < 0) {
-            super.setRotation(degrees + 360);
-        } else {
-            super.setRotation(degrees);
+            degrees += 360;
         }
-        rotationChanged();
+
+        if (getRotation() != degrees) {
+            m_valuesHistory.addValue(new RestorableValue() {
+                private float m_previousRotation = getRotation();
+
+                @Override
+                public void restore() {
+                    GameObject.this.setRotationWithoutStoring(m_previousRotation);
+                }
+            });
+
+            super.setRotation(degrees);
+            rotationChanged();
+        }
     }
 
     public void update(float delta) {
@@ -116,42 +154,34 @@ public abstract class GameObject extends Group implements Spatial {
 
                 @Override
                 public void restore() {
-                    setPosition(x, y);
+                    GameObject.this.setX(x);
+                    GameObject.this.setY(y);
                 }
             });
+
         super.setPosition(x, y);
     }
 
     @Override
     public void setPosition(float x, float y, int alignment) {
-        if (alignment == Constants.ALIGN_ORIGIN) {
-            x -= getOriginX();
-            y -= getOriginY();
-        } else {
-            if ((alignment & right) != 0)
-                x -= getWidth();
-            else if ((alignment & left) == 0) //
-                x -= getWidth() / 2;
-
-            if ((alignment & top) != 0)
-                y -= getHeight();
-            else if ((alignment & bottom) == 0) //
-                y -= getHeight() / 2;
-        }
-
-        if (getX() != x || getY() != y) {
+        if (getX(alignment) != x || getY(alignment) != y)
             m_valuesHistory.addValue(new RestorableValue() {
-                private float x = getX();
-                private float y = getY();
+                private float m_previousX = getX();
+                private float m_previousY = getY();
 
                 @Override
                 public void restore() {
-                    setPosition(x, y);
+                    GameObject.this.setX(m_previousX);
+                    GameObject.this.setY(m_previousY);
                 }
             });
 
+        if (alignment == Constants.ALIGN_ORIGIN) {
+            x -= getOriginX();
+            y -= getOriginY();
             super.setPosition(x, y);
-            positionChanged();
+        } else {
+            super.setPosition(x, y, alignment);
         }
     }
 

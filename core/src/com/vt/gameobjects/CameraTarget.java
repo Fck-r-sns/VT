@@ -52,10 +52,23 @@ public class CameraTarget extends ActingObject {
     }
 
     @Override
+    public void setLinearVelocityX(float x) {
+        if (x == 0.0f || m_posUpdater.getPosition().dst2(getPosition()) >= Constants.CAMERA_ARRIVAL_TOLERANCE_POW_2)
+            super.setLinearVelocityX(x);
+    }
+
+    @Override
+    public void setLinearVelocityY(float y) {
+        if (y == 0.0f || m_posUpdater.getPosition().dst2(getPosition()) >= Constants.CAMERA_ARRIVAL_TOLERANCE_POW_2)
+            super.setLinearVelocityY(y);
+    }
+
+    @Override
     public void update(float delta) {
         super.update(delta);
-        if (m_posUpdater.getPosition().dst(getPosition()) < Constants.CAMERA_ARRIVAL_TOLERANCE) {
-            m_linearVelocity.set(0, 0);
+        if (m_posUpdater.getPosition().dst2(getPosition()) < Constants.CAMERA_ARRIVAL_TOLERANCE_POW_2) {
+            setLinearVelocityX(0);
+            setLinearVelocityY(0);
         }
     }
 }

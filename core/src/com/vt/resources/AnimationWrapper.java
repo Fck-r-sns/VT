@@ -25,9 +25,10 @@ public class AnimationWrapper {
     }
 
     public TextureRegion getCurrentFrame() {
-        if (m_animation != null)
-            return m_animation.getKeyFrame(Environment.getInstance().globalTime - m_startingTime);
-        else
+        if (m_animation != null) {
+            float animationTime = Math.max(Environment.getInstance().globalTime - m_startingTime, 0.0f);
+            return m_animation.getKeyFrame(animationTime);
+        } else
             return null;
     }
 }

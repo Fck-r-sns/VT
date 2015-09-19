@@ -49,6 +49,11 @@ public class Constants {
     public static final float REWIND_BUTTON_HEIGHT = 75.0f;
     public static final float REWIND_BUTTON_MARGIN_X = PAUSE_BUTTON_MARGIN_X + PAUSE_BUTTON_WIDTH + 20.0f;;
     public static final float REWIND_BUTTON_MARGIN_Y = -20.0f;
+
+    public static final float TIME_LABEL_MARGIN_X = 200.0f;
+    public static final float TIME_LABEL_MARGIN_Y = 10.0f;
+    public static final float FPS_LABEL_MARGIN_X = 200.0f;
+    public static final float FPS_LABEL_MARGIN_Y = 10.0f + TIME_LABEL_MARGIN_Y + 32.0f;
     // ------------------------------------------------------------------------
 
     // resources --------------------------------------------------------------
@@ -61,6 +66,7 @@ public class Constants {
     public static final String SHOOT_BUTTON_DOWN_ASSET_NAME = "buttonDown";
     public static final String REWIND_BUTTON_UP_ASSET_NAME = "buttonUp";
     public static final String REWIND_BUTTON_DOWN_ASSET_NAME = "buttonDown";
+    public static final String ARIAL_32_ASSET_NAME = "fonts/arial_32.fnt";
 
     public static final String TEXTURE_ATLAS_PACK = "entities.pack";
     public static final String PLAYER_ASSET_NAME = "marine_pistol";
@@ -107,8 +113,8 @@ public class Constants {
 
     public final static float MAX_PLAYER_LINEAR_SPEED = 2.0f; // meters per second (4 m/s = 14.4 km/h)
     public final static float MAX_PLAYER_LINEAR_ACCELERATION = 6.0f;
-    public final static float MAX_PLAYER_ANGULAR_SPEED = 1;
-    public final static float MAX_PLAYER_ANGULAR_ACCELERATION = 1;
+    public final static float MAX_PLAYER_ANGULAR_SPEED = 30;
+    public final static float MAX_PLAYER_ANGULAR_ACCELERATION = 30;
 
     public final static float PLAYER_ARRIVAL_TOLERANCE = 0.08f;
     public final static float PLAYER_ARRIVAL_TOLERANCE_POW_2 = PLAYER_ARRIVAL_TOLERANCE * PLAYER_ARRIVAL_TOLERANCE;

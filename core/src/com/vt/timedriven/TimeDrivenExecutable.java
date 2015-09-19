@@ -5,5 +5,5 @@ package com.vt.timedriven;
  */
 
 public interface TimeDrivenExecutable {
-    public boolean execute(); // checks Environmet.globalTime
+    public boolean execute(); // checks Environmet.gameTime
 }

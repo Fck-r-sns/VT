@@ -9,7 +9,7 @@ public abstract class RestorableValue {
     private float m_time = 0.0f;
 
     public RestorableValue() {
-        m_time = Environment.getInstance().globalTime;
+        m_time = Environment.getInstance().gameTime;
     }
 
     public final float getTime() {

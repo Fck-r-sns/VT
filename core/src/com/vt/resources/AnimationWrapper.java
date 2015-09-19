@@ -13,11 +13,11 @@ public class AnimationWrapper {
 
     public AnimationWrapper(Animation animation) {
         m_animation = animation;
-        m_startingTime = Environment.getInstance().globalTime;
+        m_startingTime = Environment.getInstance().gameTime;
     }
 
     public void restart() {
-        m_startingTime = Environment.getInstance().globalTime;
+        m_startingTime = Environment.getInstance().gameTime;
     }
 
     Animation getAnimation() {
@@ -26,7 +26,7 @@ public class AnimationWrapper {
 
     public TextureRegion getCurrentFrame() {
         if (m_animation != null) {
-            float animationTime = Math.max(Environment.getInstance().globalTime - m_startingTime, 0.0f);
+            float animationTime = Math.max(Environment.getInstance().gameTime - m_startingTime, 0.0f);
             return m_animation.getKeyFrame(animationTime);
         } else
             return null;

@@ -4,6 +4,12 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.vt.messages.Context;
+import com.vt.messages.MessageDispatcher;
+import com.vt.messages.MessageHandler;
+import com.vt.messages.RewindContext;
+import com.vt.serialization.RestorableValue;
+import com.vt.serialization.ValuesChangeHistory;
 
 /**
  * Created by Fck.r.sns on 27.06.2015.
@@ -13,16 +19,49 @@ public class CameraHelper {
     static final float MIN_ZOOM = 0.5f;
     static final float MAX_ZOOM = 2f;
 
+    private ValuesChangeHistory m_valuesHistory;
     private OrthographicCamera m_camera;
     private Actor m_target;
 
     public CameraHelper(OrthographicCamera camera) {
+        m_valuesHistory = new ValuesChangeHistory();
         m_camera = camera;
+        MessageDispatcher.getInstance().subscribeToBroadcast(
+                MessageDispatcher.BroadcastMessageType.Rewind,
+                new MessageHandler() {
+                    @Override
+                    public void onMessageReceived(Context ctx) {
+                        if (ctx != null && ctx instanceof RewindContext) {
+                            m_valuesHistory.rewindBack(((RewindContext) ctx).getRewindTime());
+                        }
+                    }
+                });
     }
 
     public void setPosition(float x, float y) {
-        m_camera.position.x = x;
-        m_camera.position.y = y;
+        if (m_camera.position.x != x) {
+            m_valuesHistory.addValue(new RestorableValue() {
+                private float m_previousX = m_camera.position.x;
+
+                @Override
+                public void restore() {
+                    m_camera.position.x = m_previousX;
+                }
+            });
+            m_camera.position.x = x;
+        }
+
+        if (m_camera.position.y != y) {
+            m_valuesHistory.addValue(new RestorableValue() {
+                private float m_previousY = m_camera.position.y;
+
+                @Override
+                public void restore() {
+                    m_camera.position.y = m_previousY;
+                }
+            });
+            m_camera.position.y = y;
+        }
     }
 
     public Vector2 getPosition() {

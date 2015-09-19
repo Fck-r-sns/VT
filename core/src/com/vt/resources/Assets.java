@@ -5,6 +5,7 @@ import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
@@ -23,6 +24,7 @@ public class Assets implements Disposable, AssetErrorListener {
         public TextureAtlas.AtlasRegion shootButtonDown;
         public TextureAtlas.AtlasRegion rewindButtonUp;
         public TextureAtlas.AtlasRegion rewindButtonDown;
+        public BitmapFont font;
     }
 
     public class GameEntities {
@@ -105,6 +107,8 @@ public class Assets implements Disposable, AssetErrorListener {
         gui.shootButtonDown = atlas.findRegion(Constants.SHOOT_BUTTON_DOWN_ASSET_NAME);
         gui.rewindButtonUp = atlas.findRegion(Constants.REWIND_BUTTON_UP_ASSET_NAME);
         gui.rewindButtonDown = atlas.findRegion(Constants.REWIND_BUTTON_DOWN_ASSET_NAME);
+        gui.font = new BitmapFont(Gdx.files.internal(Constants.ARIAL_32_ASSET_NAME), false);
+        gui.font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         atlas = m_assetsManager.get(Constants.TERRAIN_ATLAS_PACK);
         for (Texture t : atlas.getTextures())
@@ -132,5 +136,6 @@ public class Assets implements Disposable, AssetErrorListener {
     @Override
     public void dispose() {
         m_assetsManager.dispose();
+        gui.font.dispose();
     }
 }

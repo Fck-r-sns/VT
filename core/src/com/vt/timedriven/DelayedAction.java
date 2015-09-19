@@ -12,17 +12,17 @@ public class DelayedAction implements TimeDrivenExecutable {
 
     public DelayedAction(float delay, Runnable action) {
         m_delay = delay;
-        m_time = Environment.getInstance().globalTime + m_delay;
+        m_time = Environment.getInstance().gameTime + m_delay;
         m_action = action;
     }
 
     public void restart() {
-        m_time = Environment.getInstance().globalTime + m_delay;
+        m_time = Environment.getInstance().gameTime + m_delay;
     }
 
     @Override
     public boolean execute() {
-        if (Environment.getInstance().globalTime > m_time) {
+        if (Environment.getInstance().gameTime > m_time) {
             m_action.run();
             return true;
         }

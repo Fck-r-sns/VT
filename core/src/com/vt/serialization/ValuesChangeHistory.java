@@ -14,7 +14,7 @@ public class ValuesChangeHistory {
     }
 
     public void rewindBack(float rewindTime) {
-        float time = Environment.getInstance().globalTime - rewindTime;
+        float time = Environment.getInstance().gameTime - rewindTime;
         m_list.iterReverse();
         while (true) {
             RestorableValue value = m_list.previous();

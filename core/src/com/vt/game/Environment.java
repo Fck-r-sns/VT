@@ -9,7 +9,9 @@ public class Environment {
     private static Environment instance = null;
     public boolean debugDrawings = false;
     public float globalTime = 0.0f;
+    public float gameTime = 0.0f;
     public Stage currentStage = null;
+    public boolean rewinding = false;
 
     public static Environment getInstance() {
         if (instance == null)

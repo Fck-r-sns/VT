@@ -174,9 +174,11 @@ public class GameScreen implements Screen {
         m_rewindButton.setPushAction(new ButtonAction() {
             @Override
             public void run() {
-                float rewindTime = 1.0f;
-                MessageDispatcher.getInstance().sendBroadcast(MessageDispatcher.BroadcastMessageType.Rewind, new RewindContext(rewindTime));
-                Environment.getInstance().globalTime -= Math.min(rewindTime, Environment.getInstance().globalTime);
+//                float rewindTime = 1.0f;
+//                MessageDispatcher.getInstance().sendBroadcast(MessageDispatcher.BroadcastMessageType.Rewind, new RewindContext(rewindTime));
+//                Environment.getInstance().gameTime -= Math.min(rewindTime, Environment.getInstance().gameTime);
+                Environment env = Environment.getInstance();
+                env.rewinding = !env.rewinding;
             }
         });
 
@@ -203,10 +205,17 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        Environment env = Environment.getInstance();
+        boolean rewinding = env.rewinding;
         delta = 1 / 60.0f;
-        Environment.getInstance().globalTime += delta;
+        env.globalTime += delta;
 
-        if (!isPaused()) {
+        if (rewinding) {
+            float rewindTime = delta * 2;
+            MessageDispatcher.getInstance().sendBroadcast(MessageDispatcher.BroadcastMessageType.Rewind, new RewindContext(rewindTime));
+            env.gameTime -= Math.min(rewindTime, Environment.getInstance().gameTime);
+        } else if (!isPaused()) {
+            env.gameTime += delta;
             CollisionManager.getInstance().update(delta);
             m_level.update(delta);
             m_cameraHelper.update(delta);
@@ -226,8 +235,22 @@ public class GameScreen implements Screen {
         m_cameraGui.update(false);
         m_spriteBatch.setProjectionMatrix(m_cameraGui.combined);
         m_stageGui.draw();
+        m_spriteBatch.begin();
+        Assets.getInstance().gui.font.draw(
+                m_spriteBatch,
+                String.format("%.2f", Environment.getInstance().gameTime),
+                m_cameraGui.viewportWidth - Constants.TIME_LABEL_MARGIN_X,
+                m_cameraGui.viewportHeight - Constants.TIME_LABEL_MARGIN_Y
+        );
+        Assets.getInstance().gui.font.draw(
+                m_spriteBatch,
+                "FPS: " + Gdx.graphics.getFramesPerSecond(),
+                m_cameraGui.viewportWidth - Constants.FPS_LABEL_MARGIN_X,
+                m_cameraGui.viewportHeight - Constants.FPS_LABEL_MARGIN_Y
+        );
+        m_spriteBatch.end();
 
-        if (Environment.getInstance().debugDrawings) {
+        if (env.debugDrawings) {
             renderer.setProjectionMatrix(m_camera.combined);
             Circle c = m_player.getBoundingShape();
             renderer.begin(ShapeRenderer.ShapeType.Line);

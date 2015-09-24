@@ -15,8 +15,7 @@ public class Rifle extends AbstractWeapon {
     public void shoot() {
         Projectile p = new Projectile();
         p.setPosition(getX(), getY(), Constants.ALIGN_ORIGIN);
-        p.setStartingAngle(getRotation());
-        p.setStartingVelocity(15);
+        p.launch(getRotation(), 15);
         Environment.getInstance().currentStage.addActor(p);
     }
 

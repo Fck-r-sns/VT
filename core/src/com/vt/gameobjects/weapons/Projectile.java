@@ -1,6 +1,5 @@
 package com.vt.gameobjects.weapons;
 
-import com.badlogic.gdx.math.Vector2;
 import com.vt.game.Constants;
 import com.vt.gameobjects.ActingObject;
 import com.vt.physics.CollisionManager;
@@ -17,28 +16,14 @@ public class Projectile extends ActingObject {
         setOrigin(Constants.PROJECTILE_ORIGIN_RELATIVE_X * Constants.PROJECTILE_WIDTH,
                 Constants.PROJECTILE_ORIGIN_RELATIVE_Y * Constants.PROJECTILE_HEIGHT);
         setBoundingRadius(Constants.PROJECTILE_BOUNDING_RADIUS);
-        CollisionManager.getInstance().registerDynamicCollidableObject(getId(), this);
     }
 
-    public void setStartingVelocity(float vel) {
-        if (getLinearVelocity().len2() == 0.0f) {
-            setLinearVelocityX(1);
-            setLinearVelocityY(0);
-        }
-        Vector2 velocity = getLinearVelocity().cpy().nor().scl(vel);
-        setLinearVelocityX(velocity.x);
-        setLinearVelocityY(velocity.y);
-    }
-
-    public void setStartingAngle(float angle) {
+    public void launch(float angle, float vel) {
         setRotation(angle);
-        if (getLinearVelocity().len2() == 0.0f) {
-            setLinearVelocityX(1);
-            setLinearVelocityY(0);
-        }
-        Vector2 velocity = getLinearVelocity().cpy().rotate(angle);
-        setLinearVelocityX(velocity.x);
-        setLinearVelocityY(velocity.y);
+        setLinearVelocityX(1);
+        setLinearVelocityY(0);
+        getLinearVelocity().rotate(angle);
+        getLinearVelocity().nor().scl(vel);
     }
 
     @Override
@@ -46,6 +31,6 @@ public class Projectile extends ActingObject {
         setLinearVelocityX(0);
         setLinearVelocityY(0);
         CollisionManager.getInstance().removeDynamicCollidableObject(getId());
-        remove();
+        setActive(false);
     }
 }

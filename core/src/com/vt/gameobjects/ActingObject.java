@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.vt.game.Constants;
+import com.vt.game.Environment;
 import com.vt.physics.colliders.Collidable;
 import com.vt.serialization.RestorableValue;
 
@@ -39,31 +40,33 @@ public class ActingObject extends GameObject implements Steerable<Vector2>, Coll
     public void update(float delta) {
         super.update(delta);
 
-        Vector2 pos = getPosition();
-        pos.mulAdd(getLinearVelocity(), delta);
-        setPosition(pos.x, pos.y, Constants.ALIGN_ORIGIN);
+        if (!Environment.getInstance().rewinding) {
+            Vector2 pos = getPosition();
+            pos.mulAdd(getLinearVelocity(), delta);
+            setPosition(pos.x, pos.y, Constants.ALIGN_ORIGIN);
 
-        if (m_behavior != null) {
-            m_behavior.calculateSteering(m_acceleration);
+            if (m_behavior != null) {
+                m_behavior.calculateSteering(m_acceleration);
 
-            Vector2 vel = getLinearVelocity().cpy().mulAdd(m_acceleration.linear, delta).limit(getMaxLinearSpeed());
-            setLinearVelocityX(vel.x);
-            setLinearVelocityY(vel.y);
-        }
+                Vector2 vel = getLinearVelocity().cpy().mulAdd(m_acceleration.linear, delta).limit(getMaxLinearSpeed());
+                setLinearVelocityX(vel.x);
+                setLinearVelocityY(vel.y);
+            }
 
-        if (Math.abs(m_rotationDelta) > 1) {
-            float rotationDelta = getRotationDelta();
-            float sign = Math.signum(rotationDelta);
-            setAngularVelocity(getAngularVelocity() + getMaxAngularAcceleration() * delta * sign);
-            if (Math.abs(m_angularVelocity) > getMaxAngularSpeed())
-                setAngularVelocity(getMaxAngularSpeed() * sign);
-            float increment = Math.min(Math.abs(m_angularVelocity), Math.abs(rotationDelta)) * sign;
-            float rotation = getRotation();
-            rotation += increment;
-            setRotation(rotation);
-            setRotationDelta(rotationDelta - increment);
-        } else {
-            setAngularVelocity(0.0f);
+            if (Math.abs(m_rotationDelta) > 1) {
+                float rotationDelta = getRotationDelta();
+                float sign = Math.signum(rotationDelta);
+                setAngularVelocity(getAngularVelocity() + getMaxAngularAcceleration() * delta * sign);
+                if (Math.abs(m_angularVelocity) > getMaxAngularSpeed())
+                    setAngularVelocity(getMaxAngularSpeed() * sign);
+                float increment = Math.min(Math.abs(m_angularVelocity), Math.abs(rotationDelta)) * sign;
+                float rotation = getRotation();
+                rotation += increment;
+                setRotation(rotation);
+                setRotationDelta(rotationDelta - increment);
+            } else {
+                setAngularVelocity(0.0f);
+            }
         }
     }
 

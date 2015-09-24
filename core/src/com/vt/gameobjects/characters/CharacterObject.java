@@ -180,27 +180,29 @@ public class CharacterObject extends ActingObject implements ControllableCharact
 
     @Override
     public void update(float delta) {
-        m_actionsManager.execute();
+        if (!Environment.getInstance().rewinding) {
+            m_actionsManager.execute();
 
-        if (m_movementPointer.getPosition().dst2(getPosition()) < Constants.PLAYER_ARRIVAL_TOLERANCE_POW_2) {
-            m_movementPointer.setActive(false);
-            setLinearVelocityX(0);
-            setLinearVelocityY(0);
-        }
-
-        if (m_viewPointer.isActive()) {
-            setRotationDeltaRelativeToCurrent(m_viewPointer.getPosition().sub(getPosition()).angle());
-            if (m_keepOrientation) {
-                float newViewX = m_viewPointer.getX(Align.center) + getX(Align.center) - getLastPosition().x;
-                float newViewY = m_viewPointer.getY(Align.center) + getY(Align.center) - getLastPosition().y;
-                m_viewPointer.setPosition(newViewX, newViewY, Align.center);
+            if (m_movementPointer.getPosition().dst2(getPosition()) < Constants.PLAYER_ARRIVAL_TOLERANCE_POW_2) {
+                m_movementPointer.setActive(false);
+                setLinearVelocityX(0);
+                setLinearVelocityY(0);
             }
-        } else {
-            if (getLinearVelocity().len2() != 0.0f)
-                setRotationDeltaRelativeToCurrent(getLinearVelocity().angle());
-        }
 
-        updateLastPosition();
+            if (m_viewPointer.isActive()) {
+                setRotationDeltaRelativeToCurrent(m_viewPointer.getPosition().sub(getPosition()).angle());
+                if (m_keepOrientation) {
+                    float newViewX = m_viewPointer.getX(Align.center) + getX(Align.center) - getLastPosition().x;
+                    float newViewY = m_viewPointer.getY(Align.center) + getY(Align.center) - getLastPosition().y;
+                    m_viewPointer.setPosition(newViewX, newViewY, Align.center);
+                }
+            } else {
+                if (getLinearVelocity().len2() != 0.0f)
+                    setRotationDeltaRelativeToCurrent(getLinearVelocity().angle());
+            }
+
+            updateLastPosition();
+        }
         manageAnimation();
         if (m_state != State.Shoot) {
             if (getLinearVelocity().len2() > m_maxLinearSpeed * m_maxLinearSpeed * 0.25f)

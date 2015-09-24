@@ -214,8 +214,10 @@ public class GameScreen implements Screen {
             float rewindTime = delta * 2;
             MessageDispatcher.getInstance().sendBroadcast(MessageDispatcher.BroadcastMessageType.Rewind, new RewindContext(rewindTime));
             env.gameTime -= Math.min(rewindTime, Environment.getInstance().gameTime);
-        } else if (!isPaused()) {
-            env.gameTime += delta;
+        }
+        if (rewinding || !isPaused()) {
+            if (!rewinding)
+                env.gameTime += delta;
             CollisionManager.getInstance().update(delta);
             m_level.update(delta);
             m_cameraHelper.update(delta);

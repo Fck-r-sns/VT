@@ -77,7 +77,7 @@ public class Constants {
 
     public static final float PLAYER_ANIMATION_FRAME_TIME_BASE = 0.35f;
     public static final float PLAYER_SHOOTING_ANIMATION_FRAME_TIME = 0.2f;
-    public static final float PLAYER_SHOOTING_ANIMATION_DURATION = 0.2f;
+    public static final float PLAYER_SHOOTING_ANIMATION_DURATION = PLAYER_SHOOTING_ANIMATION_FRAME_TIME;
 
     public static final String TERRAIN_ATLAS_PACK = "tiles.pack";
     public static final String PLAIN_FLOOR_LIGHT_ASSET_NAME = "tile1";
@@ -131,6 +131,7 @@ public class Constants {
     // time and game logic ----------------------------------------------------
     public final static float REWIND_TIME = 3.0f;
     public final static float REWIND_SPEED_MULTIPLIER = 3;
+    public final static float MAX_HISTORY_TIME = REWIND_TIME * 5;
     // ------------------------------------------------------------------------
 
     // terrain ----------------------------------------------------------------

@@ -1,6 +1,7 @@
 package com.vt.serialization;
 
 import com.badlogic.gdx.utils.PooledLinkedList;
+import com.vt.game.Constants;
 import com.vt.game.Environment;
 
 /**
@@ -24,6 +25,20 @@ public class ValuesChangeHistory {
                 value.restore();
                 m_list.remove();
             } else
+                break;
+        }
+    }
+
+    public void clearOldValues() {
+        float time = Environment.getInstance().gameTime - Constants.MAX_HISTORY_TIME;
+        m_list.iter();
+        while (true) {
+            RestorableValue value = m_list.next();
+            if (value == null)
+                break;
+            if (value.getTime() < time)
+                m_list.remove();
+            else
                 break;
         }
     }

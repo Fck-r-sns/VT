@@ -46,6 +46,7 @@ public class CharacterObject extends ActingObject implements ControllableCharact
 
     public CharacterObject() {
         m_actionsManager = new TimeDrivenExecutor();
+        m_actionsManager.setValuesHistory(getValuesHistory());
         m_lastPosition = new Vector2(0, 0);
 
         m_movementPointer = new MovementPointer();
@@ -220,10 +221,13 @@ public class CharacterObject extends ActingObject implements ControllableCharact
         }
         manageAnimation();
         if (m_state != State.Shoot) {
-            if (getLinearVelocity().len2() > m_maxLinearSpeed * m_maxLinearSpeed * 0.25f)
-                setState(State.Move);
-            else
-                setState(State.Stand);
+            if (getLinearVelocity().len2() > m_maxLinearSpeed * m_maxLinearSpeed * 0.25f) {
+                if (m_state != State.Move)
+                    setState(State.Move);
+            } else {
+                if (m_state != State.Stand)
+                    setState(State.Stand);
+            }
         }
         super.update(delta);
     }

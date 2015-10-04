@@ -90,6 +90,7 @@ public abstract class GameObject extends Group implements Spatial {
 
     @Override
     public final void act(float delta) {
+        getValuesHistory().clearOldValues();
         update(delta);
         super.act(delta);
     }

@@ -195,7 +195,7 @@ public class CharacterObject extends ActingObject implements ControllableCharact
 
     @Override
     public void update(float delta) {
-        if (!Environment.getInstance().rewinding) {
+        if (!Environment.getInstance().isRewinding()) {
             m_actionsManager.execute();
 
             if (m_movementPointer.getPosition().dst2(getPosition()) < Constants.PLAYER_ARRIVAL_TOLERANCE_POW_2) {
@@ -310,7 +310,7 @@ public class CharacterObject extends ActingObject implements ControllableCharact
     private void changeAnimation(AnimationWrapper a) {
         if (m_animationCurrent != a) {
             m_animationCurrent = a;
-            if (Environment.getInstance().rewinding)
+            if (Environment.getInstance().isRewinding())
                 m_animationCurrent.restartReversed();
             else
                 m_animationCurrent.restart();

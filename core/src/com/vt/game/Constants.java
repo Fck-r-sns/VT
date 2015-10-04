@@ -128,6 +128,11 @@ public class Constants {
     public final static float CAMERA_ARRIVAL_DECELERATION_RADIUS = 1.6f;
     // ------------------------------------------------------------------------
 
+    // time and game logic ----------------------------------------------------
+    public final static float REWIND_TIME = 3.0f;
+    public final static float REWIND_SPEED_MULTIPLIER = 3;
+    // ------------------------------------------------------------------------
+
     // terrain ----------------------------------------------------------------
     static public class Level {
         public final static String LEVEL_TEST_FILE = "levels/test";

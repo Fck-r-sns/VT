@@ -63,7 +63,12 @@ public class GameScreen implements Screen {
         m_camera = new OrthographicCamera();
         m_cameraHelper = new CameraHelper(m_camera);
         m_stage = new Stage(new ScreenViewport(m_camera), m_spriteBatch); // stage overwrites camera's viewport
-        Environment.getInstance().currentStage = m_stage;
+
+        Environment env = Environment.getInstance();
+        env.currentStage = m_stage;
+        env.globalTime = -1.0f;
+        env.gameTime = -1.0f;
+
         m_camera.setToOrtho(false,
                 Constants.VIEWPORT_WIDTH,
                 Constants.VIEWPORT_WIDTH * Constants.SCREEN_RATIO);
@@ -174,11 +179,7 @@ public class GameScreen implements Screen {
         m_rewindButton.setPushAction(new ButtonAction() {
             @Override
             public void run() {
-//                float rewindTime = 1.0f;
-//                MessageDispatcher.getInstance().sendBroadcast(MessageDispatcher.BroadcastMessageType.Rewind, new RewindContext(rewindTime));
-//                Environment.getInstance().gameTime -= Math.min(rewindTime, Environment.getInstance().gameTime);
-                Environment env = Environment.getInstance();
-                env.rewinding = !env.rewinding;
+                startRewinding(Constants.REWIND_TIME);
             }
         });
 
@@ -197,6 +198,10 @@ public class GameScreen implements Screen {
         });
 
         Gdx.input.setInputProcessor(new InputMultiplexer(m_stageGui, m_stage));
+
+        // here is the game starts
+        env.globalTime = 0.0f;
+        env.gameTime = 0.0f;
     }
 
     @Override
@@ -206,24 +211,30 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         Environment env = Environment.getInstance();
-        boolean rewinding = env.rewinding;
+        boolean rewinding = env.isRewinding();
         delta = 1 / 60.0f;
         env.globalTime += delta;
 
         if (rewinding) {
-            float rewindTime = delta * 2;
-            MessageDispatcher.getInstance().sendBroadcast(MessageDispatcher.BroadcastMessageType.Rewind, new RewindContext(rewindTime));
-            env.gameTime -= Math.min(rewindTime, Environment.getInstance().gameTime);
+            if (env.gameTime <= env.getRewindTargetTime()) {
+                stopRewinding();
+            } else {
+                float rewindTime = delta * Constants.REWIND_SPEED_MULTIPLIER;
+                MessageDispatcher.getInstance().sendBroadcast(MessageDispatcher.BroadcastMessageType.Rewind, new RewindContext(rewindTime));
+                env.gameTime -= Math.min(rewindTime, Environment.getInstance().gameTime);
+            }
         }
         if (rewinding || !isPaused()) {
-            if (!rewinding)
+            if (!rewinding) {
                 env.gameTime += delta;
-            CollisionManager.getInstance().update(delta);
+                CollisionManager.getInstance().update(delta);
+            }
             m_level.update(delta);
             m_cameraHelper.update(delta);
             m_stage.act(delta);
-            m_stageGui.act(delta);
         }
+
+        m_stageGui.act(delta); // gui updates even on pause (gui animation and others)
 
         m_camera.update(false);
         m_spriteBatch.setProjectionMatrix(m_camera.combined);
@@ -304,11 +315,23 @@ public class GameScreen implements Screen {
         return m_pause;
     }
 
-    public void setPause(boolean pause) {
+    private void setPause(boolean pause) {
         m_pause = pause;
     }
 
-    public void togglePause() {
+    private void togglePause() {
         m_pause = !m_pause;
+    }
+
+    private void startRewinding(float rewindingTime) {
+        Environment env = Environment.getInstance();
+        env.setRewinding(true);
+        env.setRewindTargetTime(Environment.getInstance().gameTime - rewindingTime);
+    }
+
+    private void stopRewinding() {
+        Environment env = Environment.getInstance();
+        env.setRewinding(false);
+        setPause(true);
     }
 }

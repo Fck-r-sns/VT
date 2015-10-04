@@ -40,7 +40,7 @@ public class ActingObject extends GameObject implements Steerable<Vector2>, Coll
     public void update(float delta) {
         super.update(delta);
 
-        if (!Environment.getInstance().rewinding) {
+        if (!Environment.getInstance().isRewinding()) {
             Vector2 pos = getPosition();
             pos.mulAdd(getLinearVelocity(), delta);
             setPosition(pos.x, pos.y, Constants.ALIGN_ORIGIN);

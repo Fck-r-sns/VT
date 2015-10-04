@@ -88,6 +88,8 @@ public class CharacterObject extends ActingObject implements ControllableCharact
                         Animation.PlayMode.NORMAL
                 )
         );
+        m_animationShoot.setNormalPlayMode(Animation.PlayMode.NORMAL);
+        m_animationShoot.setReversedPlayMode(Animation.PlayMode.REVERSED);
 
         this.setName(Constants.PLAYER_ACTOR_NAME);
 
@@ -99,7 +101,6 @@ public class CharacterObject extends ActingObject implements ControllableCharact
         setBoundingRadius(Constants.PLAYER_BOUNDING_RADIUS);
         CollisionManager.getInstance().registerDynamicCollidableObject(getId(), this);
 
-//        m_weapon = new Rifle();
         m_weapon = new Pistol();
     }
 
@@ -131,7 +132,21 @@ public class CharacterObject extends ActingObject implements ControllableCharact
     }
 
     public void setState(State state) {
+        getValuesHistory().addValue(new RestorableValue() {
+            private State m_previousState = m_state;
+
+            @Override
+            public void restore() {
+                setStateImpl(m_previousState);
+            }
+        });
+
+        setStateImpl(state);
+    }
+
+    private void setStateImpl(State state) {
         m_state = state;
+        manageAnimation();
     }
 
     @Override
@@ -221,14 +236,14 @@ public class CharacterObject extends ActingObject implements ControllableCharact
     private void updateLastPosition() {
         final float currentX = getX(Align.center);
         if (m_lastPosition.x != currentX) {
-           getValuesHistory().addValue(new RestorableValue() {
-               private float m_previousX = m_lastPosition.x;
+            getValuesHistory().addValue(new RestorableValue() {
+                private float m_previousX = m_lastPosition.x;
 
-               @Override
-               public void restore() {
-                   m_lastPosition.x = m_previousX;
-               }
-           });
+                @Override
+                public void restore() {
+                    m_lastPosition.x = m_previousX;
+                }
+            });
             m_lastPosition.x = currentX;
         }
 
@@ -295,7 +310,10 @@ public class CharacterObject extends ActingObject implements ControllableCharact
     private void changeAnimation(AnimationWrapper a) {
         if (m_animationCurrent != a) {
             m_animationCurrent = a;
-            m_animationCurrent.restart();
+            if (Environment.getInstance().rewinding)
+                m_animationCurrent.restartReversed();
+            else
+                m_animationCurrent.restart();
         }
     }
 }

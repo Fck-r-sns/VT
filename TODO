@@ -1,4 +1,3 @@
-Fix shooting animation on rewinding (implement animation state machine with storable states)
 Implement tactical control on pause (action queue)
 Add stub enemies
 Add level generator

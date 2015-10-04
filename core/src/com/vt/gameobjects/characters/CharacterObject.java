@@ -221,9 +221,9 @@ public class CharacterObject extends ActingObject implements ControllableCharact
         manageAnimation();
         if (m_state != State.Shoot) {
             if (getLinearVelocity().len2() > m_maxLinearSpeed * m_maxLinearSpeed * 0.25f)
-                m_state = State.Move;
+                setState(State.Move);
             else
-                m_state = State.Stand;
+                setState(State.Stand);
         }
         super.update(delta);
     }

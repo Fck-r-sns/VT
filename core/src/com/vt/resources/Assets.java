@@ -86,9 +86,8 @@ public class Assets implements Disposable, AssetErrorListener {
 
         gameEntities.playerAnimationMove = atlas.findRegions(Constants.PLAYER_ASSET_NAME);
 
-        gameEntities.playerAnimationShoot = new Array<TextureAtlas.AtlasRegion>(2);
+        gameEntities.playerAnimationShoot = new Array<TextureAtlas.AtlasRegion>(1);
         gameEntities.playerAnimationShoot.add(atlas.findRegion(Constants.PLAYER_SHOOTING_ASSET_NAME));
-        gameEntities.playerAnimationShoot.add(atlas.findRegion(Constants.PLAYER_ASSET_NAME));
 
         gameEntities.movementPointer = atlas.findRegion(Constants.MOVEMENT_POINTER_ASSET_NAME);
         gameEntities.viewPointer = atlas.findRegion(Constants.VIEW_POINTER_ASSET_NAME);

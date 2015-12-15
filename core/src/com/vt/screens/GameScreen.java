@@ -16,6 +16,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.vt.actionqueue.ActionQueue;
+import com.vt.actionqueue.PlayerVirtualState;
+import com.vt.actionqueue.actions.PlaceMovePointer;
 import com.vt.game.CameraHelper;
 import com.vt.game.Constants;
 import com.vt.game.Environment;
@@ -41,24 +44,26 @@ public class GameScreen implements Screen {
     private OrthographicCamera m_cameraGui;
     private CameraHelper m_cameraHelper;
     private SpriteBatch m_spriteBatch;
+    private ShapeRenderer m_renderer;
     private Stage m_stage;
     private Stage m_stageGui;
     private CharacterObject m_player;
     private ManualController m_playerController;
+    private ActionQueue m_actionQueue;
     private Array<CharacterObject> m_enemies;
     private CameraTarget m_cameraTarget;
     private Button m_viewButton;
     private Button m_pauseButton;
     private Button m_shootButton;
     private Button m_rewindButton;
-    boolean m_pause = false;
 
-    private ShapeRenderer renderer = new ShapeRenderer();
+    boolean m_pause = false;
 
     private AbstractLevel m_level;
 
     public GameScreen() {
         Constants.SCREEN_RATIO = (float) Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth();
+        m_renderer = new ShapeRenderer();
         m_spriteBatch = new SpriteBatch();
         m_camera = new OrthographicCamera();
         m_cameraHelper = new CameraHelper(m_camera);
@@ -89,6 +94,14 @@ public class GameScreen implements Screen {
         m_player = new CharacterObject();
         m_player.setInitialPosition(m_level.getPlayerPosition().x, m_level.getPlayerPosition().y);
         m_playerController = new ManualController(m_player);
+
+        m_actionQueue = new ActionQueue(
+                new PlayerVirtualState(
+                        m_player.getPosition(),
+                        m_player.getMovementPointer().getPosition(),
+                        m_player.getViewPointer().getPosition()
+                )
+        );
 
         m_enemies = new Array<CharacterObject>(16);
         for (int i = 0; i < m_level.getEnemiesCount(); ++i) {
@@ -263,15 +276,17 @@ public class GameScreen implements Screen {
         );
         m_spriteBatch.end();
 
+        m_renderer.setProjectionMatrix(m_camera.combined);
+        m_actionQueue.draw(m_renderer);
+
         if (env.debugDrawings) {
-            renderer.setProjectionMatrix(m_camera.combined);
             Circle c = m_player.getBoundingShape();
-            renderer.begin(ShapeRenderer.ShapeType.Line);
-            renderer.setColor(1, 1, 1, 1);
-            renderer.rect(m_player.getX(), m_player.getY(), m_player.getOriginX(), m_player.getOriginY(),
+            m_renderer.begin(ShapeRenderer.ShapeType.Line);
+            m_renderer.setColor(1, 1, 1, 1);
+            m_renderer.rect(m_player.getX(), m_player.getY(), m_player.getOriginX(), m_player.getOriginY(),
                     m_player.getWidth(), m_player.getHeight(), 1, 1, m_player.getRotation());
-            renderer.circle(c.x, c.y, c.radius, 20);
-            renderer.end();
+            m_renderer.circle(c.x, c.y, c.radius, 20);
+            m_renderer.end();
         }
     }
 

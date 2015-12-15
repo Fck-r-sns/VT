@@ -5,10 +5,16 @@ package com.vt.actionqueue;
  */
 public abstract class AbstractQueueableAction implements QueueableAction {
     State m_state = State.Ready;
+    Flags m_flags = new Flags();
 
     @Override
     public final State getState() {
         return m_state;
+    }
+
+    @Override
+    public Flags getFlags() {
+        return m_flags;
     }
 
     @Override

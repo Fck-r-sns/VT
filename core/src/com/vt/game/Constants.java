@@ -33,22 +33,24 @@ public class Constants {
     public static final float GUI_VIEWPORT_WIDTH = 1000.0f;
     public static final float GUI_PANEL_WIDTH = 500;
     public static final float GUI_PANEL_HEIGHT = 1200;
-    public static final float VIEW_BUTTON_WIDTH = 100.0f;
-    public static final float VIEW_BUTTON_HEIGHT = 100.0f;
-    public static final float VIEW_BUTTON_MARGIN_X = 20.0f;
-    public static final float VIEW_BUTTON_MARGIN_Y = -20.0f;
-    public static final float PAUSE_BUTTON_WIDTH = 75.0f;
-    public static final float PAUSE_BUTTON_HEIGHT = 75.0f;
-    public static final float PAUSE_BUTTON_MARGIN_X = VIEW_BUTTON_MARGIN_X + VIEW_BUTTON_WIDTH + 20.0f;
-    public static final float PAUSE_BUTTON_MARGIN_Y = -20.0f;
-    public static final float SHOOT_BUTTON_WIDTH = 75.0f;
-    public static final float SHOOT_BUTTON_HEIGHT = 75.0f;
-    public static final float SHOOT_BUTTON_MARGIN_X = 20.0f;
-    public static final float SHOOT_BUTTON_MARGIN_Y = VIEW_BUTTON_MARGIN_Y - VIEW_BUTTON_HEIGHT - 20.0f;
-    public static final float REWIND_BUTTON_WIDTH = 75.0f;
-    public static final float REWIND_BUTTON_HEIGHT = 75.0f;
-    public static final float REWIND_BUTTON_MARGIN_X = PAUSE_BUTTON_MARGIN_X + PAUSE_BUTTON_WIDTH + 20.0f;;
-    public static final float REWIND_BUTTON_MARGIN_Y = -20.0f;
+
+    public static final float PAUSE_BUTTON_WIDTH = 100.0f;
+    public static final float PAUSE_BUTTON_HEIGHT = 100.0f;
+    public static final float PAUSE_BUTTON_MARGIN_X = 10.0f;
+    public static final float PAUSE_BUTTON_MARGIN_Y = -10.0f;
+    public static final float VIEW_BUTTON_WIDTH = 90.0f;
+    public static final float VIEW_BUTTON_HEIGHT = 90.0f;
+    public static final float VIEW_BUTTON_MARGIN_X = 10.0f;
+    public static final float VIEW_BUTTON_MARGIN_Y = PAUSE_BUTTON_MARGIN_Y - PAUSE_BUTTON_HEIGHT - 10.0f;
+    public static final float SHOOT_BUTTON_WIDTH = 80.0f;
+    public static final float SHOOT_BUTTON_HEIGHT = 80.0f;
+    public static final float SHOOT_BUTTON_MARGIN_X = 10.0f;
+    public static final float SHOOT_BUTTON_MARGIN_Y = VIEW_BUTTON_MARGIN_Y - VIEW_BUTTON_HEIGHT - 10.0f;
+    public static final float REWIND_BUTTON_WIDTH = 80.0f;
+    public static final float REWIND_BUTTON_HEIGHT = 80.0f;
+    public static final float REWIND_BUTTON_MARGIN_X = PAUSE_BUTTON_MARGIN_X + PAUSE_BUTTON_WIDTH + 10.0f;
+    public static final float REWIND_BUTTON_MARGIN_Y = -10.0f;
+
 
     public static final float TIME_LABEL_MARGIN_X = 200.0f;
     public static final float TIME_LABEL_MARGIN_Y = 10.0f;
@@ -113,8 +115,8 @@ public class Constants {
 
     public final static float MAX_PLAYER_LINEAR_SPEED = 2.0f; // meters per second (4 m/s = 14.4 km/h)
     public final static float MAX_PLAYER_LINEAR_ACCELERATION = 6.0f;
-    public final static float MAX_PLAYER_ANGULAR_SPEED = 30;
-    public final static float MAX_PLAYER_ANGULAR_ACCELERATION = 30;
+    public final static float MAX_PLAYER_ANGULAR_SPEED = 180; // old value = 30
+    public final static float MAX_PLAYER_ANGULAR_ACCELERATION = 180; // old value = 30
 
     public final static float PLAYER_ARRIVAL_TOLERANCE = 0.08f;
     public final static float PLAYER_ARRIVAL_TOLERANCE_POW_2 = PLAYER_ARRIVAL_TOLERANCE * PLAYER_ARRIVAL_TOLERANCE;

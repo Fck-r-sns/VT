@@ -141,6 +141,7 @@ public class Constants {
     // terrain ----------------------------------------------------------------
     static public class Level {
         public final static String LEVEL_TEST_FILE = "levels/test";
+        public final static String PATHFINDING_TEST_FILE = "levels/pathfinding";
 
         public final static int FLOOR_CODE = '0';
         public final static int WALL_CODE = '1';

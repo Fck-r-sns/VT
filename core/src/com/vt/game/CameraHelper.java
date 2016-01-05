@@ -64,6 +64,22 @@ public class CameraHelper {
         }
     }
 
+    public void moveRight(float value) {
+        setPosition(m_camera.position.x + value, m_camera.position.y);
+    }
+
+    public void moveLeft(float value) {
+        setPosition(m_camera.position.x - value, m_camera.position.y);
+    }
+
+    public void moveUp(float value) {
+        setPosition(m_camera.position.x, m_camera.position.y + value);
+    }
+
+    public void moveDown(float value) {
+        setPosition(m_camera.position.x, m_camera.position.y - value);
+    }
+
     public Vector2 getPosition() {
         return new Vector2(m_camera.position.x, m_camera.position.y);
     }
@@ -78,6 +94,14 @@ public class CameraHelper {
         else if (zoom > MAX_ZOOM)
             zoom = MAX_ZOOM;
         m_camera.zoom = zoom;
+    }
+
+    public void zoomUp(float value) {
+        setZoom(getZoom() + value);
+    }
+
+    public void zoomDown(float value) {
+        setZoom(getZoom() - value);
     }
 
     public float getZoom() {

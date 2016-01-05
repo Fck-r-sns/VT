@@ -38,6 +38,8 @@ public class Assets implements Disposable, AssetErrorListener {
     }
 
     public class Terrain {
+        public TextureAtlas.AtlasRegion simpleFloor;
+        public TextureAtlas.AtlasRegion simpleWall;
         public TextureAtlas.AtlasRegion plainFloorLight;
         public TextureAtlas.AtlasRegion plainFloorWithDotsLight;
         public TextureAtlas.AtlasRegion plainFloorDark;
@@ -114,6 +116,8 @@ public class Assets implements Disposable, AssetErrorListener {
             t.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         terrain = new Terrain();
+        terrain.simpleFloor = atlas.findRegion(Constants.SIMPLE_FLOOR_ASSET_NAME);
+        terrain.simpleWall = atlas.findRegion(Constants.SIMPLE_WALL_ASSET_NAME);
         terrain.plainFloorLight = atlas.findRegion(Constants.PLAIN_FLOOR_LIGHT_ASSET_NAME);
         terrain.plainFloorWithDotsLight = atlas.findRegion(Constants.PLAIN_FLOOR_WITH_DOTS_LIGHT_ASSET_NAME);
         terrain.plainFloorDark = atlas.findRegion(Constants.PLAIN_FLOOR_DARK_ASSET_NAME);

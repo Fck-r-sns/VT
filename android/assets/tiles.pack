@@ -5,133 +5,147 @@ filter: Nearest,Nearest
 repeat: none
 tile1
   rotate: false
-  xy: 1, 205
+  xy: 2, 218
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 tile10
   rotate: false
-  xy: 1, 171
+  xy: 2, 182
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 tile11
   rotate: false
-  xy: 35, 205
+  xy: 38, 218
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 tile12
   rotate: false
-  xy: 1, 137
+  xy: 2, 146
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 tile13
   rotate: false
-  xy: 35, 171
+  xy: 38, 182
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 tile14
   rotate: false
-  xy: 69, 205
+  xy: 74, 218
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 tile15
   rotate: false
-  xy: 1, 103
+  xy: 2, 110
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 tile16
   rotate: false
-  xy: 35, 137
+  xy: 38, 146
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 tile17
   rotate: false
-  xy: 69, 171
+  xy: 74, 182
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 tile18
   rotate: false
-  xy: 1, 69
+  xy: 2, 74
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 tile19
   rotate: false
-  xy: 35, 103
+  xy: 38, 110
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 tile2
   rotate: false
-  xy: 69, 137
+  xy: 74, 146
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 tile3
   rotate: false
-  xy: 1, 35
+  xy: 2, 38
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 tile4
   rotate: false
-  xy: 35, 69
+  xy: 38, 74
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 tile5
   rotate: false
-  xy: 69, 103
+  xy: 74, 110
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 tile6
   rotate: false
-  xy: 1, 1
+  xy: 2, 2
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 tile7
   rotate: false
-  xy: 35, 35
+  xy: 38, 38
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 tile8
   rotate: false
-  xy: 69, 69
+  xy: 74, 74
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 tile9
   rotate: false
-  xy: 35, 1
+  xy: 38, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+tile_floor
+  rotate: false
+  xy: 74, 38
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+tile_wall
+  rotate: false
+  xy: 74, 2
   size: 32, 32
   orig: 32, 32
   offset: 0, 0

@@ -16,6 +16,7 @@ import com.vt.game.Constants;
 import com.vt.game.Environment;
 import com.vt.gameobjects.terrain.levels.AbstractLevel;
 import com.vt.gameobjects.terrain.levels.LevelFactory;
+import com.vt.logic.pathfinding.Graph;
 import com.vt.resources.Assets;
 
 /**
@@ -27,6 +28,7 @@ public class PathfindingTestScreen implements Screen {
     private SpriteBatch m_spriteBatch;
     private ShapeRenderer m_renderer;
     private Stage m_stage;
+    private Graph m_graph;
 
     private AbstractLevel m_level;
 
@@ -50,7 +52,9 @@ public class PathfindingTestScreen implements Screen {
 
         Assets.getInstance().init();
 
-        m_level = LevelFactory.createFromTextFile(Constants.Level.PATHFINDING_TEST_FILE);
+//        m_level = LevelFactory.createFromTextFile(Constants.Level.PATHFINDING_TEST_FILE);
+        m_level = LevelFactory.createFromTextFile(Constants.Level.LEVEL_TEST_FILE);
+        m_graph = m_level.createGraph();
 
         m_stage.getRoot().addListener(new InputListener() {
             @Override
@@ -112,6 +116,7 @@ public class PathfindingTestScreen implements Screen {
         m_stage.draw();
 
         m_renderer.setProjectionMatrix(m_camera.combined);
+        m_graph.draw(m_renderer);
     }
 
     @Override

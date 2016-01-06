@@ -51,7 +51,7 @@ public class LevelFactory {
                 }
                 if (tile != null) {
                     tile.setPosition(Constants.TILE_SIZE * xPos, Constants.TILE_SIZE * yPos);
-                    level.setTile(new Vector2(xPos, yPos), tile);
+                    level.setTile(new Tile.Index(xPos, yPos), tile);
                 }
                 ++xPos;
             }

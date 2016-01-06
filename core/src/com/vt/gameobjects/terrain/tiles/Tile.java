@@ -19,14 +19,43 @@ public class Tile extends GameObject implements Collidable {
         Wall
     }
 
+    public static class Index {
+        public int x;
+        public int y;
+
+        public Index(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        @Override
+        public int hashCode() {
+            return x + 31 * y;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this.getClass() != obj.getClass())
+                return false;
+            Index other = (Index) obj;
+            return x == other.x && y == other.y;
+        }
+    }
+
     private Vector2 m_boundingRect;
     private Type m_type;
+    protected boolean m_passable;
+
 
     protected Tile() {
         setSize(Constants.TILE_SIZE, Constants.TILE_SIZE);
         setPosition(0, 0);
         setOrigin(Align.center);
         m_boundingRect = new Vector2(Constants.TILE_SIZE, Constants.TILE_SIZE);
+    }
+
+    public boolean isPassable() {
+        return m_passable;
     }
 
     @Override

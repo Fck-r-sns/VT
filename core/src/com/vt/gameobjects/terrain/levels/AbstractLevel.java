@@ -65,8 +65,7 @@ public abstract class AbstractLevel {
             Tile tile = (Tile) entry.getValue();
             if (tile.isPassable()) {
                 Tile.Index index = (Tile.Index) entry.getKey();
-                Graph.Node node = new Graph.Node();
-                node.vertex = new Graph.Vertex(index, tile.getX(Align.center), tile.getY(Align.center));
+                Graph.Node node = new Graph.Node(index, tile.getX(Align.center), tile.getY(Align.center));
                 g.addNode(node);
             }
         }

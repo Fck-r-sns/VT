@@ -16,8 +16,13 @@ import com.vt.game.Constants;
 import com.vt.game.Environment;
 import com.vt.gameobjects.terrain.levels.AbstractLevel;
 import com.vt.gameobjects.terrain.levels.LevelFactory;
+import com.vt.gameobjects.terrain.tiles.Tile;
+import com.vt.logic.pathfinding.DijkstraAlgorithm;
 import com.vt.logic.pathfinding.Graph;
+import com.vt.logic.pathfinding.Pathfinder;
 import com.vt.resources.Assets;
+
+import java.util.List;
 
 /**
  * Created by fckrsns on 05.01.2016.
@@ -29,6 +34,7 @@ public class PathfindingTestScreen implements Screen {
     private ShapeRenderer m_renderer;
     private Stage m_stage;
     private Graph m_graph;
+    private List<Graph.Node> m_path;
 
     private AbstractLevel m_level;
 
@@ -55,6 +61,8 @@ public class PathfindingTestScreen implements Screen {
 //        m_level = LevelFactory.createFromTextFile(Constants.Level.PATHFINDING_TEST_FILE);
         m_level = LevelFactory.createFromTextFile(Constants.Level.LEVEL_TEST_FILE);
         m_graph = m_level.createGraph();
+        Pathfinder pathfinder = new DijkstraAlgorithm(m_graph);
+        m_path =  pathfinder.findPath(m_graph.getNode(new Tile.Index(1, 6)), m_graph.getNode(new Tile.Index(15, 4)));
 
         m_stage.getRoot().addListener(new InputListener() {
             @Override
@@ -117,6 +125,8 @@ public class PathfindingTestScreen implements Screen {
 
         m_renderer.setProjectionMatrix(m_camera.combined);
         m_graph.draw(m_renderer);
+        if (m_path != null)
+            Graph.drawPath(m_renderer, m_path);
     }
 
     @Override

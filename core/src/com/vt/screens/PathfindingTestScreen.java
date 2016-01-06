@@ -3,6 +3,7 @@ package com.vt.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.vt.game.CameraHelper;
 import com.vt.game.Constants;
 import com.vt.game.Environment;
+import com.vt.gameobjects.pointers.DrawableVector;
 import com.vt.gameobjects.terrain.levels.AbstractLevel;
 import com.vt.gameobjects.terrain.levels.LevelFactory;
 import com.vt.gameobjects.terrain.tiles.Tile;
@@ -23,6 +25,7 @@ import com.vt.logic.pathfinding.Pathfinder;
 import com.vt.resources.Assets;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by fckrsns on 05.01.2016.
@@ -35,6 +38,7 @@ public class PathfindingTestScreen implements Screen {
     private Stage m_stage;
     private Graph m_graph;
     private List<Graph.Node> m_path;
+    Pathfinder m_pathfinder;
 
     private AbstractLevel m_level;
 
@@ -58,16 +62,30 @@ public class PathfindingTestScreen implements Screen {
 
         Assets.getInstance().init();
 
-//        m_level = LevelFactory.createFromTextFile(Constants.Level.PATHFINDING_TEST_FILE);
-        m_level = LevelFactory.createFromTextFile(Constants.Level.LEVEL_TEST_FILE);
+        m_level = LevelFactory.createFromTextFile(Constants.Level.PATHFINDING_TEST_FILE);
+//        m_level = LevelFactory.createFromTextFile(Constants.Level.LEVEL_TEST_FILE);
         m_graph = m_level.createGraph();
-        Pathfinder pathfinder = new DijkstraAlgorithm(m_graph);
-        m_path =  pathfinder.findPath(m_graph.getNode(new Tile.Index(1, 6)), m_graph.getNode(new Tile.Index(15, 4)));
+        m_pathfinder = new DijkstraAlgorithm(m_graph);
+//        m_pathfinder = new AStarAlgorithm(m_graph, new AStarAlgorithm.Heuristic() {
+//            @Override
+//            public float calculate(Graph.Node node, Graph.Node targetNode) {
+////                float dX = targetNode.x - node.x;
+////                float dY = targetNode.y - node.y;
+////                return (float) Math.sqrt(dX * dX + dY * dY);
+//                float dx = Math.abs(targetNode.x - node.x);
+//                float dy = Math.abs(targetNode.y - node.y);
+//                float D = 1.0f;
+//                float D2 = 1.41f;
+//                return D * (dx + dy) + (D2 - 2 * D) * Math.min(dx, dy);
+//            }
+//        });
+//        m_path =  m_pathfinder.findPath(m_graph.getNode(new Tile.Index(1, 6)), m_graph.getNode(new Tile.Index(15, 4)));
+        m_path = m_pathfinder.findPath(m_graph.getNode(new Tile.Index(1, 1)), m_graph.getNode(new Tile.Index(7, 7)));
 
         m_stage.getRoot().addListener(new InputListener() {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
-                final float MOVE_RANGE = 0.2f;
+                final float MOVE_RANGE = 1.0f;
                 final float ZOOM_VALUE = 0.1f;
                 switch (keycode) {
                     case Input.Keys.LEFT:
@@ -95,6 +113,9 @@ public class PathfindingTestScreen implements Screen {
             }
         });
         Gdx.input.setInputProcessor(m_stage);
+
+        m_cameraHelper.setZoom(2);
+        m_cameraHelper.setPosition(5, 10);
 
         env.globalTime = 0.0f;
         env.gameTime = 0.0f;
@@ -124,9 +145,26 @@ public class PathfindingTestScreen implements Screen {
         m_stage.draw();
 
         m_renderer.setProjectionMatrix(m_camera.combined);
-        m_graph.draw(m_renderer);
+//        m_graph.draw(m_renderer);
+        for (DrawableVector v : m_pathfinder.variations)
+            v.draw(m_renderer);
         if (m_path != null)
             Graph.drawPath(m_renderer, m_path);
+
+        m_spriteBatch.begin();
+        Assets.getInstance().gui.font.setScale(0.05f);
+        Assets.getInstance().gui.font.setColor(Color.BLACK);
+        for (Map.Entry entry : m_pathfinder.d.entrySet()) {
+            Tile.Index index = (Tile.Index) entry.getKey();
+            Float value = (Float) entry.getValue();
+            Assets.getInstance().gui.font.draw(
+                    m_spriteBatch,
+                    String.format("%.1f", value),
+                    (index.x + 0.5f) * Constants.TILE_SIZE,
+                    (index.y + 0.5f) * Constants.TILE_SIZE
+            );
+        }
+        m_spriteBatch.end();
     }
 
     @Override

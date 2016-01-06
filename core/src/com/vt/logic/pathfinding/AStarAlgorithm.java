@@ -15,11 +15,17 @@ import java.util.Set;
 /**
  * Created by fckrsns on 06.01.2016.
  */
-public class DijkstraAlgorithm extends Pathfinder {
-    private Graph m_graph;
+public class AStarAlgorithm extends Pathfinder {
+    public interface Heuristic {
+        float calculate(Graph.Node node, Graph.Node targetNode);
+    }
 
-    public DijkstraAlgorithm(Graph graph) {
+    private Graph m_graph;
+    private Heuristic m_heuristic;
+
+    public AStarAlgorithm(Graph graph, Heuristic heuristic) {
         m_graph = graph;
+        m_heuristic = heuristic;
     }
 
     @Override
@@ -35,7 +41,7 @@ public class DijkstraAlgorithm extends Pathfinder {
                 Tile.Index index = adjacentNode.node.index;
                 if (!d.containsKey(index))
                     d.put(index, INFINITY);
-                d.put(index, Math.min(d.get(index), d.get(currentNode.index) + adjacentNode.edgeWeight));
+                d.put(index, Math.min(d.get(index), d.get(currentNode.index) + adjacentNode.edgeWeight + m_heuristic.calculate(adjacentNode.node, toNode)));
                 vectors.put(index, new DrawableVector(currentNode.x, currentNode.y, adjacentNode.node.x, adjacentNode.node.y, Color.RED, 0.5f, true));
             }
             Float min = INFINITY;

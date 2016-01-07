@@ -13,9 +13,26 @@ import java.util.Set;
  * Created by fckrsns on 06.01.2016.
  */
 public abstract class Pathfinder {
+    public static class DecisionInfo {
+        public float sumWeight;
+        public float heuristic;
+
+        DecisionInfo(float sumWeight, float heuristic) {
+            this.sumWeight = sumWeight;
+            this.heuristic = heuristic;
+        }
+
+        DecisionInfo(float sumWeight) {
+            this(sumWeight, 0.0f);
+        }
+
+        DecisionInfo() {
+            this(0.0f);
+        }
+    }
     Float INFINITY = Float.POSITIVE_INFINITY;
     public Set<Tile.Index> processedNodes = new HashSet<Tile.Index>();
-    public Map<Tile.Index, Float> d = new HashMap<Tile.Index, Float>();
+    public Map<Tile.Index, DecisionInfo> d = new HashMap<Tile.Index, DecisionInfo>();
     public Map<Tile.Index, DrawableVector> vectors = new HashMap<Tile.Index, DrawableVector>();
     public Set<DrawableVector> variations = new HashSet<DrawableVector>();
 

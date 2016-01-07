@@ -6,11 +6,8 @@ import com.vt.gameobjects.terrain.tiles.Tile;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by fckrsns on 06.01.2016.
@@ -31,7 +28,7 @@ public class AStarAlgorithm extends Pathfinder {
     @Override
     public List<Graph.Node> findPath(Graph.Node fromNode, Graph.Node toNode) {
         // initial
-        d.put(fromNode.index, 0.0f);
+        d.put(fromNode.index, new DecisionInfo());
         processedNodes.add(fromNode.index);
 
         // calculate path costs
@@ -40,14 +37,17 @@ public class AStarAlgorithm extends Pathfinder {
             for (Graph.DestinationNode adjacentNode : currentNode.incidentNodes) {
                 Tile.Index index = adjacentNode.node.index;
                 if (!d.containsKey(index))
-                    d.put(index, INFINITY);
-                d.put(index, Math.min(d.get(index), d.get(currentNode.index) + adjacentNode.edgeWeight + m_heuristic.calculate(adjacentNode.node, toNode)));
-                vectors.put(index, new DrawableVector(currentNode.x, currentNode.y, adjacentNode.node.x, adjacentNode.node.y, Color.RED, 0.5f, true));
+                    d.put(index, new DecisionInfo(INFINITY));
+                DecisionInfo info = d.get(index);
+                info.sumWeight = Math.min(info.sumWeight, d.get(currentNode.index).sumWeight + adjacentNode.edgeWeight);
+                info.heuristic = m_heuristic.calculate(adjacentNode.node, toNode);
+                vectors.put(index, new DrawableVector(currentNode.x, currentNode.y, adjacentNode.node.x, adjacentNode.node.y, Color.RED, 0.05f, true));
             }
             Float min = INFINITY;
             Tile.Index minIndex = null;
             for (Map.Entry entry : d.entrySet()) {
-                Float currentValue = (Float) entry.getValue();
+                DecisionInfo info = (DecisionInfo) entry.getValue();
+                Float currentValue = info.sumWeight + info.heuristic;
                 Tile.Index currentIndex = (Tile.Index) entry.getKey();
                 if (!processedNodes.contains(currentIndex) && currentValue < min) {
                     min = currentValue;
@@ -72,8 +72,8 @@ public class AStarAlgorithm extends Pathfinder {
             for (Graph.DestinationNode adjacentNode : currentNode.incidentNodes) {
                 Tile.Index index = adjacentNode.node.index;
                 if (!d.containsKey(index))
-                    d.put(index, INFINITY);
-                Float weight = d.get(index) + adjacentNode.edgeWeight;
+                    d.put(index, new DecisionInfo(INFINITY));
+                Float weight = d.get(index).sumWeight + adjacentNode.edgeWeight;
                 if (weight < min) {
                     min = weight;
                     minIndex = index;

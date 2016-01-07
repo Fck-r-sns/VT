@@ -19,6 +19,7 @@ import com.vt.gameobjects.pointers.DrawableVector;
 import com.vt.gameobjects.terrain.levels.AbstractLevel;
 import com.vt.gameobjects.terrain.levels.LevelFactory;
 import com.vt.gameobjects.terrain.tiles.Tile;
+import com.vt.logic.pathfinding.AStarAlgorithm;
 import com.vt.logic.pathfinding.DijkstraAlgorithm;
 import com.vt.logic.pathfinding.Graph;
 import com.vt.logic.pathfinding.Pathfinder;
@@ -39,6 +40,12 @@ public class PathfindingTestScreen implements Screen {
     private Graph m_graph;
     private List<Graph.Node> m_path;
     Pathfinder m_pathfinder;
+
+    private final boolean m_useDijkstra = false;
+    private final boolean m_drawGraph = false;
+    private final boolean m_drawPath = true;
+    private final boolean m_drawVariations = true;
+    private final boolean m_drawDecisionInfo = false;
 
     private AbstractLevel m_level;
 
@@ -65,22 +72,25 @@ public class PathfindingTestScreen implements Screen {
         m_level = LevelFactory.createFromTextFile(Constants.Level.PATHFINDING_TEST_FILE);
 //        m_level = LevelFactory.createFromTextFile(Constants.Level.LEVEL_TEST_FILE);
         m_graph = m_level.createGraph();
-        m_pathfinder = new DijkstraAlgorithm(m_graph);
-//        m_pathfinder = new AStarAlgorithm(m_graph, new AStarAlgorithm.Heuristic() {
-//            @Override
-//            public float calculate(Graph.Node node, Graph.Node targetNode) {
-////                float dX = targetNode.x - node.x;
-////                float dY = targetNode.y - node.y;
-////                return (float) Math.sqrt(dX * dX + dY * dY);
-//                float dx = Math.abs(targetNode.x - node.x);
-//                float dy = Math.abs(targetNode.y - node.y);
-//                float D = 1.0f;
-//                float D2 = 1.41f;
-//                return D * (dx + dy) + (D2 - 2 * D) * Math.min(dx, dy);
-//            }
-//        });
+        if (m_useDijkstra) {
+            m_pathfinder = new DijkstraAlgorithm(m_graph);
+        } else {
+            m_pathfinder = new AStarAlgorithm(m_graph, new AStarAlgorithm.Heuristic() {
+                @Override
+                public float calculate(Graph.Node node, Graph.Node targetNode) {
+//                float dX = targetNode.x - node.x;
+//                float dY = targetNode.y - node.y;
+//                return (float) Math.sqrt(dX * dX + dY * dY);
+                    float dx = Math.abs(targetNode.x - node.x);
+                    float dy = Math.abs(targetNode.y - node.y);
+                    float D = 1.0f;
+                    float D2 = 1.41f;
+                    return D * (dx + dy) + (D2 - 2 * D) * Math.min(dx, dy);
+                }
+            });
+        }
 //        m_path =  m_pathfinder.findPath(m_graph.getNode(new Tile.Index(1, 6)), m_graph.getNode(new Tile.Index(15, 4)));
-        m_path = m_pathfinder.findPath(m_graph.getNode(new Tile.Index(1, 1)), m_graph.getNode(new Tile.Index(7, 7)));
+        m_path = m_pathfinder.findPath(m_graph.getNode(new Tile.Index(4, 3)), m_graph.getNode(new Tile.Index(4, 7)));
 
         m_stage.getRoot().addListener(new InputListener() {
             @Override
@@ -145,26 +155,40 @@ public class PathfindingTestScreen implements Screen {
         m_stage.draw();
 
         m_renderer.setProjectionMatrix(m_camera.combined);
-//        m_graph.draw(m_renderer);
-        for (DrawableVector v : m_pathfinder.variations)
-            v.draw(m_renderer);
-        if (m_path != null)
-            Graph.drawPath(m_renderer, m_path);
+        if (m_drawGraph)
+            m_graph.draw(m_renderer);
 
-        m_spriteBatch.begin();
-        Assets.getInstance().gui.font.setScale(0.05f);
-        Assets.getInstance().gui.font.setColor(Color.BLACK);
-        for (Map.Entry entry : m_pathfinder.d.entrySet()) {
-            Tile.Index index = (Tile.Index) entry.getKey();
-            Float value = (Float) entry.getValue();
-            Assets.getInstance().gui.font.draw(
-                    m_spriteBatch,
-                    String.format("%.1f", value),
-                    (index.x + 0.5f) * Constants.TILE_SIZE,
-                    (index.y + 0.5f) * Constants.TILE_SIZE
-            );
+        if (m_drawVariations)
+            for (DrawableVector v : m_pathfinder.variations)
+                v.draw(m_renderer);
+
+        if (m_drawPath)
+            if (m_path != null)
+                Graph.drawPath(m_renderer, m_path);
+
+        if (m_drawDecisionInfo) {
+            m_spriteBatch.begin();
+            Assets.getInstance().gui.font.setScale(0.05f);
+            Assets.getInstance().gui.font.setColor(Color.BLACK);
+            for (Map.Entry entry : m_pathfinder.d.entrySet()) {
+                Tile.Index index = (Tile.Index) entry.getKey();
+                Float weight = ((Pathfinder.DecisionInfo) entry.getValue()).sumWeight;
+                Float heuristic = ((Pathfinder.DecisionInfo) entry.getValue()).heuristic;
+                Assets.getInstance().gui.font.draw(
+                        m_spriteBatch,
+                        String.format("%.1f", weight),
+                        (index.x + 0.5f) * Constants.TILE_SIZE,
+                        (index.y + 0.6f) * Constants.TILE_SIZE
+                );
+                Assets.getInstance().gui.font.draw(
+                        m_spriteBatch,
+                        String.format("%.1f", heuristic),
+                        (index.x + 0.5f) * Constants.TILE_SIZE,
+                        (index.y + 0.4f) * Constants.TILE_SIZE
+                );
+            }
+            m_spriteBatch.end();
         }
-        m_spriteBatch.end();
     }
 
     @Override

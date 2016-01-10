@@ -36,5 +36,5 @@ public abstract class Pathfinder {
     public Map<Tile.Index, DrawableVector> vectors = new HashMap<Tile.Index, DrawableVector>();
     public Set<DrawableVector> variations = new HashSet<DrawableVector>();
 
-    public abstract List<Graph.Vertex> findPath(Graph.Vertex fromVertex, Graph.Vertex toVertex);
+    public abstract List<Graph.Vertex> findPath(Graph.Vertex start, Graph.Vertex goal);
 }

@@ -40,6 +40,11 @@ public class Tile extends GameObject implements Collidable {
             Index other = (Index) obj;
             return x == other.x && y == other.y;
         }
+
+        @Override
+        public String toString() {
+            return "(" + x + ";" + y + ")";
+        }
     }
 
     private Vector2 m_boundingRect;

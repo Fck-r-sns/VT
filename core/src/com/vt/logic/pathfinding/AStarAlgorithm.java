@@ -26,21 +26,21 @@ public class AStarAlgorithm extends Pathfinder {
     }
 
     @Override
-    public List<Graph.Vertex> findPath(Graph.Vertex fromVertex, Graph.Vertex toVertex) {
+    public List<Graph.Vertex> findPath(Graph.Vertex start, Graph.Vertex goal) {
         // initial
-        d.put(fromVertex.index, new DecisionInfo());
-        processedNodes.add(fromVertex.index);
+        d.put(start.index, new DecisionInfo());
+        processedNodes.add(start.index);
 
         // calculate path costs
-        Graph.Vertex currentVertex = fromVertex;
-        while (currentVertex.index != toVertex.index) {
+        Graph.Vertex currentVertex = start;
+        while (currentVertex.index != goal.index) {
             for (Graph.Edge adjacentNode : currentVertex.incidentEdges) {
                 Tile.Index index = adjacentNode.destination.index;
                 if (!d.containsKey(index))
                     d.put(index, new DecisionInfo(INFINITY));
                 DecisionInfo info = d.get(index);
                 info.sumWeight = Math.min(info.sumWeight, d.get(currentVertex.index).sumWeight + adjacentNode.weight);
-                info.heuristic = m_heuristic.calculate(adjacentNode.destination, toVertex);
+                info.heuristic = m_heuristic.calculate(adjacentNode.destination, goal);
                 vectors.put(index, new DrawableVector(currentVertex.x, currentVertex.y, adjacentNode.destination.x, adjacentNode.destination.y, Color.RED, 0.05f, true));
             }
             Float min = INFINITY;
@@ -63,10 +63,10 @@ public class AStarAlgorithm extends Pathfinder {
         }
 
         // get optimal path
-        currentVertex = toVertex;
+        currentVertex = goal;
         List<Graph.Vertex> path = new ArrayList<Graph.Vertex>();
-        path.add(toVertex);
-        while (currentVertex.index != fromVertex.index) {
+        path.add(goal);
+        while (currentVertex.index != start.index) {
             Float min = INFINITY;
             Tile.Index minIndex = null;
             for (Graph.Edge incidentEdge : currentVertex.incidentEdges) {

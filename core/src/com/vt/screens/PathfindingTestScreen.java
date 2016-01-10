@@ -3,7 +3,6 @@ package com.vt.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -11,6 +10,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.vt.game.CameraHelper;
 import com.vt.game.Constants;
@@ -25,8 +25,9 @@ import com.vt.logic.pathfinding.Graph;
 import com.vt.logic.pathfinding.Pathfinder;
 import com.vt.resources.Assets;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by fckrsns on 05.01.2016.
@@ -44,8 +45,7 @@ public class PathfindingTestScreen implements Screen {
     private final boolean m_useDijkstra = false;
     private final boolean m_drawGraph = false;
     private final boolean m_drawPath = true;
-    private final boolean m_drawVariations = true;
-    private final boolean m_drawDecisionInfo = false;
+    private final boolean m_drawVariations = false;
 
     private AbstractLevel m_level;
 
@@ -69,32 +69,97 @@ public class PathfindingTestScreen implements Screen {
 
         Assets.getInstance().init();
 
-        m_level = LevelFactory.createFromTextFile(Constants.Level.PATHFINDING_TEST_FILE);
-//        m_level = LevelFactory.createFromTextFile(Constants.Level.LEVEL_TEST_FILE);
-        int levelSize = 51;
-//        m_level = LevelFactory.createStub(levelSize, levelSize);
+////        m_level = LevelFactory.createFromTextFile(Constants.Level.PATHFINDING_TEST_FILE);
+////        m_level = LevelFactory.createFromTextFile(Constants.Level.LEVEL_TEST_FILE);
+//        int levelSize = 51;
 //        m_level = LevelFactory.createPathfindingTest(levelSize, levelSize);
-        m_graph = m_level.createGraph();
-        if (m_useDijkstra) {
-            m_pathfinder = new DijkstraAlgorithm(m_graph);
-        } else {
-            m_pathfinder = new AStarAlgorithm(m_graph, new AStarAlgorithm.Heuristic() {
+//        m_graph = m_level.createGraph();
+//        if (m_useDijkstra) {
+//            m_pathfinder = new DijkstraAlgorithm(m_graph);
+//        } else {
+//            m_pathfinder = new AStarAlgorithm(m_graph, new AStarAlgorithm.Heuristic() {
+//                @Override
+//                public float calculate(Graph.Vertex vertex, Graph.Vertex targetVertex) {
+////                float dX = targetVertex.x - vertex.x;
+////                float dY = targetVertex.y - vertex.y;
+////                return (float) Math.sqrt(dX * dX + dY * dY);
+//                    float dx = Math.abs(targetVertex.x - vertex.x);
+//                    float dy = Math.abs(targetVertex.y - vertex.y);
+//                    float D = 1 * 1.0f;
+//                    float D2 = 1 * 1.41f;
+//                    return D * (dx + dy) + (D2 - 2 * D) * Math.min(dx, dy);
+////                    return 0;
+//                }
+//            });
+//        }
+//        long time = System.nanoTime();
+////        m_path =  m_pathfinder.findPath(m_graph.getVertex(new Tile.Index(1, 6)), m_graph.getVertex(new Tile.Index(29, 5)));
+//        m_path = m_pathfinder.findPath(m_graph.getVertex(new Tile.Index(0, 0)), m_graph.getVertex(new Tile.Index(levelSize - 1, levelSize - 1)));
+////        m_path = m_pathfinder.findPath(m_graph.getVertex(new Tile.Index(4, 2)), m_graph.getVertex(new Tile.Index(7, 7)));
+//        time = System.nanoTime() - time;
+//        Gdx.app.debug("Pathfinding", "Execution time = " + time);
+
+        PrintWriter file = null;
+        try {
+            file = new PrintWriter("output.txt");
+        } catch (FileNotFoundException e) {
+            throw new NullPointerException();
+        }
+        long dijkstraAverage = 0;
+        long astarAverage = 0;
+        int testsCount = 5;
+        int repetitionCount = 100;
+        for (int i = 0; i < testsCount; ++i) {
+            int levelSize = 401 + i * 100;
+            long time = System.nanoTime();
+            m_level = LevelFactory.createPathfindingTest(levelSize, levelSize);
+            time = System.nanoTime() - time;
+            Gdx.app.debug("Pathfinding", levelSize + "x" + levelSize + ": " + "level creation = " + time);
+            time = System.nanoTime();
+            m_graph = m_level.createGraph();
+            time = System.nanoTime() - time;
+            Gdx.app.debug("Pathfinding", levelSize + "x" + levelSize + ": " + "graph creation = " + time);
+            Pathfinder dijkstra = new DijkstraAlgorithm(m_graph);
+            Pathfinder astar = new AStarAlgorithm(m_graph, new AStarAlgorithm.Heuristic() {
                 @Override
                 public float calculate(Graph.Vertex vertex, Graph.Vertex targetVertex) {
-//                float dX = targetVertex.x - vertex.x;
-//                float dY = targetVertex.y - vertex.y;
-//                return (float) Math.sqrt(dX * dX + dY * dY);
                     float dx = Math.abs(targetVertex.x - vertex.x);
                     float dy = Math.abs(targetVertex.y - vertex.y);
-                    float D = 10 * 1.0f;
-                    float D2 = 10 * 1.41f;
+                    float D = 1.0f;
+                    float D2 = 1.41f;
                     return D * (dx + dy) + (D2 - 2 * D) * Math.min(dx, dy);
                 }
             });
+            Array<Long> dijkstraTime = new Array<Long>(repetitionCount);
+            Array<Long> astarTime = new Array<Long>(repetitionCount);
+            dijkstraAverage = 0;
+            astarAverage = 0;
+            Graph.Vertex from = m_graph.getVertex(new Tile.Index(0, 0));
+            Graph.Vertex to = m_graph.getVertex(new Tile.Index(levelSize - 1, levelSize - 1));
+            for (int j = 0; j < repetitionCount; ++j) {
+                time = System.nanoTime();
+                m_path = dijkstra.findPath(from, to);
+                if (m_path == null)
+                    throw new NullPointerException();
+                time = System.nanoTime() - time;
+                dijkstraTime.add(time);
+                dijkstraAverage += time;
+
+                time = System.nanoTime();
+                m_path = astar.findPath(from, to);
+                if (m_path == null)
+                    throw new NullPointerException();
+                time = System.nanoTime() - time;
+                astarTime.add(time);
+                astarAverage += time;
+            }
+            dijkstraAverage /= dijkstraTime.size;
+            astarAverage /= astarTime.size;
+            file.println(levelSize + "," + dijkstraAverage + "," + astarAverage);
+            Gdx.app.debug("Pathfinding", levelSize + "x" + levelSize + ": " + "Dijkstra time = " + dijkstraAverage);
+            Gdx.app.debug("Pathfinding", levelSize + "x" + levelSize + ": " + "A*       time = " + astarAverage);
         }
-//        m_path =  m_pathfinder.findPath(m_graph.getVertex(new Tile.Index(1, 6)), m_graph.getVertex(new Tile.Index(29, 5)));
-//        m_path = m_pathfinder.findPath(m_graph.getVertex(new Tile.Index(0, 0)), m_graph.getVertex(new Tile.Index(levelSize - 1, levelSize - 1)));
-        m_path = m_pathfinder.findPath(m_graph.getVertex(new Tile.Index(4, 2)), m_graph.getVertex(new Tile.Index(7, 7)));
+        file.close();
 
         m_stage.getRoot().addListener(new InputListener() {
             @Override
@@ -128,7 +193,7 @@ public class PathfindingTestScreen implements Screen {
         });
         Gdx.input.setInputProcessor(m_stage);
 
-        m_cameraHelper.setZoom(2f);
+        m_cameraHelper.setZoom(10f);
         m_cameraHelper.moveDown(3);
         m_cameraHelper.moveLeft(1);
 
@@ -170,30 +235,6 @@ public class PathfindingTestScreen implements Screen {
         if (m_drawPath)
             if (m_path != null)
                 Graph.drawPath(m_renderer, m_path);
-
-        if (m_drawDecisionInfo) {
-            m_spriteBatch.begin();
-            Assets.getInstance().gui.font.setScale(0.05f);
-            Assets.getInstance().gui.font.setColor(Color.BLACK);
-            for (Map.Entry entry : m_pathfinder.d.entrySet()) {
-                Tile.Index index = (Tile.Index) entry.getKey();
-                Float weight = ((Pathfinder.DecisionInfo) entry.getValue()).sumWeight;
-                Float heuristic = ((Pathfinder.DecisionInfo) entry.getValue()).heuristic;
-                Assets.getInstance().gui.font.draw(
-                        m_spriteBatch,
-                        String.format("%.1f", weight),
-                        (index.x + 0.5f) * Constants.TILE_SIZE,
-                        (index.y + 0.6f) * Constants.TILE_SIZE
-                );
-                Assets.getInstance().gui.font.draw(
-                        m_spriteBatch,
-                        String.format("%.1f", heuristic),
-                        (index.x + 0.5f) * Constants.TILE_SIZE,
-                        (index.y + 0.4f) * Constants.TILE_SIZE
-                );
-            }
-            m_spriteBatch.end();
-        }
     }
 
     @Override

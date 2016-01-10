@@ -1,14 +1,14 @@
 package com.vt.logic.pathfinding;
 
-import com.badlogic.gdx.graphics.Color;
-import com.vt.gameobjects.pointers.DrawableVector;
 import com.vt.gameobjects.terrain.tiles.Tile;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by fckrsns on 06.01.2016.
@@ -33,7 +33,8 @@ public class DijkstraAlgorithm extends Pathfinder {
 
             @Override
             public boolean equals(Object obj) {
-                return vertex.equals(obj);
+                return (getClass() == obj.getClass())
+                        && vertex.equals(((MarkedVertex) obj).vertex);
             }
         }
 
@@ -51,7 +52,8 @@ public class DijkstraAlgorithm extends Pathfinder {
         };
 
         IndexedPriorityQueue<Tile.Index, MarkedVertex> dist = new IndexedPriorityQueue<Tile.Index, MarkedVertex>(cmp);
-        HashMap<Tile.Index, Float> result = new HashMap<Tile.Index, Float>();
+        Set<Tile.Index> processed = new HashSet<Tile.Index>();
+        HashMap<Tile.Index, Graph.Vertex> previous = new HashMap<Tile.Index, Graph.Vertex>();
 
         // calculate path costs
         boolean goalAchieved = false;
@@ -59,26 +61,30 @@ public class DijkstraAlgorithm extends Pathfinder {
         while (!dist.isEmpty()) {
             MarkedVertex v = dist.first();
             dist.remove(v.vertex.index);
-            result.put(v.vertex.index, v.distance);
-            if (vectors.containsKey(v.vertex.index))
-                variations.add(vectors.get(v.vertex.index));
+            processed.add(v.vertex.index);
+//            if (vectors.containsKey(v.vertex.index))
+//                variations.add(vectors.get(v.vertex.index));
             if (v.vertex == goal) {
                 goalAchieved = true;
                 break;
             }
             for (Graph.Edge e : v.vertex.incidentEdges) {
                 Graph.Vertex v2 = e.destination;
-                if (result.containsKey(v2.index))
+                if (processed.contains(v2.index))
                     continue;
                 float d = v.distance + e.weight;
                 if (!dist.containsKey(v2.index)) {
                     dist.add(v2.index, new MarkedVertex(v2, d));
+                    previous.put(v2.index, v.vertex);
                 } else {
                     MarkedVertex vertex = dist.take(v2.index);
-                    vertex.distance = Math.min(vertex.distance, d);
+                    if (vertex.distance > d) {
+                        vertex.distance = d;
+                        previous.put(v2.index, v.vertex);
+                    }
                     dist.add(v2.index, vertex);
                 }
-                vectors.put(v2.index, new DrawableVector(v.vertex.x, v.vertex.y, v2.x, v2.y, Color.RED, 0.05f, true));
+//                vectors.put(v2.index, new DrawableVector(v.vertex.x, v.vertex.y, v2.x, v2.y, Color.RED, 0.05f, true));
             }
         }
 
@@ -86,24 +92,12 @@ public class DijkstraAlgorithm extends Pathfinder {
             return null;
 
         // get optimal path
-        Graph.Vertex currentVertex = goal;
+        Graph.Vertex v = goal;
         List<Graph.Vertex> path = new ArrayList<Graph.Vertex>();
         path.add(goal);
-        while (currentVertex.index != start.index) {
-            Float min = Float.MAX_VALUE;
-            Tile.Index minIndex = null;
-            for (Graph.Edge e : currentVertex.incidentEdges) {
-                Tile.Index index = e.destination.index;
-                float weight = result.get(index) + e.weight;
-                if (weight < min) {
-                    min = weight;
-                    minIndex = index;
-                }
-            }
-            if (minIndex == null)
-                return null;
-            currentVertex = m_graph.getVertex(minIndex);
-            path.add(currentVertex);
+        while (v.index != start.index) {
+            v = previous.get(v.index);
+            path.add(v);
         }
 
         Collections.reverse(path);

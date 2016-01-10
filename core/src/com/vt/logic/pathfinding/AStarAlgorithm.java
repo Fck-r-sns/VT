@@ -6,8 +6,13 @@ import com.vt.gameobjects.terrain.tiles.Tile;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Created by fckrsns on 06.01.2016.
@@ -27,62 +32,85 @@ public class AStarAlgorithm extends Pathfinder {
 
     @Override
     public List<Graph.Vertex> findPath(Graph.Vertex start, Graph.Vertex goal) {
-        // initial
-        d.put(start.index, new DecisionInfo());
-        processedNodes.add(start.index);
+        class MarkedVertex {
+            Graph.Vertex vertex;
+            float distance;
+            float heuristic;
 
-        // calculate path costs
-        Graph.Vertex currentVertex = start;
-        while (currentVertex.index != goal.index) {
-            for (Graph.Edge adjacentNode : currentVertex.incidentEdges) {
-                Tile.Index index = adjacentNode.destination.index;
-                if (!d.containsKey(index))
-                    d.put(index, new DecisionInfo(INFINITY));
-                DecisionInfo info = d.get(index);
-                info.sumWeight = Math.min(info.sumWeight, d.get(currentVertex.index).sumWeight + adjacentNode.weight);
-                info.heuristic = m_heuristic.calculate(adjacentNode.destination, goal);
-                vectors.put(index, new DrawableVector(currentVertex.x, currentVertex.y, adjacentNode.destination.x, adjacentNode.destination.y, Color.RED, 0.05f, true));
+            MarkedVertex(Graph.Vertex vertex, float distance, float heuristic) {
+                this.vertex = vertex;
+                this.distance = distance;   // g
+                this.heuristic = heuristic; // h
             }
-            Float min = INFINITY;
-            Tile.Index minIndex = null;
-            for (Map.Entry entry : d.entrySet()) {
-                DecisionInfo info = (DecisionInfo) entry.getValue();
-                Float currentValue = info.sumWeight + info.heuristic;
-                Tile.Index currentIndex = (Tile.Index) entry.getKey();
-                if (!processedNodes.contains(currentIndex) && currentValue < min) {
-                    min = currentValue;
-                    minIndex = currentIndex;
-                }
+
+            @Override
+            public boolean equals(Object obj) {
+                return (getClass() == obj.getClass())
+                        && vertex.equals(((MarkedVertex) obj).vertex);
             }
-            if (min.equals(INFINITY) || minIndex == null)
-                return null;
-            currentVertex = m_graph.getVertex(minIndex);
-            processedNodes.add(minIndex);
-            if (variations != null)
-                variations.add(vectors.get(minIndex));
         }
 
+        Comparator<MarkedVertex> cmp = new Comparator<MarkedVertex>() {
+            @Override
+            public int compare(MarkedVertex o1, MarkedVertex o2) {
+                // ignore different distances for same vertex
+                if (o1.vertex == o2.vertex)
+                    return 0;
+                int value = (int) Math.signum((o1.distance + o1.heuristic) - (o2.distance + o2.heuristic));
+                if (value == 0)
+                    return o1.vertex.hashCode() - o2.vertex.hashCode();
+                return value;
+            }
+        };
+
+        IndexedPriorityQueue<Tile.Index, MarkedVertex> open = new IndexedPriorityQueue<Tile.Index, MarkedVertex>(cmp);
+        Set<Tile.Index> closed = new HashSet<Tile.Index>();
+        Map<Tile.Index, Graph.Vertex> previous = new HashMap<Tile.Index, Graph.Vertex>();
+
+        // calculate path costs
+        boolean goalAchieved = false;
+        open.add(start.index, new MarkedVertex(start, 0, 0));
+        while (!open.isEmpty()) {
+            MarkedVertex v = open.first();
+            open.remove(v.vertex.index);
+            closed.add(v.vertex.index);
+//            if (vectors.containsKey(v.vertex.index))
+//                variations.add(vectors.get(v.vertex.index));
+            if (v.vertex == goal) {
+                goalAchieved = true;
+                break;
+            }
+            for (Graph.Edge e : v.vertex.incidentEdges) {
+                Graph.Vertex v2 = e.destination;
+                if (closed.contains(v2.index))
+                    continue;
+                float d = v.distance + e.weight;
+                if (!open.containsKey(v2.index)) {
+                    float h = m_heuristic.calculate(v2, goal);
+                    open.add(v2.index, new MarkedVertex(v2, d, h));
+                    previous.put(v2.index, v.vertex);
+                } else {
+                    MarkedVertex vertex = open.take(v2.index);
+                    if (vertex.distance > d) {
+                        vertex.distance = d;
+                        previous.put(v2.index, v.vertex);
+                    }
+                    open.add(v2.index, vertex);
+                }
+//                vectors.put(v2.index, new DrawableVector(v.vertex.x, v.vertex.y, v2.x, v2.y, Color.RED, 0.05f, true));
+            }
+        }
+
+        if (!goalAchieved)
+            return null;
+
         // get optimal path
-        currentVertex = goal;
+        Graph.Vertex v = goal;
         List<Graph.Vertex> path = new ArrayList<Graph.Vertex>();
         path.add(goal);
-        while (currentVertex.index != start.index) {
-            Float min = INFINITY;
-            Tile.Index minIndex = null;
-            for (Graph.Edge incidentEdge : currentVertex.incidentEdges) {
-                Tile.Index index = incidentEdge.destination.index;
-                if (!d.containsKey(index))
-                    d.put(index, new DecisionInfo(INFINITY));
-                Float weight = d.get(index).sumWeight + incidentEdge.weight;
-                if (weight < min) {
-                    min = weight;
-                    minIndex = index;
-                }
-            }
-            if (minIndex == null)
-                return null;
-            currentVertex = m_graph.getVertex(minIndex);
-            path.add(currentVertex);
+        while (v.index != start.index) {
+            v = previous.get(v.index);
+            path.add(v);
         }
 
         Collections.reverse(path);

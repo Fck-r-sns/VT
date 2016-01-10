@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public class AStarAlgorithm extends Pathfinder {
     public interface Heuristic {
-        float calculate(Graph.Node node, Graph.Node targetNode);
+        float calculate(Graph.Vertex vertex, Graph.Vertex targetVertex);
     }
 
     private Graph m_graph;
@@ -26,22 +26,22 @@ public class AStarAlgorithm extends Pathfinder {
     }
 
     @Override
-    public List<Graph.Node> findPath(Graph.Node fromNode, Graph.Node toNode) {
+    public List<Graph.Vertex> findPath(Graph.Vertex fromVertex, Graph.Vertex toVertex) {
         // initial
-        d.put(fromNode.index, new DecisionInfo());
-        processedNodes.add(fromNode.index);
+        d.put(fromVertex.index, new DecisionInfo());
+        processedNodes.add(fromVertex.index);
 
         // calculate path costs
-        Graph.Node currentNode = fromNode;
-        while (currentNode.index != toNode.index) {
-            for (Graph.DestinationNode adjacentNode : currentNode.incidentNodes) {
-                Tile.Index index = adjacentNode.node.index;
+        Graph.Vertex currentVertex = fromVertex;
+        while (currentVertex.index != toVertex.index) {
+            for (Graph.Edge adjacentNode : currentVertex.incidentEdges) {
+                Tile.Index index = adjacentNode.destination.index;
                 if (!d.containsKey(index))
                     d.put(index, new DecisionInfo(INFINITY));
                 DecisionInfo info = d.get(index);
-                info.sumWeight = Math.min(info.sumWeight, d.get(currentNode.index).sumWeight + adjacentNode.edgeWeight);
-                info.heuristic = m_heuristic.calculate(adjacentNode.node, toNode);
-                vectors.put(index, new DrawableVector(currentNode.x, currentNode.y, adjacentNode.node.x, adjacentNode.node.y, Color.RED, 0.05f, true));
+                info.sumWeight = Math.min(info.sumWeight, d.get(currentVertex.index).sumWeight + adjacentNode.weight);
+                info.heuristic = m_heuristic.calculate(adjacentNode.destination, toVertex);
+                vectors.put(index, new DrawableVector(currentVertex.x, currentVertex.y, adjacentNode.destination.x, adjacentNode.destination.y, Color.RED, 0.05f, true));
             }
             Float min = INFINITY;
             Tile.Index minIndex = null;
@@ -56,24 +56,24 @@ public class AStarAlgorithm extends Pathfinder {
             }
             if (min.equals(INFINITY) || minIndex == null)
                 return null;
-            currentNode = m_graph.getNode(minIndex);
+            currentVertex = m_graph.getVertex(minIndex);
             processedNodes.add(minIndex);
             if (variations != null)
                 variations.add(vectors.get(minIndex));
         }
 
         // get optimal path
-        currentNode = toNode;
-        List<Graph.Node> path = new ArrayList<Graph.Node>();
-        path.add(toNode);
-        while (currentNode.index != fromNode.index) {
+        currentVertex = toVertex;
+        List<Graph.Vertex> path = new ArrayList<Graph.Vertex>();
+        path.add(toVertex);
+        while (currentVertex.index != fromVertex.index) {
             Float min = INFINITY;
             Tile.Index minIndex = null;
-            for (Graph.DestinationNode adjacentNode : currentNode.incidentNodes) {
-                Tile.Index index = adjacentNode.node.index;
+            for (Graph.Edge incidentEdge : currentVertex.incidentEdges) {
+                Tile.Index index = incidentEdge.destination.index;
                 if (!d.containsKey(index))
                     d.put(index, new DecisionInfo(INFINITY));
-                Float weight = d.get(index).sumWeight + adjacentNode.edgeWeight;
+                Float weight = d.get(index).sumWeight + incidentEdge.weight;
                 if (weight < min) {
                     min = weight;
                     minIndex = index;
@@ -81,8 +81,8 @@ public class AStarAlgorithm extends Pathfinder {
             }
             if (minIndex == null)
                 return null;
-            currentNode = m_graph.getNode(minIndex);
-            path.add(currentNode);
+            currentVertex = m_graph.getVertex(minIndex);
+            path.add(currentVertex);
         }
 
         Collections.reverse(path);

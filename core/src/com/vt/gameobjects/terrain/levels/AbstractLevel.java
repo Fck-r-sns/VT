@@ -65,32 +65,40 @@ public abstract class AbstractLevel {
             Tile tile = (Tile) entry.getValue();
             if (tile.isPassable()) {
                 Tile.Index index = (Tile.Index) entry.getKey();
-                Graph.Node node = new Graph.Node(index, tile.getX(Align.center), tile.getY(Align.center));
-                g.addNode(node);
+                Graph.Vertex vertex = new Graph.Vertex(index, tile.getX(Align.center), tile.getY(Align.center));
+                g.addVertex(vertex);
             }
         }
 
         // add edges
-        for (Map.Entry entry : g.getNodes().entrySet()) {
+        for (Map.Entry entry : g.getVertices().entrySet()) {
             Tile.Index index = (Tile.Index) entry.getKey();
-            Graph.Node node = (Graph.Node) entry.getValue();
+            Graph.Vertex vertex = (Graph.Vertex) entry.getValue();
             // iterate for adjacent tiles
             final int offsets[] = {-1, 0, 1};
             for (int deltaX : offsets) {
                 for (int deltaY : offsets) {
                     if (deltaX == 0 && deltaY == 0)
                         continue; // this is the same tile, not adjacent
+                    if (Math.abs(deltaX) + Math.abs(deltaY) == 2) {
+                        Tile.Index key1 = new Tile.Index(index.x + deltaX, index.y);
+                        Tile.Index key2 = new Tile.Index(index.x, index.y + deltaY);
+
+                        if (!m_tiles.containsKey(key1) || !m_tiles.get(key1).isPassable()
+                                || !m_tiles.containsKey(key2) || !m_tiles.get(key2).isPassable())
+                            continue;
+                    }
                     Tile.Index adjacentIndex = new Tile.Index(index.x + deltaX, index.y + deltaY);
                     if (m_tiles.containsKey(adjacentIndex)) {
                         Tile adjacentTile = m_tiles.get(adjacentIndex);
                         if (adjacentTile.isPassable()) {
-                            Graph.DestinationNode destNode = new Graph.DestinationNode();
-                            destNode.node = g.getNode(adjacentIndex);
+                            Graph.Edge destNode = new Graph.Edge();
+                            destNode.destination = g.getVertex(adjacentIndex);
                             Tile currentTile = m_tiles.get(index);
                             float dX = adjacentTile.getX(Align.center) - currentTile.getX(Align.center);
                             float dY = adjacentTile.getY(Align.center) - currentTile.getY(Align.center);
-                            destNode.edgeWeight = (float) Math.sqrt(dX * dX + dY * dY);
-                            node.incidentNodes.add(destNode);
+                            destNode.weight = (float) Math.sqrt(dX * dX + dY * dY);
+                            vertex.incidentEdges.add(destNode);
                         }
                     }
                 }

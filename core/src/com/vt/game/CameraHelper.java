@@ -16,8 +16,8 @@ import com.vt.serialization.ValuesChangeHistory;
  */
 public class CameraHelper {
     static final float DEFAULT_ZOOM = 1.0f;
-    static final float MIN_ZOOM = 0.5f;
-    static final float MAX_ZOOM = 2f;
+    static final float MIN_ZOOM = 0.1f;
+    static final float MAX_ZOOM = 10f;
 
     private ValuesChangeHistory m_valuesHistory;
     private OrthographicCamera m_camera;

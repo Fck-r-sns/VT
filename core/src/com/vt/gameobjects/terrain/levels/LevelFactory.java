@@ -2,7 +2,6 @@ package com.vt.gameobjects.terrain.levels;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.math.Vector2;
 import com.vt.game.Constants;
 import com.vt.gameobjects.terrain.tiles.Tile;
 import com.vt.gameobjects.terrain.tiles.TileFactory;
@@ -13,6 +12,17 @@ import com.vt.gameobjects.terrain.tiles.TileFactory;
 public class LevelFactory {
     public static AbstractLevel createStub(int width, int height) {
         return new StubLevel(width, height);
+    }
+
+    public static AbstractLevel createPathfindingTest(int width, int height) {
+        AbstractLevel level = new StubLevel(width, height);
+        int x = height / 2;
+        for (int y = 2; y <= width - 3; ++y) {
+            Tile tile = TileFactory.create(Tile.Type.Wall);
+            tile.setPosition(Constants.TILE_SIZE * x, Constants.TILE_SIZE * y);
+            level.setTile(new Tile.Index(x, y), tile);
+        }
+        return level;
     }
 
     public static AbstractLevel createFromTextFile(String fileName) {

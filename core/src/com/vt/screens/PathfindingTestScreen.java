@@ -38,7 +38,7 @@ public class PathfindingTestScreen implements Screen {
     private ShapeRenderer m_renderer;
     private Stage m_stage;
     private Graph m_graph;
-    private List<Graph.Node> m_path;
+    private List<Graph.Vertex> m_path;
     Pathfinder m_pathfinder;
 
     private final boolean m_useDijkstra = false;
@@ -71,26 +71,30 @@ public class PathfindingTestScreen implements Screen {
 
         m_level = LevelFactory.createFromTextFile(Constants.Level.PATHFINDING_TEST_FILE);
 //        m_level = LevelFactory.createFromTextFile(Constants.Level.LEVEL_TEST_FILE);
+        int levelSize = 51;
+//        m_level = LevelFactory.createStub(levelSize, levelSize);
+//        m_level = LevelFactory.createPathfindingTest(levelSize, levelSize);
         m_graph = m_level.createGraph();
         if (m_useDijkstra) {
             m_pathfinder = new DijkstraAlgorithm(m_graph);
         } else {
             m_pathfinder = new AStarAlgorithm(m_graph, new AStarAlgorithm.Heuristic() {
                 @Override
-                public float calculate(Graph.Node node, Graph.Node targetNode) {
-//                float dX = targetNode.x - node.x;
-//                float dY = targetNode.y - node.y;
+                public float calculate(Graph.Vertex vertex, Graph.Vertex targetVertex) {
+//                float dX = targetVertex.x - vertex.x;
+//                float dY = targetVertex.y - vertex.y;
 //                return (float) Math.sqrt(dX * dX + dY * dY);
-                    float dx = Math.abs(targetNode.x - node.x);
-                    float dy = Math.abs(targetNode.y - node.y);
-                    float D = 1.0f;
-                    float D2 = 1.41f;
+                    float dx = Math.abs(targetVertex.x - vertex.x);
+                    float dy = Math.abs(targetVertex.y - vertex.y);
+                    float D = 10 * 1.0f;
+                    float D2 = 10 * 1.41f;
                     return D * (dx + dy) + (D2 - 2 * D) * Math.min(dx, dy);
                 }
             });
         }
-//        m_path =  m_pathfinder.findPath(m_graph.getNode(new Tile.Index(1, 6)), m_graph.getNode(new Tile.Index(15, 4)));
-        m_path = m_pathfinder.findPath(m_graph.getNode(new Tile.Index(4, 3)), m_graph.getNode(new Tile.Index(4, 7)));
+//        m_path =  m_pathfinder.findPath(m_graph.getVertex(new Tile.Index(1, 6)), m_graph.getVertex(new Tile.Index(29, 5)));
+//        m_path = m_pathfinder.findPath(m_graph.getVertex(new Tile.Index(0, 0)), m_graph.getVertex(new Tile.Index(levelSize - 1, levelSize - 1)));
+        m_path = m_pathfinder.findPath(m_graph.getVertex(new Tile.Index(4, 2)), m_graph.getVertex(new Tile.Index(7, 7)));
 
         m_stage.getRoot().addListener(new InputListener() {
             @Override
@@ -124,8 +128,9 @@ public class PathfindingTestScreen implements Screen {
         });
         Gdx.input.setInputProcessor(m_stage);
 
-        m_cameraHelper.setZoom(2);
-        m_cameraHelper.setPosition(5, 10);
+        m_cameraHelper.setZoom(2f);
+        m_cameraHelper.moveDown(3);
+        m_cameraHelper.moveLeft(1);
 
         env.globalTime = 0.0f;
         env.gameTime = 0.0f;
@@ -147,7 +152,7 @@ public class PathfindingTestScreen implements Screen {
 
         m_camera.update(false);
         m_spriteBatch.setProjectionMatrix(m_camera.combined);
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         m_spriteBatch.begin();
         m_level.draw(m_spriteBatch);

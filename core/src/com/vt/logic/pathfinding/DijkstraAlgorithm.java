@@ -6,7 +6,6 @@ import com.vt.gameobjects.terrain.tiles.Tile;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -24,69 +23,41 @@ public class DijkstraAlgorithm extends Pathfinder {
 
     @Override
     public List<Graph.Vertex> findPath(Graph.Vertex start, Graph.Vertex goal) {
-        class MarkedVertex {
-            Graph.Vertex vertex;
-            float distance;
-
-            MarkedVertex(Graph.Vertex vertex, float distance) {
-                this.vertex = vertex;
-                this.distance = distance;
-            }
-
-            @Override
-            public boolean equals(Object obj) {
-                return (getClass() == obj.getClass())
-                        && vertex.equals(((MarkedVertex) obj).vertex);
-            }
-        }
-
-        Comparator<MarkedVertex> cmp = new Comparator<MarkedVertex>() {
-            @Override
-            public int compare(MarkedVertex o1, MarkedVertex o2) {
-                // ignore different distances for same vertex
-                if (o1.vertex == o2.vertex)
-                    return 0;
-                int value = (int) Math.signum(o1.distance - o2.distance);
-                if (value == 0)
-                    return o1.vertex.hashCode() - o2.vertex.hashCode();
-                return value;
-            }
-        };
-
-        IndexedPriorityQueue<Tile.Index, MarkedVertex> dist = new IndexedPriorityQueue<Tile.Index, MarkedVertex>(cmp);
+        IndexedPriorityQueue<Tile.Index> dist = new IndexedPriorityQueue<Tile.Index>(m_graph.getOrder());
         Set<Tile.Index> processed = new HashSet<Tile.Index>();
         HashMap<Tile.Index, Graph.Vertex> previous = new HashMap<Tile.Index, Graph.Vertex>();
 
         // calculate path costs
         boolean goalAchieved = false;
-        dist.add(start.index, new MarkedVertex(start, 0));
+        dist.insert(start.index, 0);
         while (!dist.isEmpty()) {
-            MarkedVertex v = dist.first();
-            dist.remove(v.vertex.index);
-            processed.add(v.vertex.index);
-            if (vectors.containsKey(v.vertex.index))
-                variations.add(vectors.get(v.vertex.index));
-            if (v.vertex == goal) {
+            IndexedPriorityQueue.Result<Tile.Index> nextVertex = dist.deleteMin();
+            Tile.Index index = nextVertex.key;
+            float distance = nextVertex.priority;
+            Graph.Vertex v = m_graph.getVertex(index);
+            processed.add(index);
+            if (vectors.containsKey(index))
+                variations.add(vectors.get(index));
+            if (v == goal) {
                 goalAchieved = true;
                 break;
             }
-            for (Graph.Edge e : v.vertex.incidentEdges) {
+            for (Graph.Edge e : v.incidentEdges) {
                 Graph.Vertex v2 = e.destination;
                 if (processed.contains(v2.index))
                     continue;
-                float d = v.distance + e.weight;
-                if (!dist.containsKey(v2.index)) {
-                    dist.add(v2.index, new MarkedVertex(v2, d));
-                    previous.put(v2.index, v.vertex);
-                    vectors.put(v2.index, new DrawableVector(v.vertex.x, v.vertex.y, v2.x, v2.y, Color.RED, 0.05f, true));
+                float d = distance + e.weight;
+                if (!dist.contains(v2.index)) {
+                    dist.insert(v2.index, d);
+                    previous.put(v2.index, v);
+                    vectors.put(v2.index, new DrawableVector(v.x, v.y, v2.x, v2.y, Color.RED, 0.05f, true));
                 } else {
-                    MarkedVertex vertex = dist.take(v2.index);
-                    if (vertex.distance > d) {
-                        vertex.distance = d;
-                        previous.put(v2.index, v.vertex);
-                        vectors.put(v2.index, new DrawableVector(v.vertex.x, v.vertex.y, v2.x, v2.y, Color.RED, 0.05f, true));
+                    float oldD = dist.getPriority(v2.index);
+                    if (oldD > d) {
+                        dist.changePriority(v2.index, d);
+                        previous.put(v2.index, v);
+                        vectors.put(v2.index, new DrawableVector(v.x, v.y, v2.x, v2.y, Color.RED, 0.05f, true));
                     }
-                    dist.add(v2.index, vertex);
                 }
             }
         }

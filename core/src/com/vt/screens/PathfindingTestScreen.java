@@ -45,7 +45,7 @@ public class PathfindingTestScreen implements Screen {
     private final boolean m_useDijkstra = false;
     private final boolean m_drawGraph = false;
     private final boolean m_drawPath = true;
-    private final boolean m_drawVariations = false;
+    private final boolean m_drawVariations = true;
 
     private AbstractLevel m_level;
 
@@ -69,10 +69,11 @@ public class PathfindingTestScreen implements Screen {
 
         Assets.getInstance().init();
 
-////        m_level = LevelFactory.createFromTextFile(Constants.Level.PATHFINDING_TEST_FILE);
+//        m_level = LevelFactory.createFromTextFile(Constants.Level.PATHFINDING_TEST_FILE);
 ////        m_level = LevelFactory.createFromTextFile(Constants.Level.LEVEL_TEST_FILE);
-//        int levelSize = 51;
-//        m_level = LevelFactory.createPathfindingTest(levelSize, levelSize);
+//        int levelSize = 9;
+////        m_level = LevelFactory.createPathfindingTest(levelSize, levelSize);
+////        m_level = LevelFactory.createStub(levelSize, levelSize);
 //        m_graph = m_level.createGraph();
 //        if (m_useDijkstra) {
 //            m_pathfinder = new DijkstraAlgorithm(m_graph);
@@ -94,8 +95,8 @@ public class PathfindingTestScreen implements Screen {
 //        }
 //        long time = System.nanoTime();
 ////        m_path =  m_pathfinder.findPath(m_graph.getVertex(new Tile.Index(1, 6)), m_graph.getVertex(new Tile.Index(29, 5)));
-//        m_path = m_pathfinder.findPath(m_graph.getVertex(new Tile.Index(0, 0)), m_graph.getVertex(new Tile.Index(levelSize - 1, levelSize - 1)));
-////        m_path = m_pathfinder.findPath(m_graph.getVertex(new Tile.Index(4, 2)), m_graph.getVertex(new Tile.Index(7, 7)));
+////        m_path = m_pathfinder.findPath(m_graph.getVertex(new Tile.Index(0, 0)), m_graph.getVertex(new Tile.Index(levelSize - 1, levelSize - 1)));
+//        m_path = m_pathfinder.findPath(m_graph.getVertex(new Tile.Index(4, 2)), m_graph.getVertex(new Tile.Index(7, 7)));
 //        time = System.nanoTime() - time;
 //        Gdx.app.debug("Pathfinding", "Execution time = " + time);
 
@@ -107,10 +108,10 @@ public class PathfindingTestScreen implements Screen {
         }
         long dijkstraAverage = 0;
         long astarAverage = 0;
-        int testsCount = 5;
+        int testsCount = 1;
         int repetitionCount = 100;
         for (int i = 0; i < testsCount; ++i) {
-            int levelSize = 401 + i * 100;
+            int levelSize = 801 + i * 100;
             long time = System.nanoTime();
             m_level = LevelFactory.createPathfindingTest(levelSize, levelSize);
             time = System.nanoTime() - time;
@@ -193,7 +194,7 @@ public class PathfindingTestScreen implements Screen {
         });
         Gdx.input.setInputProcessor(m_stage);
 
-        m_cameraHelper.setZoom(10f);
+        m_cameraHelper.setZoom(2f);
         m_cameraHelper.moveDown(3);
         m_cameraHelper.moveLeft(1);
 

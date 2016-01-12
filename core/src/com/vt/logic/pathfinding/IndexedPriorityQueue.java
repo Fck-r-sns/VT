@@ -8,7 +8,6 @@ import java.util.TreeSet;
  * Created by fckrsns on 10.01.2016.
  */
 
-// for pathfinding only
 class IndexedPriorityQueue<K, V> {
     private TreeSet<V> m_set;
     private HashMap<K, V> m_index;

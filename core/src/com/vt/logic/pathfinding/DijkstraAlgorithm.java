@@ -1,5 +1,7 @@
 package com.vt.logic.pathfinding;
 
+import com.badlogic.gdx.graphics.Color;
+import com.vt.gameobjects.pointers.DrawableVector;
 import com.vt.gameobjects.terrain.tiles.Tile;
 
 import java.util.ArrayList;
@@ -62,8 +64,8 @@ public class DijkstraAlgorithm extends Pathfinder {
             MarkedVertex v = dist.first();
             dist.remove(v.vertex.index);
             processed.add(v.vertex.index);
-//            if (vectors.containsKey(v.vertex.index))
-//                variations.add(vectors.get(v.vertex.index));
+            if (vectors.containsKey(v.vertex.index))
+                variations.add(vectors.get(v.vertex.index));
             if (v.vertex == goal) {
                 goalAchieved = true;
                 break;
@@ -76,15 +78,16 @@ public class DijkstraAlgorithm extends Pathfinder {
                 if (!dist.containsKey(v2.index)) {
                     dist.add(v2.index, new MarkedVertex(v2, d));
                     previous.put(v2.index, v.vertex);
+                    vectors.put(v2.index, new DrawableVector(v.vertex.x, v.vertex.y, v2.x, v2.y, Color.RED, 0.05f, true));
                 } else {
                     MarkedVertex vertex = dist.take(v2.index);
                     if (vertex.distance > d) {
                         vertex.distance = d;
                         previous.put(v2.index, v.vertex);
+                        vectors.put(v2.index, new DrawableVector(v.vertex.x, v.vertex.y, v2.x, v2.y, Color.RED, 0.05f, true));
                     }
                     dist.add(v2.index, vertex);
                 }
-//                vectors.put(v2.index, new DrawableVector(v.vertex.x, v.vertex.y, v2.x, v2.y, Color.RED, 0.05f, true));
             }
         }
 

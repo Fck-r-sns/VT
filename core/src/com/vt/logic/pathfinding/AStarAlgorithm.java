@@ -74,8 +74,8 @@ public class AStarAlgorithm extends Pathfinder {
             MarkedVertex v = open.first();
             open.remove(v.vertex.index);
             closed.add(v.vertex.index);
-//            if (vectors.containsKey(v.vertex.index))
-//                variations.add(vectors.get(v.vertex.index));
+            if (vectors.containsKey(v.vertex.index))
+                variations.add(vectors.get(v.vertex.index));
             if (v.vertex == goal) {
                 goalAchieved = true;
                 break;
@@ -89,15 +89,16 @@ public class AStarAlgorithm extends Pathfinder {
                     float h = m_heuristic.calculate(v2, goal);
                     open.add(v2.index, new MarkedVertex(v2, d, h));
                     previous.put(v2.index, v.vertex);
+                    vectors.put(v2.index, new DrawableVector(v.vertex.x, v.vertex.y, v2.x, v2.y, Color.RED, 0.05f, true));
                 } else {
                     MarkedVertex vertex = open.take(v2.index);
                     if (vertex.distance > d) {
                         vertex.distance = d;
                         previous.put(v2.index, v.vertex);
+                        vectors.put(v2.index, new DrawableVector(v.vertex.x, v.vertex.y, v2.x, v2.y, Color.RED, 0.05f, true));
                     }
                     open.add(v2.index, vertex);
                 }
-//                vectors.put(v2.index, new DrawableVector(v.vertex.x, v.vertex.y, v2.x, v2.y, Color.RED, 0.05f, true));
             }
         }
 

@@ -78,7 +78,6 @@ public class Assets implements Disposable, AssetErrorListener {
             t.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         gameEntities = new GameEntities();
-//        gameEntities.player = atlas.findRegion(Constants.PLAYER_ASSET_NAME);
         gameEntities.player = atlas.findRegion(Constants.CIRCLE_WITH_POINTER_ASSET_NAME);
 
         gameEntities.movementPointer = atlas.findRegion(Constants.MOVEMENT_POINTER_ASSET_NAME);

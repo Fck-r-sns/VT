@@ -8,7 +8,8 @@ import com.badlogic.gdx.utils.ObjectMap;
  */
 public class MessageDispatcher {
     public enum BroadcastMessageType {
-        Rewind
+        Rewind,
+        InterruptRewind
     }
 
     private static MessageDispatcher m_instance;

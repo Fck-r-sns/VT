@@ -10,6 +10,7 @@ public class Environment {
     public boolean debugDrawings = false;
     public float globalTime = 0.0f;
     public float gameTime = 0.0f;
+    public float rewindableTime = 0.0f;
     public Stage currentStage = null;
     private boolean m_rewinding = false;
     private float m_rewindTargetTime = 0;

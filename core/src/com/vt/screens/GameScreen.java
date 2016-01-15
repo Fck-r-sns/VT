@@ -73,6 +73,7 @@ public class GameScreen implements Screen {
         env.currentStage = m_stage;
         env.globalTime = -1.0f;
         env.gameTime = -1.0f;
+        env.rewindableTime = -1.0f;
 
         m_camera.setToOrtho(false,
                 Constants.VIEWPORT_WIDTH,
@@ -215,6 +216,7 @@ public class GameScreen implements Screen {
         // here is the game starts
         env.globalTime = 0.0f;
         env.gameTime = 0.0f;
+        env.rewindableTime = 0.0f;
     }
 
     @Override
@@ -229,17 +231,20 @@ public class GameScreen implements Screen {
         env.globalTime += delta;
 
         if (rewinding) {
-            if (env.gameTime <= env.getRewindTargetTime()) {
+            if (env.gameTime <= env.getRewindTargetTime() || env.rewindableTime <= 0.0f) {
                 stopRewinding();
+                rewinding = false;
             } else {
-                float rewindTime = delta * Constants.REWIND_SPEED_MULTIPLIER;
+                float rewindTime = delta * (Constants.REWIND_SPEED_MULTIPLIER + 1); // +1 to compensate real time going forward
                 MessageDispatcher.getInstance().sendBroadcast(MessageDispatcher.BroadcastMessageType.Rewind, new RewindContext(rewindTime));
-                env.gameTime -= Math.min(rewindTime, Environment.getInstance().gameTime);
+                env.gameTime -= Math.min(rewindTime, env.gameTime);
+                env.rewindableTime -= rewindTime;
             }
         }
         if (rewinding || !isPaused()) {
             if (!rewinding) {
                 env.gameTime += delta;
+                env.rewindableTime = Math.min(env.rewindableTime + delta, Constants.MAX_HISTORY_TIME);
                 CollisionManager.getInstance().update(delta);
             }
             m_level.update(delta);
@@ -348,5 +353,6 @@ public class GameScreen implements Screen {
         Environment env = Environment.getInstance();
         env.setRewinding(false);
         setPause(true);
+        env.rewindableTime = Math.max(env.rewindableTime, 0.0f);
     }
 }

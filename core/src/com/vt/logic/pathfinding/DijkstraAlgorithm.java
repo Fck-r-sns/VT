@@ -1,7 +1,5 @@
 package com.vt.logic.pathfinding;
 
-import com.badlogic.gdx.graphics.Color;
-import com.vt.gameobjects.pointers.DrawableVector;
 import com.vt.gameobjects.terrain.tiles.Tile;
 
 import java.util.ArrayList;
@@ -14,7 +12,7 @@ import java.util.Set;
 /**
  * Created by fckrsns on 06.01.2016.
  */
-public class DijkstraAlgorithm extends Pathfinder {
+public class DijkstraAlgorithm implements Pathfinder {
     private Graph m_graph;
 
     public DijkstraAlgorithm(Graph graph) {
@@ -23,12 +21,9 @@ public class DijkstraAlgorithm extends Pathfinder {
 
     @Override
     public List<Graph.Vertex> findPath(Graph.Vertex start, Graph.Vertex goal) {
-        IndexedPriorityQueue<Tile.Index, Float> dist
-                = new IndexedPriorityQueue<Tile.Index, Float>(m_graph.getOrder());
-        Set<Tile.Index> processed
-                = new HashSet<Tile.Index>();
-        HashMap<Tile.Index, Graph.Vertex> previous
-                = new HashMap<Tile.Index, Graph.Vertex>();
+        IndexedPriorityQueue<Tile.Index, Float> dist = new IndexedPriorityQueue<Tile.Index, Float>(m_graph.getOrder());
+        Set<Tile.Index> processed = new HashSet<Tile.Index>();
+        HashMap<Tile.Index, Graph.Vertex> previous = new HashMap<Tile.Index, Graph.Vertex>();
 
         // calculate path costs
         boolean goalAchieved = false;
@@ -39,8 +34,6 @@ public class DijkstraAlgorithm extends Pathfinder {
             float distance = nextVertex.priority;
             Graph.Vertex v = m_graph.getVertex(index);
             processed.add(index);
-//            if (vectors.containsKey(index))
-//                variations.add(vectors.get(index));
             if (v == goal) {
                 goalAchieved = true;
                 break;
@@ -53,13 +46,11 @@ public class DijkstraAlgorithm extends Pathfinder {
                 if (!dist.contains(v2.index)) {
                     dist.insert(v2.index, d);
                     previous.put(v2.index, v);
-//                    vectors.put(v2.index, new DrawableVector(v.x, v.y, v2.x, v2.y, Color.RED, 0.05f, true));
                 } else {
                     float oldD = dist.getPriority(v2.index);
                     if (oldD > d) {
                         dist.changePriority(v2.index, d);
                         previous.put(v2.index, v);
-//                        vectors.put(v2.index, new DrawableVector(v.x, v.y, v2.x, v2.y, Color.RED, 0.05f, true));
                     }
                 }
             }

@@ -231,9 +231,9 @@ public class PathfindingTestScreen implements Screen {
         if (m_drawGraph)
             m_graph.draw(m_renderer);
 
-        if (m_drawVariations)
-            for (DrawableVector v : m_pathfinder.variations)
-                v.draw(m_renderer);
+//        if (m_drawVariations)
+//            for (DrawableVector v : m_pathfinder.variations)
+//                v.draw(m_renderer);
 
         if (m_drawPath)
             if (m_path != null)

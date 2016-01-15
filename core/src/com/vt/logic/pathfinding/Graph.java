@@ -51,6 +51,10 @@ public class Graph {
         return m_nodes.get(index);
     }
 
+    public int getOrder() {
+        return m_nodes.size();
+    }
+
     public void draw(ShapeRenderer renderer) {
         for (Map.Entry entry : m_nodes.entrySet()) {
             Vertex vertex = (Vertex) entry.getValue();

@@ -7,6 +7,7 @@ import com.vt.resources.Assets;
  */
 public class Floor extends Tile {
     public Floor() {
-        setTexture(Assets.getInstance().terrain.plainFloorDark);
+//        setTexture(Assets.getInstance().terrain.plainFloorDark);
+        setTexture(Assets.getInstance().terrain.simpleFloor);
     }
 }

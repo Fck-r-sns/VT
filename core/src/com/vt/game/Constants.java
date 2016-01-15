@@ -12,7 +12,7 @@ public class Constants {
     public static final float PLAYER_WIDTH = 0.75f;
     public static final float PLAYER_HEIGHT = 0.75f;
     public static final float PLAYER_BOUNDING_RADIUS = 0.3f;
-    public static final float PLAYER_ORIGIN_RELATIVE_X = 0.25f; // in % of width
+    public static final float PLAYER_ORIGIN_RELATIVE_X = 0.50f; // in % of width
     public static final float PLAYER_ORIGIN_RELATIVE_Y = 0.50f; // in % of height
     public static final float MOVEMENT_POINTER_HEIGHT = 0.5f;
     public static final float MOVEMENT_POINTER_WIDTH = 0.5f;
@@ -71,17 +71,14 @@ public class Constants {
     public static final String ARIAL_32_ASSET_NAME = "fonts/arial_32.fnt";
 
     public static final String TEXTURE_ATLAS_PACK = "entities.pack";
-    public static final String PLAYER_ASSET_NAME = "marine_pistol";
-    public static final String PLAYER_SHOOTING_ASSET_NAME = "marine_pistol_fire";
+    public static final String CIRCLE_WITH_POINTER_ASSET_NAME = "circleWithPointer";
     public static final String MOVEMENT_POINTER_ASSET_NAME = "movementPointer";
     public static final String VIEW_POINTER_ASSET_NAME = "viewPointer";
     public static final String PROJECTILE_ASSET_NAME = "projectile";
 
-    public static final float PLAYER_ANIMATION_FRAME_TIME_BASE = 0.35f;
-    public static final float PLAYER_SHOOTING_ANIMATION_FRAME_TIME = 0.2f;
-    public static final float PLAYER_SHOOTING_ANIMATION_DURATION = PLAYER_SHOOTING_ANIMATION_FRAME_TIME;
-
     public static final String TERRAIN_ATLAS_PACK = "tiles.pack";
+    public static final String SIMPLE_FLOOR_ASSET_NAME = "tile_floor";
+    public static final String SIMPLE_WALL_ASSET_NAME = "tile_wall";
     public static final String PLAIN_FLOOR_LIGHT_ASSET_NAME = "tile1";
     public static final String PLAIN_FLOOR_WITH_DOTS_LIGHT_ASSET_NAME = "tile2";
     public static final String PLAIN_FLOOR_DARK_ASSET_NAME = "tile16";
@@ -113,10 +110,10 @@ public class Constants {
     public final static float MAX_ANGULAR_SPEED_DEFAULT = 30;
     public final static float MAX_ANGULAR_ACCELERATION_DEFAULT = 30;
 
-    public final static float MAX_PLAYER_LINEAR_SPEED = 2.0f; // meters per second (4 m/s = 14.4 km/h)
+    public final static float MAX_PLAYER_LINEAR_SPEED = 3.0f; // meters per second (4 m/s = 14.4 km/h)
     public final static float MAX_PLAYER_LINEAR_ACCELERATION = 6.0f;
-    public final static float MAX_PLAYER_ANGULAR_SPEED = 180; // old value = 30
-    public final static float MAX_PLAYER_ANGULAR_ACCELERATION = 180; // old value = 30
+    public final static float MAX_PLAYER_ANGULAR_SPEED = 120; // old value = 30
+    public final static float MAX_PLAYER_ANGULAR_ACCELERATION = 120; // old value = 30
 
     public final static float PLAYER_ARRIVAL_TOLERANCE = 0.08f;
     public final static float PLAYER_ARRIVAL_TOLERANCE_POW_2 = PLAYER_ARRIVAL_TOLERANCE * PLAYER_ARRIVAL_TOLERANCE;
@@ -132,7 +129,7 @@ public class Constants {
 
     // time and game logic ----------------------------------------------------
     public final static float REWIND_TIME = 3.0f;
-    public final static float REWIND_SPEED_MULTIPLIER = 3;
+    public final static float REWIND_SPEED_MULTIPLIER = 2;
     public final static float MAX_HISTORY_TIME = REWIND_TIME * 5;
     // ------------------------------------------------------------------------
 

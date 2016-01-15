@@ -1,7 +1,6 @@
 package com.vt.gameobjects.characters;
 
 import com.badlogic.gdx.ai.steer.behaviors.Arrive;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
@@ -13,7 +12,6 @@ import com.vt.gameobjects.pointers.ViewPointer;
 import com.vt.gameobjects.weapons.AbstractWeapon;
 import com.vt.gameobjects.weapons.Pistol;
 import com.vt.physics.CollisionManager;
-import com.vt.resources.AnimationWrapper;
 import com.vt.resources.Assets;
 import com.vt.serialization.RestorableValue;
 import com.vt.timedriven.DelayedAction;
@@ -30,10 +28,6 @@ public class CharacterObject extends ActingObject implements ControllableCharact
     private Vector2 m_lastPosition;
     private boolean m_keepOrientation = true;
     private AbstractWeapon m_weapon;
-    private AnimationWrapper m_animationCurrent;
-    private AnimationWrapper m_animationMove;
-    private AnimationWrapper m_animationShoot;
-    private AnimationWrapper m_animationStand;
     private DelayedAction m_shootingAction;
 
     protected enum State {
@@ -65,32 +59,6 @@ public class CharacterObject extends ActingObject implements ControllableCharact
         setOrigin(Constants.PLAYER_ORIGIN_RELATIVE_X * Constants.PLAYER_WIDTH,
                 Constants.PLAYER_ORIGIN_RELATIVE_Y * Constants.PLAYER_HEIGHT);
         setTexture(Assets.getInstance().gameEntities.player);
-
-        m_animationMove = new AnimationWrapper(
-                new Animation(
-                        Constants.PLAYER_ANIMATION_FRAME_TIME_BASE,
-                        Assets.getInstance().gameEntities.playerAnimationMove,
-                        Animation.PlayMode.LOOP
-                )
-        );
-
-        m_animationStand = new AnimationWrapper(
-                new Animation(
-                        Constants.PLAYER_ANIMATION_FRAME_TIME_BASE,
-                        Assets.getInstance().gameEntities.playerAnimationStand,
-                        Animation.PlayMode.LOOP
-                )
-        );
-
-        m_animationShoot = new AnimationWrapper(
-                new Animation(
-                        Constants.PLAYER_SHOOTING_ANIMATION_FRAME_TIME,
-                        Assets.getInstance().gameEntities.playerAnimationShoot,
-                        Animation.PlayMode.NORMAL
-                )
-        );
-        m_animationShoot.setNormalPlayMode(Animation.PlayMode.NORMAL);
-        m_animationShoot.setReversedPlayMode(Animation.PlayMode.REVERSED);
 
         this.setName(Constants.PLAYER_ACTOR_NAME);
 
@@ -166,10 +134,9 @@ public class CharacterObject extends ActingObject implements ControllableCharact
     public void shoot() {
         if (m_weapon != null) {
             setState(State.Shoot);
-            m_animationShoot.restart();
             if (m_shootingAction == null) {
                 m_shootingAction = new DelayedAction(
-                        Constants.PLAYER_SHOOTING_ANIMATION_DURATION,
+                        0.2f, // TODO: change to constant
                         new Runnable() {
                             @Override
                             public void run() {
@@ -295,29 +262,13 @@ public class CharacterObject extends ActingObject implements ControllableCharact
     private void manageAnimation() {
         switch (m_state) {
             case Stand:
-                changeAnimation(m_animationStand);
                 break;
             case Move:
-                changeAnimation(m_animationMove);
                 break;
             case Shoot:
-                changeAnimation(m_animationShoot);
                 break;
             default:
-                changeAnimation(m_animationStand);
                 break;
-        }
-        if (m_animationCurrent != null)
-            setTexture(m_animationCurrent.getCurrentFrame());
-    }
-
-    private void changeAnimation(AnimationWrapper a) {
-        if (m_animationCurrent != a) {
-            m_animationCurrent = a;
-            if (Environment.getInstance().isRewinding())
-                m_animationCurrent.restartReversed();
-            else
-                m_animationCurrent.restart();
         }
     }
 }

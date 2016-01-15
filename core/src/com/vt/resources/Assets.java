@@ -29,15 +29,14 @@ public class Assets implements Disposable, AssetErrorListener {
 
     public class GameEntities {
         public TextureAtlas.AtlasRegion player;
-        public Array<TextureAtlas.AtlasRegion> playerAnimationStand;
-        public Array<TextureAtlas.AtlasRegion> playerAnimationMove;
-        public Array<TextureAtlas.AtlasRegion> playerAnimationShoot;
         public TextureAtlas.AtlasRegion movementPointer;
         public TextureAtlas.AtlasRegion viewPointer;
         public TextureAtlas.AtlasRegion projectile;
     }
 
     public class Terrain {
+        public TextureAtlas.AtlasRegion simpleFloor;
+        public TextureAtlas.AtlasRegion simpleWall;
         public TextureAtlas.AtlasRegion plainFloorLight;
         public TextureAtlas.AtlasRegion plainFloorWithDotsLight;
         public TextureAtlas.AtlasRegion plainFloorDark;
@@ -79,15 +78,8 @@ public class Assets implements Disposable, AssetErrorListener {
             t.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         gameEntities = new GameEntities();
-        gameEntities.player = atlas.findRegion(Constants.PLAYER_ASSET_NAME);
-
-        gameEntities.playerAnimationStand = new Array<TextureAtlas.AtlasRegion>(1);
-        gameEntities.playerAnimationStand.add(atlas.findRegion(Constants.PLAYER_ASSET_NAME));
-
-        gameEntities.playerAnimationMove = atlas.findRegions(Constants.PLAYER_ASSET_NAME);
-
-        gameEntities.playerAnimationShoot = new Array<TextureAtlas.AtlasRegion>(1);
-        gameEntities.playerAnimationShoot.add(atlas.findRegion(Constants.PLAYER_SHOOTING_ASSET_NAME));
+//        gameEntities.player = atlas.findRegion(Constants.PLAYER_ASSET_NAME);
+        gameEntities.player = atlas.findRegion(Constants.CIRCLE_WITH_POINTER_ASSET_NAME);
 
         gameEntities.movementPointer = atlas.findRegion(Constants.MOVEMENT_POINTER_ASSET_NAME);
         gameEntities.viewPointer = atlas.findRegion(Constants.VIEW_POINTER_ASSET_NAME);
@@ -114,6 +106,8 @@ public class Assets implements Disposable, AssetErrorListener {
             t.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         terrain = new Terrain();
+        terrain.simpleFloor = atlas.findRegion(Constants.SIMPLE_FLOOR_ASSET_NAME);
+        terrain.simpleWall = atlas.findRegion(Constants.SIMPLE_WALL_ASSET_NAME);
         terrain.plainFloorLight = atlas.findRegion(Constants.PLAIN_FLOOR_LIGHT_ASSET_NAME);
         terrain.plainFloorWithDotsLight = atlas.findRegion(Constants.PLAIN_FLOOR_WITH_DOTS_LIGHT_ASSET_NAME);
         terrain.plainFloorDark = atlas.findRegion(Constants.PLAIN_FLOOR_DARK_ASSET_NAME);

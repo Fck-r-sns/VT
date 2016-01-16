@@ -4,10 +4,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.vt.gameobjects.terrain.tiles.Tile;
 import com.vt.logic.pathfinding.Graph;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -16,12 +16,12 @@ import java.util.Map;
 public abstract class AbstractLevel {
     private Array<Vector2> m_enemies;
     private Vector2 m_playerPosition;
-    protected HashMap<Tile.Index, Tile> m_tiles;
+    protected ObjectMap<Tile.Index, Tile> m_tiles;
 
     protected AbstractLevel() {
         m_enemies = new Array<Vector2>(16);
         m_playerPosition = new Vector2(0, 0);
-        m_tiles = new HashMap<Tile.Index, Tile>();
+        m_tiles = new ObjectMap<Tile.Index, Tile>();
     }
 
     protected void setPlayerPosition(float x, float y) {
@@ -49,22 +49,22 @@ public abstract class AbstractLevel {
     }
 
     public void update(float delta) {
-        for (Map.Entry tile : m_tiles.entrySet())
-            ((Tile) tile.getValue()).update(delta);
+        for (ObjectMap.Entry<Tile.Index, Tile> tile : m_tiles)
+            tile.value.update(delta);
     }
 
     public void draw(SpriteBatch spriteBatch) {
-        for (Map.Entry tile : m_tiles.entrySet())
-            ((Tile) tile.getValue()).draw(spriteBatch, 0.0f);
+        for (ObjectMap.Entry<Tile.Index, Tile> tile : m_tiles)
+            tile.value.draw(spriteBatch, 0.0f);
     }
 
     public Graph createGraph() {
         Graph g = new Graph();
         // add vertices
-        for (Map.Entry entry : m_tiles.entrySet()) {
-            Tile tile = (Tile) entry.getValue();
+        for (ObjectMap.Entry<Tile.Index, Tile> entry : m_tiles) {
+            Tile tile = entry.value;
             if (tile.isPassable()) {
-                Tile.Index index = (Tile.Index) entry.getKey();
+                Tile.Index index = entry.key;
                 Graph.Vertex vertex = new Graph.Vertex(index, tile.getX(Align.center), tile.getY(Align.center));
                 g.addVertex(vertex);
             }

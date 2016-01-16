@@ -1,3 +1,9 @@
-Implement tactical control on pause (action queue)
-Add stub enemies
-Add level generator
+TODO: Implement tactical control on pause (action queue)
+TODO: Add stub enemies
+TODO: Add level generator
+TODO: Replace and do not use standard collections java.util - they are too heavy, use badlogic.gdx.utils instead
+    HashMap -> ObjectMap
+    TreeMap -> OrderedMap
+    HashSet -> ObjectSet
+    TreeSet -> OrderedSet
+    Do not forget collections optimized for primitives: IntSet, ObjectFloatMap and others

@@ -1,4 +1,4 @@
-package com.vt.actionqueue;
+package com.vt.gameobjects.actionqueue;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 

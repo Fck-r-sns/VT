@@ -1,11 +1,11 @@
-package com.vt.actionqueue.actions;
+package com.vt.gameobjects.actionqueue.actions;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.vt.actionqueue.AbstractQueueableAction;
-import com.vt.actionqueue.Context;
-import com.vt.actionqueue.PlayerVirtualState;
+import com.vt.gameobjects.actionqueue.AbstractQueueableAction;
+import com.vt.gameobjects.actionqueue.Context;
+import com.vt.gameobjects.actionqueue.PlayerVirtualState;
 import com.vt.gameobjects.pointers.DrawableVector;
 
 /**

@@ -16,9 +16,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.vt.actionqueue.ActionQueue;
-import com.vt.actionqueue.PlayerVirtualState;
-import com.vt.actionqueue.actions.PlaceMovePointer;
+import com.vt.gameobjects.TouchHandler;
+import com.vt.gameobjects.actionqueue.ActionQueue;
+import com.vt.gameobjects.actionqueue.ActionQueueController;
+import com.vt.gameobjects.actionqueue.PlayerVirtualState;
 import com.vt.game.CameraHelper;
 import com.vt.game.Constants;
 import com.vt.game.Environment;
@@ -36,6 +37,8 @@ import com.vt.messages.RewindContext;
 import com.vt.physics.CollisionManager;
 import com.vt.resources.Assets;
 
+import java.util.EnumMap;
+
 /**
  * Created by Fck.r.sns on 04.05.2015.
  */
@@ -50,14 +53,14 @@ public class GameScreen implements Screen {
     private CharacterObject m_player;
     private ManualController m_playerController;
     private ActionQueue m_actionQueue;
+    private ActionQueueController m_actionQueueController;
+    private EnumMap<Environment.TimeState, TouchHandler> m_touchHandlers;
     private Array<CharacterObject> m_enemies;
     private CameraTarget m_cameraTarget;
     private Button m_viewButton;
     private Button m_pauseButton;
     private Button m_shootButton;
     private Button m_rewindButton;
-
-    boolean m_pause = false;
 
     private AbstractLevel m_level;
 
@@ -103,6 +106,11 @@ public class GameScreen implements Screen {
                         m_player.getViewPointer().getPosition()
                 )
         );
+        m_actionQueueController = new ActionQueueController(m_actionQueue);
+
+        m_touchHandlers = new EnumMap<Environment.TimeState, TouchHandler>(Environment.TimeState.class);
+        m_touchHandlers.put(Environment.TimeState.RealTime, m_playerController);
+        m_touchHandlers.put(Environment.TimeState.ActivePause, m_actionQueueController);
 
         m_enemies = new Array<CharacterObject>(16);
         for (int i = 0; i < m_level.getEnemiesCount(); ++i) {
@@ -119,31 +127,22 @@ public class GameScreen implements Screen {
         m_stage.addActor(m_cameraTarget);
 
         m_stage.getRoot().addListener(new InputListener() {
-            private int m_firstTouchPointer = -1;
-
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                // in case of touchUp skipping m_firstTouchPointer can be locked on not actual value
-                // for that case added check for pointer == 0
-                if (m_firstTouchPointer == -1 || pointer == 0) // 0 is always first touch
-                    m_firstTouchPointer = pointer;
-                if (pointer == m_firstTouchPointer)
-                    m_playerController.setPointerPosition(x, y);
-                else
-                    m_playerController.shoot();
-                return true;
+                return m_touchHandlers.get(Environment.getInstance().getTimeState())
+                        .handleTouchDown(event, x, y, pointer, button);
             }
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                if (pointer == m_firstTouchPointer)
-                    m_firstTouchPointer = -1;
+                m_touchHandlers.get(Environment.getInstance().getTimeState())
+                        .handleTouchUp(event, x, y, pointer, button);
             }
 
             @Override
             public void touchDragged(InputEvent event, float x, float y, int pointer) {
-                if (pointer == m_firstTouchPointer)
-                    m_playerController.setPointerPosition(x, y);
+                m_touchHandlers.get(Environment.getInstance().getTimeState())
+                        .handleTouchDragged(event, x, y, pointer);
             }
         });
 
@@ -179,7 +178,7 @@ public class GameScreen implements Screen {
         m_pauseButton.setPushAction(new ButtonAction() {
             @Override
             public void run() {
-                togglePause();
+                Environment.getInstance().togglePaused();
             }
         });
 
@@ -226,6 +225,7 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         Environment env = Environment.getInstance();
+        boolean paused = env.isPaused();
         boolean rewinding = env.isRewinding();
         delta = 1 / 60.0f;
         env.globalTime += delta;
@@ -241,7 +241,7 @@ public class GameScreen implements Screen {
                 env.rewindableTime -= rewindTime;
             }
         }
-        if (rewinding || !isPaused()) {
+        if (rewinding || !paused) {
             if (!rewinding) {
                 env.gameTime += delta;
                 env.rewindableTime = Math.min(env.rewindableTime + delta, Constants.MAX_HISTORY_TIME);
@@ -331,18 +331,6 @@ public class GameScreen implements Screen {
         Assets.getInstance().dispose();
     }
 
-    public boolean isPaused() {
-        return m_pause;
-    }
-
-    private void setPause(boolean pause) {
-        m_pause = pause;
-    }
-
-    private void togglePause() {
-        m_pause = !m_pause;
-    }
-
     private void startRewinding(float rewindingTime) {
         Environment env = Environment.getInstance();
         env.setRewinding(true);
@@ -352,7 +340,7 @@ public class GameScreen implements Screen {
     private void stopRewinding() {
         Environment env = Environment.getInstance();
         env.setRewinding(false);
-        setPause(true);
+        env.setPaused(true);
         env.rewindableTime = Math.max(env.rewindableTime, 0.0f);
     }
 }

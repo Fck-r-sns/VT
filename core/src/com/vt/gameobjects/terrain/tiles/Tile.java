@@ -35,6 +35,8 @@ public class Tile extends GameObject implements Collidable {
 
         @Override
         public boolean equals(Object obj) {
+            if (obj == null)
+                return false;
             if (this.getClass() != obj.getClass())
                 return false;
             Index other = (Index) obj;

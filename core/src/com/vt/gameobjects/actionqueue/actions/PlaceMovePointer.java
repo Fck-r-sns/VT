@@ -1,8 +1,8 @@
 package com.vt.gameobjects.actionqueue.actions;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.vt.game.Constants;
 import com.vt.gameobjects.actionqueue.AbstractQueueableAction;
 import com.vt.gameobjects.actionqueue.Context;
 import com.vt.gameobjects.actionqueue.PlayerVirtualState;
@@ -15,8 +15,14 @@ public class PlaceMovePointer extends AbstractQueueableAction {
     DrawableVector m_drawable;
     Vector2 m_targetPosition;
 
-    public PlaceMovePointer(float x, float y) {
+    public PlaceMovePointer(float x, float y, PlayerVirtualState state) {
         m_targetPosition = new Vector2(x, y);
+        Vector2 prevPos = state.getMovementPtrPos();
+        m_drawable = new DrawableVector(
+                prevPos.x, prevPos.y,
+                m_targetPosition.x, m_targetPosition.y,
+                Constants.MOVEMENT_POINTER_VECTOR_COLOR,
+                Constants.MOVEMENT_POINTER_VECTOR_WIDTH);
     }
 
     @Override
@@ -42,8 +48,33 @@ public class PlaceMovePointer extends AbstractQueueableAction {
 
     @Override
     public void onAdd(Context ctx, PlayerVirtualState state) {
-        Vector2 prevPos = state.getMovePtrPos();
-        m_drawable = new DrawableVector(prevPos.x, prevPos.y, m_targetPosition.x, m_targetPosition.y, Color.WHITE, 0.05f);
-        state.changeMovePtrPos(m_targetPosition.x, m_targetPosition.y);
+        ++ctx.placeMovementPtrCount;
+        state.changeMovementPtrPos(m_targetPosition.x, m_targetPosition.y);
+    }
+
+    @Override
+    public void onRemove(Context ctx, PlayerVirtualState state) {
+        --ctx.placeMovementPtrCount;
+    }
+
+    @Override
+    public Vector2 getPosition() {
+        return m_targetPosition;
+    }
+
+    @Override
+    public void setPosition(float x, float y) {
+        m_targetPosition.set(x, y);
+        m_drawable.setVector(x, y);
+    }
+
+    @Override
+    public float getX() {
+        return m_targetPosition.x;
+    }
+
+    @Override
+    public float getY() {
+        return m_targetPosition.y;
     }
 }

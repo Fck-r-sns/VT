@@ -1,5 +1,7 @@
 package com.vt.game;
 
+import com.badlogic.gdx.graphics.Color;
+
 /**
  * Created by Fck.r.sns on 08.05.2015.
  */
@@ -56,6 +58,13 @@ public class Constants {
     public static final float TIME_LABEL_MARGIN_Y = 10.0f;
     public static final float FPS_LABEL_MARGIN_X = 200.0f;
     public static final float FPS_LABEL_MARGIN_Y = 10.0f + TIME_LABEL_MARGIN_Y + 32.0f;
+    // ------------------------------------------------------------------------
+
+    // action queue -----------------------------------------------------------
+    public static final Color MOVEMENT_POINTER_VECTOR_COLOR = Color.BLUE;
+    public static final float MOVEMENT_POINTER_VECTOR_WIDTH = 0.05f;
+    public static final Color VIEW_POINTER_VECTOR_COLOR = Color.RED;
+    public static final float VIEW_POINTER_VECTOR_WIDTH = 0.05f;
     // ------------------------------------------------------------------------
 
     // resources --------------------------------------------------------------

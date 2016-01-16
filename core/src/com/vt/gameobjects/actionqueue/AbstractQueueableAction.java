@@ -1,9 +1,11 @@
 package com.vt.gameobjects.actionqueue;
 
+import com.vt.physics.Positionable;
+
 /**
  * Created by Fck.r.sns on 22.08.2015.
  */
-public abstract class AbstractQueueableAction implements QueueableAction {
+public abstract class AbstractQueueableAction implements QueueableAction, Positionable {
     State m_state = State.Ready;
     Flags m_flags = new Flags();
 

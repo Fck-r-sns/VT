@@ -127,7 +127,7 @@ public abstract class GameObject extends Group implements Spatial {
 
     @Override
     public Vector2 getPosition() {
-        return new Vector2(getX() + getOriginX(), getY() + getOriginY());
+        return new Vector2(getX(Constants.ALIGN_ORIGIN), getY(Constants.ALIGN_ORIGIN));
     }
 
     @Override

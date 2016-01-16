@@ -18,7 +18,6 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.vt.gameobjects.TouchHandler;
 import com.vt.gameobjects.actionqueue.ActionQueue;
-import com.vt.gameobjects.actionqueue.ActionQueueController;
 import com.vt.gameobjects.actionqueue.PlayerVirtualState;
 import com.vt.game.CameraHelper;
 import com.vt.game.Constants;
@@ -53,7 +52,7 @@ public class GameScreen implements Screen {
     private CharacterObject m_player;
     private ManualController m_playerController;
     private ActionQueue m_actionQueue;
-    private ActionQueueController m_actionQueueController;
+    private ActionQueue.Controller m_actionQueueController;
     private EnumMap<Environment.TimeState, TouchHandler> m_touchHandlers;
     private Array<CharacterObject> m_enemies;
     private CameraTarget m_cameraTarget;
@@ -99,13 +98,14 @@ public class GameScreen implements Screen {
         m_playerController = new ManualController(m_player);
 
         m_actionQueue = new ActionQueue(
+                m_player,
                 new PlayerVirtualState(
                         m_player.getPosition(),
                         m_player.getMovementPointer().getPosition(),
                         m_player.getViewPointer().getPosition()
                 )
         );
-        m_actionQueueController = new ActionQueueController(m_actionQueue);
+        m_actionQueueController = m_actionQueue.new Controller();
 
         m_touchHandlers = new EnumMap<Environment.TimeState, TouchHandler>(Environment.TimeState.class);
         m_touchHandlers.put(Environment.TimeState.RealTime, m_playerController);

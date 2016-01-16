@@ -16,11 +16,11 @@ public class PlayerVirtualState {
         m_viewPtrPos = viewPos.cpy();
     }
 
-    public Vector2 getMovePtrPos() {
+    public Vector2 getMovementPtrPos() {
         return m_movePtrPos;
     }
 
-    public void changeMovePtrPos(float x, float y) {
+    public void changeMovementPtrPos(float x, float y) {
         m_movePtrPos.set(x, y);
     }
 

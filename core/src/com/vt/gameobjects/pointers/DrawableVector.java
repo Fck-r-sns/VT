@@ -19,12 +19,28 @@ public class DrawableVector {
         m_vector = new Vector2(x, y);
         m_color = color;
         m_width = width;
-        m_drawArrow = false;
+        m_drawArrow = true;
     }
 
     public DrawableVector(float originX, float originY, float x, float y, Color color, float width, boolean drawArrow) {
         this(originX, originY, x, y, color, width);
         m_drawArrow = drawArrow;
+    }
+
+    public void setOrigin(float x, float y) {
+        m_origin.set(x, y);
+    }
+
+    public void setOrigin(final Vector2 pos) {
+        m_origin.set(pos.x, pos.y);
+    }
+
+    public void setVector(float x, float y) {
+        m_vector.set(x, y);
+    }
+
+    public void setVector(final Vector2 pos) {
+        m_vector.set(pos.x, pos.y);
     }
 
     public void draw(ShapeRenderer renderer) {

@@ -25,4 +25,5 @@ public interface QueueableAction {
     boolean stop(Context ctx);
     boolean execute(Context ctx); // called every frame between start and stop
     void onAdd(Context ctx, PlayerVirtualState state);
+    void onRemove(Context ctx, PlayerVirtualState state);
 }

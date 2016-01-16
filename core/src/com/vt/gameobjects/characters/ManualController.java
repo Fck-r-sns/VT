@@ -2,18 +2,14 @@ package com.vt.gameobjects.characters;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.vt.gameobjects.TouchHandler;
+import com.vt.gameobjects.pointers.PointerSwitcher;
 
 /**
  * Created by Fck.r.sns on 10.07.2015.
  */
 public class ManualController implements TouchHandler {
-    private enum CurrentPointer {
-        Movement,
-        View
-    }
-
     private ControllableCharacter m_controllable;
-    private CurrentPointer m_currentPointer = CurrentPointer.Movement;
+    private PointerSwitcher m_pointerSwitcher = new PointerSwitcher();
     private int m_firstTouchPointer = -1;
 
     public ManualController(ControllableCharacter target) {
@@ -21,24 +17,18 @@ public class ManualController implements TouchHandler {
     }
 
     public void setCurrentPointerToMovement() {
-        m_currentPointer = CurrentPointer.Movement;
+        m_pointerSwitcher.setCurrentPointerToMovement();
     }
 
     public void setCurrentPointerToView() {
-        m_currentPointer = CurrentPointer.View;
+        m_pointerSwitcher.setCurrentPointerToView();
     }
 
     public void setPointerPosition(float x, float y) {
-        switch (m_currentPointer) {
-            case Movement:
-                m_controllable.setMovementPointerPosition(x, y);
-                break;
-            case View:
-                m_controllable.setViewPointerPosition(x, y);
-                break;
-            default:
-                break;
-        }
+        if (m_pointerSwitcher.isCurrentPointerMovement())
+            m_controllable.setMovementPointerPosition(x, y);
+        else
+            m_controllable.setViewPointerPosition(x, y);
     }
 
     public void shoot() {

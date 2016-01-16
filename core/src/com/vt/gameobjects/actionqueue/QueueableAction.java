@@ -12,17 +12,17 @@ public interface QueueableAction {
         public boolean CHANGE_VIEW_PTR = false;
     }
 
-    public enum State {
+    enum State {
         Ready,
         Running,
         Finished
     }
 
-    public State getState();
-    public Flags getFlags();
-    public void draw(ShapeRenderer renderer);
-    public boolean start(Context ctx);
-    public boolean stop(Context ctx);
-    public boolean execute(Context ctx); // called every frame between start and stop
-    public void onAdd(Context ctx, PlayerVirtualState state);
+    State getState();
+    Flags getFlags();
+    void draw(ShapeRenderer renderer);
+    boolean start(Context ctx);
+    boolean stop(Context ctx);
+    boolean execute(Context ctx); // called every frame between start and stop
+    void onAdd(Context ctx, PlayerVirtualState state);
 }

@@ -8,15 +8,14 @@ import com.badlogic.gdx.utils.ObjectMap;
  */
 public class MessageDispatcher {
     public enum BroadcastMessageType {
-        Rewind,
-        InterruptRewind
+        Rewind
     }
 
     private static MessageDispatcher m_instance;
-    private ObjectMap<BroadcastMessageType, Array<MessageHandler>> m_receivers;
+    private ObjectMap<BroadcastMessageType, Array<MessageHandler>> m_subscribers;
 
     private MessageDispatcher() {
-        m_receivers = new ObjectMap<BroadcastMessageType, Array<MessageHandler>>();
+        m_subscribers = new ObjectMap<BroadcastMessageType, Array<MessageHandler>>();
     }
 
     public static MessageDispatcher getInstance() {
@@ -26,13 +25,13 @@ public class MessageDispatcher {
     }
 
     public void subscribeToBroadcast(BroadcastMessageType type, MessageHandler handler) {
-        if (!m_receivers.containsKey(type))
-            m_receivers.put(type, new Array<MessageHandler>(32));
-        m_receivers.get(type).add(handler);
+        if (!m_subscribers.containsKey(type))
+            m_subscribers.put(type, new Array<MessageHandler>(32));
+        m_subscribers.get(type).add(handler);
     }
 
     public void sendBroadcast(BroadcastMessageType type, Context ctx) {
-        Array<MessageHandler> handlers = m_receivers.get(type);
+        Array<MessageHandler> handlers = m_subscribers.get(type);
         if (handlers == null)
             return;
         for (MessageHandler handler : handlers)

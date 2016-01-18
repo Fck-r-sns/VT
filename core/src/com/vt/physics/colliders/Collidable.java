@@ -17,11 +17,11 @@ public interface Collidable extends Spatial {
         Ray,
         Beam
     }
-    public Type getColliderType();
-    public Shape2D getBoundingShape();
-    public void onCollision(Collidable other); // process effect on this by other object
+    Type getColliderType();
+    Shape2D getBoundingShape();
+    void onCollision(Collidable other); // process effect on this by other object
 
-    public boolean checkCollision(Collidable other);
-    public boolean checkShapeCollision(Circle circle);
-    public boolean checkShapeCollision(Rectangle rectangle);
+    boolean checkCollision(Collidable other);
+    boolean checkShapeCollision(Circle circle);
+    boolean checkShapeCollision(Rectangle rectangle);
 }

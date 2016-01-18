@@ -7,6 +7,6 @@ import com.vt.serialization.ValuesChangeHistory;
  */
 
 public interface TimeDrivenExecutable {
-    public boolean execute(); // checks Environment.gameTime
-    public void setValuesHistory(ValuesChangeHistory history); // for rewind
+    boolean execute(); // checks Environment.gameTime
+    void setValuesHistory(ValuesChangeHistory history); // for rewind
 }

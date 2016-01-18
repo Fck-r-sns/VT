@@ -36,7 +36,23 @@ public abstract class AbstractQueueableAction implements QueueableAction, Positi
         return onExecute(ctx);
     }
 
-    public abstract boolean onStart(Context ctx);
-    public abstract boolean onStop(Context ctx);
-    public abstract boolean onExecute(Context ctx);
+    public boolean onStart(Context ctx) {
+        return false;
+    }
+
+    public boolean onStop(Context ctx) {
+        return false;
+    }
+
+    public boolean onExecute(Context ctx) {
+        return false;
+    }
+
+    @Override
+    public void onAdd(Context ctx, PlayerVirtualState state) {
+    }
+
+    @Override
+    public void onRemove(Context ctx, PlayerVirtualState state) {
+    }
 }

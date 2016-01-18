@@ -49,10 +49,10 @@ public abstract class AbstractQueueableAction implements QueueableAction, Positi
     }
 
     @Override
-    public void onAdd(Context ctx, PlayerVirtualState state) {
+    public void onAdd(Context ctx) {
     }
 
     @Override
-    public void onRemove(Context ctx, PlayerVirtualState state) {
+    public void onRemove(Context ctx) {
     }
 }

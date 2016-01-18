@@ -2,7 +2,7 @@ package com.vt.gameobjects.actionqueue;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Queue;
 import com.vt.game.Constants;
 import com.vt.gameobjects.TouchHandler;
 import com.vt.gameobjects.actionqueue.actions.PlaceMovePointer;
@@ -15,17 +15,21 @@ import com.vt.gameobjects.pointers.PointerSwitcher;
  */
 public class ActionQueue {
     private PlayerVirtualState m_virtualState;
-    private QueueableAction m_candidate;
     private CharacterObject m_character;
-    private Array<QueueableAction> m_actions = new Array<com.vt.gameobjects.actionqueue.QueueableAction>(16);
-    private Context m_context = new Context();
-
-    public ActionQueue(CharacterObject character, PlayerVirtualState virtualState) {
+    private Context m_context;
+    private AbstractQueueableAction m_candidate;
+    private Queue<AbstractQueueableAction> m_actions = new Queue<AbstractQueueableAction>(16);
+    public ActionQueue(CharacterObject character) {
         m_character = character;
-        m_virtualState = virtualState;
+        m_virtualState = new PlayerVirtualState(
+                m_character.getMovementPointer().getPosition(),
+                m_character.getViewPointer().getPosition()
+                );
+        m_context = new Context(m_character, m_virtualState);
     }
 
     public void act(float delta) {
+        // TODO: implement
     }
 
     public void draw(ShapeRenderer renderer) {
@@ -35,9 +39,9 @@ public class ActionQueue {
             action.draw(renderer);
     }
 
-    public void addAction(QueueableAction action) {
-        m_actions.add(action);
-        action.onAdd(m_context, m_virtualState);
+    public void addAction(AbstractQueueableAction action) {
+        m_actions.addLast(action);
+        action.onAdd(m_context);
     }
 
     public void clear() {
@@ -46,7 +50,6 @@ public class ActionQueue {
 
     public class Controller implements TouchHandler {
         private PointerSwitcher m_pointerSwitcher = new PointerSwitcher();
-        private AbstractQueueableAction m_currentAction;
 
         public void setCurrentPointerToMovement() {
             m_pointerSwitcher.setCurrentPointerToMovement();
@@ -63,24 +66,22 @@ public class ActionQueue {
                 m_virtualState.changeViewPtrPos(m_character.getX(Constants.ALIGN_ORIGIN), m_character.getY(Constants.ALIGN_ORIGIN));
             }
             if (m_pointerSwitcher.isCurrentPointerMovement()) {
-                m_currentAction = new PlaceMovePointer(x, y, m_virtualState);
+                m_candidate = new PlaceMovePointer(x, y, m_context);
             } else {
-                m_currentAction = new PlaceViewPointer(x, y, m_virtualState);
+                m_candidate = new PlaceViewPointer(x, y, m_context);
             }
-            m_candidate = m_currentAction;
             return true;
         }
 
         @Override
         public void handleTouchUp(InputEvent event, float x, float y, int pointer, int button) {
-            addAction(m_currentAction);
-            m_currentAction = null;
+            addAction(m_candidate);
             m_candidate = null;
         }
 
         @Override
         public void handleTouchDragged(InputEvent event, float x, float y, int pointer) {
-            m_currentAction.setPosition(x, y);
+            m_candidate.setPosition(x, y);
         }
     }
 }

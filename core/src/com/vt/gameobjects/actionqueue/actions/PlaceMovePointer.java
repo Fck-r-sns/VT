@@ -15,9 +15,9 @@ public class PlaceMovePointer extends AbstractQueueableAction {
     DrawableVector m_drawable;
     Vector2 m_targetPosition;
 
-    public PlaceMovePointer(float x, float y, PlayerVirtualState state) {
+    public PlaceMovePointer(float x, float y, Context ctx) {
         m_targetPosition = new Vector2(x, y);
-        Vector2 prevPos = state.getMovementPtrPos();
+        Vector2 prevPos = ctx.virtualState.getMovementPtrPos();
         m_drawable = new DrawableVector(
                 prevPos.x, prevPos.y,
                 m_targetPosition.x, m_targetPosition.y,
@@ -47,13 +47,13 @@ public class PlaceMovePointer extends AbstractQueueableAction {
     }
 
     @Override
-    public void onAdd(Context ctx, PlayerVirtualState state) {
+    public void onAdd(Context ctx) {
         ++ctx.placeMovementPtrCount;
-        state.changeMovementPtrPos(m_targetPosition.x, m_targetPosition.y);
+        ctx.virtualState.changeMovementPtrPos(m_targetPosition.x, m_targetPosition.y);
     }
 
     @Override
-    public void onRemove(Context ctx, PlayerVirtualState state) {
+    public void onRemove(Context ctx) {
         --ctx.placeMovementPtrCount;
     }
 

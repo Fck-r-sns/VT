@@ -1,6 +1,12 @@
+Major:
 TODO: Implement tactical control on pause (action queue)
-TODO: Add stub enemies
+TODO: Add enemies
 TODO: Add level generator
+
+Minor:
+TODO: Implement zoom out on pause using interpolators
+
+Notes:
 TODO: Replace and do not use standard collections java.util - they are too heavy, use badlogic.gdx.utils instead
     HashMap -> ObjectMap
     TreeMap -> OrderedMap

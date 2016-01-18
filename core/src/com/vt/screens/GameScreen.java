@@ -13,7 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.vt.gameobjects.TouchHandler;
@@ -70,6 +70,7 @@ public class GameScreen implements Screen {
         m_camera = new OrthographicCamera();
         m_cameraHelper = new CameraHelper(m_camera);
         m_stage = new Stage(new ScreenViewport(m_camera), m_spriteBatch); // stage overwrites camera's viewport
+        m_cameraHelper.setZoom(1.5f);
 
         Environment env = Environment.getInstance();
         env.currentStage = m_stage;

@@ -2,8 +2,7 @@ package com.vt.gameobjects.pointers;
 
 import com.badlogic.gdx.ai.steer.Steerable;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.badlogic.gdx.utils.Align;
 import com.vt.game.Constants;
 import com.vt.gameobjects.GameObject;
 import com.vt.resources.Assets;

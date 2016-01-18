@@ -3,7 +3,7 @@ package com.vt.game;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.badlogic.gdx.utils.Align;
 import com.vt.messages.Context;
 import com.vt.messages.MessageDispatcher;
 import com.vt.messages.MessageHandler;

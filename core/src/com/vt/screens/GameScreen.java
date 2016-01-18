@@ -31,7 +31,9 @@ import com.vt.gameobjects.gui.ButtonAction;
 import com.vt.gameobjects.gui.ButtonFactory;
 import com.vt.gameobjects.terrain.levels.AbstractLevel;
 import com.vt.gameobjects.terrain.levels.LevelFactory;
+import com.vt.messages.Context;
 import com.vt.messages.MessageDispatcher;
+import com.vt.messages.MessageHandler;
 import com.vt.messages.RewindContext;
 import com.vt.physics.CollisionManager;
 import com.vt.resources.Assets;
@@ -98,15 +100,14 @@ public class GameScreen implements Screen {
         m_player.setInitialPosition(m_level.getPlayerPosition().x, m_level.getPlayerPosition().y);
         m_playerController = new ManualController(m_player);
 
-        m_actionQueue = new ActionQueue(
-                m_player,
-                new PlayerVirtualState(
-                        m_player.getPosition(),
-                        m_player.getMovementPointer().getPosition(),
-                        m_player.getViewPointer().getPosition()
-                )
-        );
+        m_actionQueue = new ActionQueue(m_player);
         m_actionQueueController = m_actionQueue.new Controller();
+        MessageDispatcher.getInstance().subscribeToBroadcast(MessageDispatcher.BroadcastMessageType.TouchDownWithRealTime, new MessageHandler() {
+            @Override
+            public void onMessageReceived(Context ctx) {
+                m_actionQueue.clear();
+            }
+        });
 
         m_touchHandlers = new EnumMap<Environment.TimeState, TouchHandler>(Environment.TimeState.class);
         m_touchHandlers.put(Environment.TimeState.RealTime, m_playerController);

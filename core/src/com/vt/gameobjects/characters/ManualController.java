@@ -3,6 +3,7 @@ package com.vt.gameobjects.characters;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.vt.gameobjects.TouchHandler;
 import com.vt.gameobjects.pointers.PointerSwitcher;
+import com.vt.messages.MessageDispatcher;
 
 /**
  * Created by Fck.r.sns on 10.07.2015.
@@ -49,6 +50,7 @@ public class ManualController implements TouchHandler {
             setPointerPosition(x, y);
         else
             shoot();
+        MessageDispatcher.getInstance().sendBroadcast(MessageDispatcher.BroadcastMessageType.TouchDownWithRealTime, null);
         return true;
     }
 

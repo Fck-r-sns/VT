@@ -10,7 +10,8 @@ public class MessageDispatcher {
     public enum BroadcastMessageType {
         Rewind,
         StateChangedToRealTime,
-        StateChangedToActivePause
+        StateChangedToActivePause,
+        TouchDownWithRealTime
     }
 
     private static MessageDispatcher m_instance;

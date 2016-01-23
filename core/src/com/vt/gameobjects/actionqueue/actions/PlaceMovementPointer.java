@@ -5,17 +5,16 @@ import com.badlogic.gdx.math.Vector2;
 import com.vt.game.Constants;
 import com.vt.gameobjects.actionqueue.AbstractQueueableAction;
 import com.vt.gameobjects.actionqueue.Context;
-import com.vt.gameobjects.actionqueue.PlayerVirtualState;
 import com.vt.gameobjects.pointers.DrawableVector;
 
 /**
  * Created by Fck.r.sns on 15.12.2015.
  */
-public class PlaceMovePointer extends AbstractQueueableAction {
+public class PlaceMovementPointer extends AbstractQueueableAction {
     DrawableVector m_drawable;
     Vector2 m_targetPosition;
 
-    public PlaceMovePointer(float x, float y, Context ctx) {
+    public PlaceMovementPointer(float x, float y, Context ctx) {
         m_targetPosition = new Vector2(x, y);
         Vector2 prevPos = ctx.virtualState.getMovementPtrPos();
         m_drawable = new DrawableVector(
@@ -23,6 +22,7 @@ public class PlaceMovePointer extends AbstractQueueableAction {
                 m_targetPosition.x, m_targetPosition.y,
                 Constants.MOVEMENT_POINTER_VECTOR_COLOR,
                 Constants.MOVEMENT_POINTER_VECTOR_WIDTH);
+        m_flags.CHANGE_MOVE_PTR = true;
     }
 
     @Override

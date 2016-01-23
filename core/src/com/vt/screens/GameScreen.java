@@ -252,6 +252,7 @@ public class GameScreen implements Screen {
             }
             m_level.update(delta);
             m_cameraHelper.update(delta);
+            m_actionQueue.act(delta);
             m_stage.act(delta);
         }
 

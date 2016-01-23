@@ -25,7 +25,7 @@ public interface QueueableAction {
     void onAdd(Context ctx);
     void onRemove(Context ctx);
 
-    // this methods will return true if action finish it's task and queue can fetch next one
+    // this methods will return true when action finish it's task and queue can fetch next one
     boolean start(Context ctx);
     boolean stop(Context ctx);
     boolean execute(Context ctx); // called every frame between start and stop

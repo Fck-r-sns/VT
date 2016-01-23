@@ -6,8 +6,8 @@ import com.vt.physics.Positionable;
  * Created by Fck.r.sns on 22.08.2015.
  */
 public abstract class AbstractQueueableAction implements QueueableAction, Positionable {
-    State m_state = State.Ready;
-    Flags m_flags = new Flags();
+    protected State m_state = State.Ready;
+    protected Flags m_flags = new Flags();
 
     @Override
     public final State getState() {
@@ -37,15 +37,15 @@ public abstract class AbstractQueueableAction implements QueueableAction, Positi
     }
 
     public boolean onStart(Context ctx) {
-        return false;
+        return true;
     }
 
     public boolean onStop(Context ctx) {
-        return false;
+        return true;
     }
 
     public boolean onExecute(Context ctx) {
-        return false;
+        return true;
     }
 
     @Override

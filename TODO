@@ -5,6 +5,7 @@ TODO: Add level generator
 
 Minor:
 TODO: Implement zoom out on pause using interpolators
+TODO: Think about new ActionQueue implementation without separated variables for move and view actions
 
 Notes:
 TODO: Replace and do not use standard collections java.util - they are too heavy, use badlogic.gdx.utils instead

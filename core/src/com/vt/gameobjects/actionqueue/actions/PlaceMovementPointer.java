@@ -33,17 +33,13 @@ public class PlaceMovementPointer extends AbstractQueueableAction {
 
     @Override
     public boolean onStart(Context ctx) {
-        return false;
-    }
-
-    @Override
-    public boolean onStop(Context ctx) {
+        ctx.character.setMovementPointerPosition(m_targetPosition.x, m_targetPosition.y);
         return false;
     }
 
     @Override
     public boolean onExecute(Context ctx) {
-        return false;
+        return ctx.character.getPosition().dst2(m_targetPosition) < Constants.PLAYER_WIDTH * 0.7f;
     }
 
     @Override

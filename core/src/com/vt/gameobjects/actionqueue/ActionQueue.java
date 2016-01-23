@@ -19,8 +19,7 @@ public class ActionQueue {
     private Context m_context;
     private AbstractQueueableAction m_candidate;
     private Queue<AbstractQueueableAction> m_actions = new Queue<AbstractQueueableAction>(16);
-    private AbstractQueueableAction m_currentMovementAction;
-    private AbstractQueueableAction m_currentViewAction;
+    private AbstractQueueableAction m_currentAction;
     public ActionQueue(CharacterObject character) {
         m_character = character;
         m_virtualState = new PlayerVirtualState(
@@ -34,39 +33,20 @@ public class ActionQueue {
         if (m_actions.size != 0) {
             // dispatch next action
             AbstractQueueableAction next = m_actions.first();
-            boolean dispatched = false;
-            if (next.getFlags().CHANGE_MOVE_PTR && m_currentMovementAction == null) {
-                m_currentMovementAction = next;
-                if (m_currentMovementAction.start(m_context)) {
-                    m_currentMovementAction.stop(m_context);
-                    m_currentMovementAction = null;
+            if (m_currentAction == null) {
+                m_currentAction = next;
+                if (m_currentAction.start(m_context)) {
+                    m_currentAction.stop(m_context);
+                    m_currentAction = null;
                 }
-                dispatched = true;
-            }
-            if (next.getFlags().CHANGE_VIEW_PTR && m_currentViewAction == null) {
-                m_currentViewAction = next;
-                if (!dispatched) { // prevent double start
-                    if (m_currentViewAction.start(m_context)) {
-                        m_currentViewAction.stop(m_context);
-                        m_currentViewAction = null;
-                    }
-                    dispatched = true;
-                }
-            }
-            if (dispatched) {
                 m_actions.removeFirst();
             }
         }
 
-        if (m_currentMovementAction != null) {
-            if (m_currentMovementAction.execute(m_context)) {
-                m_currentMovementAction.stop(m_context);
-                m_currentMovementAction = null;
-            }
-        }
-        if (m_currentViewAction != null) {
-            if (m_currentViewAction.execute(m_context)) {
-                m_currentViewAction = null;
+        if (m_currentAction != null) {
+            if (m_currentAction.execute(m_context)) {
+                m_currentAction.stop(m_context);
+                m_currentAction = null;
             }
         }
     }

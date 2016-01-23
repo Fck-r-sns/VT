@@ -5,7 +5,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.vt.game.Constants;
 import com.vt.gameobjects.actionqueue.AbstractQueueableAction;
 import com.vt.gameobjects.actionqueue.Context;
-import com.vt.gameobjects.actionqueue.PlayerVirtualState;
 import com.vt.gameobjects.pointers.DrawableVector;
 
 /**
@@ -23,6 +22,7 @@ public class PlaceViewPointer extends AbstractQueueableAction {
                 m_targetPosition.x, m_targetPosition.y,
                 Constants.VIEW_POINTER_VECTOR_COLOR,
                 Constants.VIEW_POINTER_VECTOR_WIDTH);
+        m_flags.CHANGE_VIEW_PTR = true;
     }
 
     @Override
@@ -32,13 +32,8 @@ public class PlaceViewPointer extends AbstractQueueableAction {
     }
 
     @Override
-    public boolean onStop(Context ctx) {
-        return false;
-    }
-
-    @Override
     public boolean onExecute(Context ctx) {
-        return false;
+        return Math.abs(ctx.character.getRotation() - m_targetPosition.cpy().sub(ctx.character.getPosition()).angle()) < 10;
     }
 
     @Override

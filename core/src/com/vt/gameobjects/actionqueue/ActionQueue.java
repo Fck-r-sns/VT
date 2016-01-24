@@ -19,28 +19,32 @@ public class ActionQueue {
     private CharacterObject m_character;
     private Context m_context;
     private AbstractQueueableAction m_candidate;
-    private Queue<AbstractQueueableAction> m_actions = new Queue<AbstractQueueableAction>(16);
+    private Queue<Queue<AbstractQueueableAction>> m_actions = new Queue<Queue<AbstractQueueableAction>>(128);
     private AbstractQueueableAction m_currentAction;
+
     public ActionQueue(CharacterObject character) {
         m_character = character;
         m_virtualState = new PlayerVirtualState(
                 m_character.getMovementPointer().getPosition(),
                 m_character.getViewPointer().getPosition()
-                );
+        );
         m_context = new Context(m_character, m_virtualState);
     }
 
     public void act(float delta) {
         if (m_actions.size != 0) {
             // dispatch next action
-            AbstractQueueableAction next = m_actions.first();
+            Queue<AbstractQueueableAction> subQueue = m_actions.first();
+            AbstractQueueableAction next = subQueue.first();
             if (m_currentAction == null) {
                 m_currentAction = next;
                 if (m_currentAction.start(m_context)) {
                     m_currentAction.stop(m_context);
                     m_currentAction = null;
                 }
-                m_actions.removeFirst();
+                subQueue.removeFirst();
+                if (subQueue.size == 0)
+                    m_actions.removeFirst();
             }
         }
 
@@ -57,24 +61,21 @@ public class ActionQueue {
             m_currentAction.draw(renderer);
         if (m_candidate != null)
             m_candidate.draw(renderer);
-        for (QueueableAction action : m_actions)
-            action.draw(renderer);
+        for (Queue<AbstractQueueableAction> subQueue : m_actions)
+            for (QueueableAction action : subQueue)
+                action.draw(renderer);
     }
 
     public void addAction(AbstractQueueableAction action) {
-        m_actions.addLast(action);
+        Queue<AbstractQueueableAction> subQueue = new Queue<AbstractQueueableAction>(1);
+        subQueue.addLast(action);
+        m_actions.addLast(subQueue);
         action.onAdd(m_context);
     }
 
-    public void insertAction(int idx, AbstractQueueableAction action) {
-        Array<AbstractQueueableAction> temp = new Array<AbstractQueueableAction>(16);
-        for (int i = idx; i < m_actions.size; ++i) {
-            temp.add(m_actions.get(i));
-        }
-        addAction(action);
-        for (int i = 0; i < temp.size; ++i) {
-            m_actions.addLast(temp.get(i));
-        }
+    public void addAction(Queue<AbstractQueueableAction> subQueue, AbstractQueueableAction action) {
+        subQueue.addLast(action);
+        action.onAdd(m_context);
     }
 
     public void clear() {

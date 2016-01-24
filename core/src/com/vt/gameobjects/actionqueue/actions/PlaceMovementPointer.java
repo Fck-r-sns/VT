@@ -39,6 +39,7 @@ public class PlaceMovementPointer extends AbstractQueueableAction {
 
     @Override
     public boolean onExecute(Context ctx) {
+        m_drawable.setOrigin(ctx.character.getPosition());
         return ctx.character.getPosition().dst2(m_targetPosition) < Constants.PLAYER_WIDTH * 0.7f;
     }
 

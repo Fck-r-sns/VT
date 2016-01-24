@@ -18,7 +18,6 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.vt.gameobjects.TouchHandler;
 import com.vt.gameobjects.actionqueue.ActionQueue;
-import com.vt.gameobjects.actionqueue.PlayerVirtualState;
 import com.vt.game.CameraHelper;
 import com.vt.game.Constants;
 import com.vt.game.Environment;

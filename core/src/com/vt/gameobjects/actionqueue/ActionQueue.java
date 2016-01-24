@@ -2,6 +2,7 @@ package com.vt.gameobjects.actionqueue;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Queue;
 import com.vt.game.Constants;
 import com.vt.gameobjects.TouchHandler;
@@ -52,6 +53,8 @@ public class ActionQueue {
     }
 
     public void draw(ShapeRenderer renderer) {
+        if (m_currentAction != null)
+            m_currentAction.draw(renderer);
         if (m_candidate != null)
             m_candidate.draw(renderer);
         for (QueueableAction action : m_actions)
@@ -63,8 +66,25 @@ public class ActionQueue {
         action.onAdd(m_context);
     }
 
+    public void insertAction(int idx, AbstractQueueableAction action) {
+        Array<AbstractQueueableAction> temp = new Array<AbstractQueueableAction>(16);
+        for (int i = idx; i < m_actions.size; ++i) {
+            temp.add(m_actions.get(i));
+        }
+        addAction(action);
+        for (int i = 0; i < temp.size; ++i) {
+            m_actions.addLast(temp.get(i));
+        }
+    }
+
     public void clear() {
         m_actions.clear();
+        m_currentAction = null;
+        m_candidate = null;
+    }
+
+    public void removeLast() {
+        m_actions.removeLast();
     }
 
     public class Controller implements TouchHandler {

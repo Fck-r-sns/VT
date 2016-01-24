@@ -33,6 +33,7 @@ public class PlaceViewPointer extends AbstractQueueableAction {
 
     @Override
     public boolean onExecute(Context ctx) {
+        m_drawable.setOrigin(ctx.character.getPosition());
         return Math.abs(ctx.character.getRotation() - m_targetPosition.cpy().sub(ctx.character.getPosition()).angle()) < 10;
     }
 

@@ -25,6 +25,19 @@ public class PlaceMovementPointer extends AbstractQueueableAction {
         m_flags.CHANGE_MOVE_PTR = true;
     }
 
+    public PlaceMovementPointer(float x, float y, Context ctx, boolean invisible) {
+        m_targetPosition = new Vector2(x, y);
+        if (!invisible) {
+            Vector2 prevPos = ctx.virtualState.getMovementPtrPos();
+            m_drawable = new DrawableVector(
+                    prevPos.x, prevPos.y,
+                    m_targetPosition.x, m_targetPosition.y,
+                    Constants.MOVEMENT_POINTER_VECTOR_COLOR,
+                    Constants.MOVEMENT_POINTER_VECTOR_WIDTH);
+        }
+        m_flags.CHANGE_MOVE_PTR = true;
+    }
+
     @Override
     public void draw(ShapeRenderer renderer) {
         if (m_drawable != null)
@@ -39,7 +52,8 @@ public class PlaceMovementPointer extends AbstractQueueableAction {
 
     @Override
     public boolean onExecute(Context ctx) {
-        m_drawable.setOrigin(ctx.character.getPosition());
+        if (m_drawable != null)
+            m_drawable.setOrigin(ctx.character.getPosition());
         return ctx.character.getPosition().dst2(m_targetPosition) < Constants.PLAYER_WIDTH * 0.7f;
     }
 
@@ -62,7 +76,8 @@ public class PlaceMovementPointer extends AbstractQueueableAction {
     @Override
     public void setPosition(float x, float y) {
         m_targetPosition.set(x, y);
-        m_drawable.setVector(x, y);
+        if (m_drawable != null)
+            m_drawable.setVector(x, y);
     }
 
     @Override

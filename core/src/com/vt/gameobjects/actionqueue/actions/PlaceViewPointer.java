@@ -25,6 +25,16 @@ public class PlaceViewPointer extends AbstractQueueableAction {
         m_flags.CHANGE_VIEW_PTR = true;
     }
 
+    public PlaceViewPointer(float xOrig, float yOrig, float x, float y, Context ctx) {
+        m_targetPosition = new Vector2(x, y);
+        m_drawable = new DrawableVector(
+                xOrig, yOrig,
+                m_targetPosition.x, m_targetPosition.y,
+                Constants.VIEW_POINTER_VECTOR_COLOR,
+                Constants.VIEW_POINTER_VECTOR_WIDTH);
+        m_flags.CHANGE_VIEW_PTR = true;
+    }
+
     @Override
     public boolean onStart(Context ctx) {
         ctx.character.setViewPointerPosition(m_targetPosition.x, m_targetPosition.y);

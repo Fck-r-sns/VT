@@ -13,4 +13,21 @@ public class Ray {
         this.origin = origin;
         this.direction = direction;
     }
+
+    @Override
+    public int hashCode() {
+        return origin.hashCode() + 31 * direction.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (obj.getClass() != Ray.class)
+            return false;
+        Ray other = (Ray)obj;
+        return origin == other.origin && direction == other.direction;
+    }
 }

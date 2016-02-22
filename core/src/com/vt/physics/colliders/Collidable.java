@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Shape2D;
 import com.vt.physics.Spatial;
+import com.vt.physics.geometry.LineSegment;
 
 /**
  * Created by Fck.r.sns on 08.07.2015.
@@ -24,4 +25,5 @@ public interface Collidable extends Spatial {
     boolean checkCollision(Collidable other);
     boolean checkShapeCollision(Circle circle);
     boolean checkShapeCollision(Rectangle rectangle);
+    LineSegment[] getLineSegments();
 }

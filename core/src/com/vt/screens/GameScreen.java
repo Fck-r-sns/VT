@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.OrderedMap;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.vt.gameobjects.TouchHandler;
 import com.vt.gameobjects.actionqueue.ActionQueue;
@@ -30,12 +31,13 @@ import com.vt.gameobjects.gui.ButtonAction;
 import com.vt.gameobjects.gui.ButtonFactory;
 import com.vt.gameobjects.terrain.levels.AbstractLevel;
 import com.vt.gameobjects.terrain.levels.LevelFactory;
-import com.vt.logic.raycasting.RayCaster;
 import com.vt.messages.Context;
 import com.vt.messages.MessageDispatcher;
 import com.vt.messages.MessageHandler;
 import com.vt.messages.RewindContext;
 import com.vt.physics.CollisionManager;
+import com.vt.physics.geometry.Point;
+import com.vt.physics.raycasting.VisibilityChecker;
 import com.vt.resources.Assets;
 
 import java.util.EnumMap;
@@ -58,6 +60,7 @@ public class GameScreen implements Screen {
     private EnumMap<Environment.TimeState, TouchHandler> m_touchHandlers;
     private Array<CharacterObject> m_enemies;
     private CameraTarget m_cameraTarget;
+    private VisibilityChecker m_visibilityChecker;
     private Button m_viewButton;
     private Button m_pauseButton;
     private Button m_shootButton;
@@ -73,6 +76,8 @@ public class GameScreen implements Screen {
         m_cameraHelper = new CameraHelper(m_camera);
         m_stage = new Stage(new ScreenViewport(m_camera), m_spriteBatch); // stage overwrites camera's viewport
         m_cameraHelper.setZoom(1.5f);
+
+        m_visibilityChecker = new VisibilityChecker();
 
         Environment env = Environment.getInstance();
         env.currentStage = m_stage;
@@ -94,8 +99,8 @@ public class GameScreen implements Screen {
 
         Assets.getInstance().init();
 
-//        m_level = LevelFactory.createFromTextFile(Constants.Level.LEVEL_TEST_FILE);
-        m_level = LevelFactory.createFromTextFile(Constants.Level.RAYCASTING_TEST_FILE);
+        m_level = LevelFactory.createFromTextFile(Constants.Level.LEVEL_TEST_FILE);
+//        m_level = LevelFactory.createFromTextFile(Constants.Level.RAYCASTING_TEST_FILE);
 
         m_player = new CharacterObject();
         m_player.setInitialPosition(m_level.getPlayerPosition().x, m_level.getPlayerPosition().y);
@@ -261,6 +266,8 @@ public class GameScreen implements Screen {
             m_cameraHelper.update(delta);
             m_actionQueue.act(delta);
             m_stage.act(delta);
+            m_visibilityChecker.setSource(new Point(m_player.getX(Constants.ALIGN_ORIGIN), m_player.getY(Constants.ALIGN_ORIGIN)));
+            m_visibilityChecker.updateVisibilityZone();
         }
 
         m_stageGui.act(delta); // gui updates even on pause (gui animation and others)
@@ -276,6 +283,7 @@ public class GameScreen implements Screen {
         m_spriteBatch.end();
         m_stage.draw();
 
+        m_visibilityChecker.draw(m_renderer);
         m_actionQueue.draw(m_renderer);
 
         m_cameraGui.update(false);

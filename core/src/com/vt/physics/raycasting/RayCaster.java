@@ -1,4 +1,4 @@
-package com.vt.logic.raycasting;
+package com.vt.physics.raycasting;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
@@ -11,8 +11,16 @@ import com.vt.physics.geometry.Ray;
  */
 public class RayCaster {
     private Ray m_ray;
+    private float m_t2 = Float.MAX_VALUE; // ray parameter
+
+    public RayCaster() {
+    }
 
     public RayCaster(Ray ray) {
+        setRay(ray);
+    }
+
+    public void setRay(Ray ray) {
         m_ray = ray;
     }
 
@@ -27,36 +35,39 @@ public class RayCaster {
         if (t2_denominator == 0.0) {
             return null;
         }
-        float t2 = t2_numerator / t2_denominator;
-        if (t2 < 0) {
+        m_t2 = t2_numerator / t2_denominator;
+        if (m_t2 < 0) {
             return null;
         }
         float t1;
         if (dx != 0) {
-            t1 = (m_ray.origin.x + t2 * m_ray.direction.x - segment.p1.x) / dx;
+            t1 = (m_ray.origin.x + m_t2 * m_ray.direction.x - segment.p1.x) / dx;
         } else if (dy != 0) {
-            t1 = (m_ray.origin.y + t2 * m_ray.direction.y - segment.p1.y) / dy;
+            t1 = (m_ray.origin.y + m_t2 * m_ray.direction.y - segment.p1.y) / dy;
         } else {
             return null;
         }
         if (t1 < 0 || t1 > 1.0f) {
             return null;
         }
-        float x = m_ray.origin.x + t2 * m_ray.direction.x;
-        float y = m_ray.origin.y + t2 * m_ray.direction.y;
+        float x = m_ray.origin.x + m_t2 * m_ray.direction.x;
+        float y = m_ray.origin.y + m_t2 * m_ray.direction.y;
         return new Point(x, y);
+    }
+
+    public float getRayParameter() {
+        return m_t2;
     }
 
     public static void test() {
         String tag = "RayCastingTest";
-        RayCaster rc;
-        rc = new RayCaster(new Ray(new Point(2, 3), new Vector2(1, 1)));
+        RayCaster rc = new RayCaster(new Ray(new Point(2, 3), new Vector2(1, 1)));
         Gdx.app.log(tag, "" + rc.findIntersection(new LineSegment(new Point(8, 5), new Point(8, 9))).equals(new Point(8, 9)));
         Gdx.app.log(tag, "" + rc.findIntersection(new LineSegment(new Point(6, 7), new Point(10, 7))).equals(new Point(6, 7)));
         Gdx.app.log(tag, "" + (rc.findIntersection(new LineSegment(new Point(4, 5), new Point(6, 7))) == null));
-        rc = new RayCaster(new Ray(new Point(3, 3), new Vector2(1, 0)));
+        rc.setRay(new Ray(new Point(3, 3), new Vector2(1, 0)));
         Gdx.app.log(tag, "" + (rc.findIntersection(new LineSegment(new Point(6, 3), new Point(8, 3))) == null));
-        rc = new RayCaster(new Ray(new Point(3, 3), new Vector2(0, 1)));
+        rc.setRay(new Ray(new Point(3, 3), new Vector2(0, 1)));
         Gdx.app.log(tag, "" + (rc.findIntersection(new LineSegment(new Point(3, 6), new Point(3, 8))) == null));
     }
 }

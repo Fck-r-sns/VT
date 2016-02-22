@@ -11,8 +11,7 @@ public class StubLevel extends AbstractLevel {
     protected StubLevel(int width, int height) {
         for (int column = 0; column < width; ++column) {
             for (int row = 0; row < height; ++row) {
-                Tile tile = new Floor();
-                tile.setPosition(Constants.TILE_SIZE * column, Constants.TILE_SIZE * row);
+                Tile tile = new Floor(Constants.TILE_SIZE * column, Constants.TILE_SIZE * row);
                 m_tiles.put(new Tile.Index(column, row), tile);
             }
         }

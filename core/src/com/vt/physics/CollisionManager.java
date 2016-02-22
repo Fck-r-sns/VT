@@ -2,13 +2,16 @@ package com.vt.physics;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.ObjectSet;
 import com.vt.physics.colliders.Collidable;
+import com.vt.physics.geometry.LineSegment;
 
 /**
  * Created by Fck.r.sns on 08.07.2015.
  */
 public class CollisionManager {
     private static CollisionManager instance = null;
+    private ObjectSet<LineSegment> m_staticLineSegments;
     private ObjectMap<Integer, Collidable> m_staticCollidables;
     private ObjectMap<Integer, Collidable> m_dynamicCollidables;
 
@@ -19,6 +22,7 @@ public class CollisionManager {
     }
 
     private CollisionManager() {
+        m_staticLineSegments = new ObjectSet<LineSegment>(32 * 4);
         m_staticCollidables = new ObjectMap<Integer, Collidable>(32);
         m_dynamicCollidables = new ObjectMap<Integer, Collidable>(32);
     }
@@ -46,10 +50,14 @@ public class CollisionManager {
 
     public void registerStaticCollidableObject(Integer key, Collidable object) {
         m_staticCollidables.put(key, object);
+        m_staticLineSegments.addAll(object.getLineSegments());
     }
 
     public void removeStaticCollidableObject(Integer key) {
-        m_staticCollidables.remove(key);
+        Collidable c = m_staticCollidables.remove(key);
+        LineSegment[] segments = c.getLineSegments();
+        for (LineSegment s : segments)
+            m_staticLineSegments.remove(s);
     }
 
     public void registerDynamicCollidableObject(Integer key, Collidable object) {
@@ -58,5 +66,9 @@ public class CollisionManager {
 
     public void removeDynamicCollidableObject(Integer key) {
         m_dynamicCollidables.remove(key);
+    }
+
+    public ObjectSet<LineSegment> getStaticLineSegments() {
+        return m_staticLineSegments;
     }
 }

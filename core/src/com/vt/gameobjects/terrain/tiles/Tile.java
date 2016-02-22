@@ -8,6 +8,8 @@ import com.badlogic.gdx.utils.Align;
 import com.vt.game.Constants;
 import com.vt.gameobjects.GameObject;
 import com.vt.physics.colliders.Collidable;
+import com.vt.physics.geometry.LineSegment;
+import com.vt.physics.geometry.Point;
 
 /**
  * Created by Fck.r.sns on 22.06.2015.
@@ -54,9 +56,9 @@ public class Tile extends GameObject implements Collidable {
     protected boolean m_passable;
 
 
-    protected Tile() {
+    protected Tile(float x, float y) {
         setSize(Constants.TILE_SIZE, Constants.TILE_SIZE);
-        setPosition(0, 0);
+        setPosition(x, y);
         setOrigin(Align.center);
         m_boundingRect = new Vector2(Constants.TILE_SIZE, Constants.TILE_SIZE);
     }
@@ -92,5 +94,15 @@ public class Tile extends GameObject implements Collidable {
     @Override
     public boolean checkShapeCollision(Rectangle rectangle) {
         return Intersector.overlaps(rectangle, getBoundingShape());
+    }
+
+    @Override
+    public LineSegment[] getLineSegments() {
+        return new LineSegment[] {
+                new LineSegment(new Point(getX(), getY()), new Point(getX() + getWidth(), getY())),
+                new LineSegment(new Point(getX() + getWidth(), getY()), new Point(getX() + getWidth(), getY() + getHeight())),
+                new LineSegment(new Point(getX() + getWidth(), getY() + getHeight()), new Point(getX(), getY() + getHeight())),
+                new LineSegment(new Point(getX(), getY() + getHeight()), new Point(getX(), getY())),
+        };
     }
 }

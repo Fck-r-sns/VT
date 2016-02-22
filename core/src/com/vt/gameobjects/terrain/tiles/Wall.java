@@ -8,7 +8,8 @@ import com.vt.resources.Assets;
  * Created by Fck.r.sns on 07.07.2015.
  */
 public class Wall extends Tile {
-    public Wall() {
+    public Wall(float x, float y) {
+        super(x, y);
         m_passable = false;
         setTexture(Assets.getInstance().terrain.simpleWall);
         CollisionManager.getInstance().registerStaticCollidableObject(getId(), this);

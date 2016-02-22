@@ -43,6 +43,16 @@ public class Point {
         return this;
     }
 
+    public float distanceTo(final Point other) {
+        return (float)Math.sqrt(distance2To(other));
+    }
+
+    public float distance2To(final Point other) {
+        float dx = other.x - x;
+        float dy = other.y - y;
+        return (dx * dx + dy * dy);
+    }
+
     public static Point sum(final Point p1, final Point p2) {
         return new Point(p1.x + p2.x, p1.y + p2.y);
     }

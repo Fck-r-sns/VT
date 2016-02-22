@@ -18,8 +18,7 @@ public class LevelFactory {
         AbstractLevel level = new StubLevel(width, height);
         int x = height / 2;
         for (int y = 2; y <= width - 3; ++y) {
-            Tile tile = TileFactory.create(Tile.Type.Wall);
-            tile.setPosition(Constants.TILE_SIZE * x, Constants.TILE_SIZE * y);
+            Tile tile = TileFactory.create(Tile.Type.Wall, Constants.TILE_SIZE * x, Constants.TILE_SIZE * y);
             level.setTile(new Tile.Index(x, y), tile);
         }
         return level;
@@ -43,24 +42,23 @@ public class LevelFactory {
                 Tile tile = null;
                 switch (symbol) {
                     case Constants.Level.PLAYER_START_POS_CODE:
-                        tile = TileFactory.create(Tile.Type.Floor);
+                        tile = TileFactory.create(Tile.Type.Floor, Constants.TILE_SIZE * xPos, Constants.TILE_SIZE * yPos);
                         level.setPlayerPosition((xPos + 0.5f ) * Constants.TILE_SIZE, (yPos + 0.5f ) * Constants.TILE_SIZE);
                         break;
                     case Constants.Level.ENEMY_START_POS_CODE:
-                        tile = TileFactory.create(Tile.Type.Floor);
+                        tile = TileFactory.create(Tile.Type.Floor, Constants.TILE_SIZE * xPos, Constants.TILE_SIZE * yPos);
                         level.addEnemyPosition((xPos + 0.5f ) * Constants.TILE_SIZE, (yPos + 0.5f ) * Constants.TILE_SIZE);
                         break;
                     case Constants.Level.FLOOR_CODE:
-                        tile = TileFactory.create(Tile.Type.Floor);
+                        tile = TileFactory.create(Tile.Type.Floor, Constants.TILE_SIZE * xPos, Constants.TILE_SIZE * yPos);
                         break;
                     case Constants.Level.WALL_CODE:
-                        tile = TileFactory.create(Tile.Type.Wall);
+                        tile = TileFactory.create(Tile.Type.Wall, Constants.TILE_SIZE * xPos, Constants.TILE_SIZE * yPos);
                         break;
                     default:
                         break;
                 }
                 if (tile != null) {
-                    tile.setPosition(Constants.TILE_SIZE * xPos, Constants.TILE_SIZE * yPos);
                     level.setTile(new Tile.Index(xPos, yPos), tile);
                 }
                 ++xPos;

@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Align;
 import com.vt.game.Constants;
 import com.vt.game.Environment;
 import com.vt.physics.colliders.Collidable;
+import com.vt.physics.geometry.LineSegment;
 import com.vt.serialization.RestorableValue;
 
 /**
@@ -259,6 +260,11 @@ public class ActingObject extends GameObject implements Steerable<Vector2>, Coll
     @Override
     public boolean checkShapeCollision(Rectangle rectangle) {
         return Intersector.overlaps(getBoundingShape(), rectangle);
+    }
+
+    @Override
+    public LineSegment[] getLineSegments() {
+        return new LineSegment[0];
     }
 
     protected void processCollisionWithWall(Collidable wall) {

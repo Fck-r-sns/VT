@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.vt.gameobjects.terrain.tiles.Tile;
+import com.vt.gameobjects.terrain.tiles.Wall;
 import com.vt.logic.pathfinding.Graph;
 
 import java.util.Map;

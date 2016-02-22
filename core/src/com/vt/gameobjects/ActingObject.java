@@ -262,11 +262,6 @@ public class ActingObject extends GameObject implements Steerable<Vector2>, Coll
         return Intersector.overlaps(getBoundingShape(), rectangle);
     }
 
-    @Override
-    public LineSegment[] getLineSegments() {
-        return new LineSegment[0];
-    }
-
     protected void processCollisionWithWall(Collidable wall) {
         Circle c = getBoundingShape();
         float x = c.x;

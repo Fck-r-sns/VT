@@ -22,7 +22,6 @@ public class CollisionManager {
     }
 
     private CollisionManager() {
-        m_staticLineSegments = new ObjectSet<LineSegment>(32 * 4);
         m_staticCollidables = new ObjectMap<Integer, Collidable>(32);
         m_dynamicCollidables = new ObjectMap<Integer, Collidable>(32);
     }
@@ -50,14 +49,10 @@ public class CollisionManager {
 
     public void registerStaticCollidableObject(Integer key, Collidable object) {
         m_staticCollidables.put(key, object);
-        m_staticLineSegments.addAll(object.getLineSegments());
     }
 
     public void removeStaticCollidableObject(Integer key) {
         Collidable c = m_staticCollidables.remove(key);
-        LineSegment[] segments = c.getLineSegments();
-        for (LineSegment s : segments)
-            m_staticLineSegments.remove(s);
     }
 
     public void registerDynamicCollidableObject(Integer key, Collidable object) {
@@ -66,6 +61,10 @@ public class CollisionManager {
 
     public void removeDynamicCollidableObject(Integer key) {
         m_dynamicCollidables.remove(key);
+    }
+
+    public void setStaticLineSegments(ObjectSet<LineSegment> segments) {
+        m_staticLineSegments = segments;
     }
 
     public ObjectSet<LineSegment> getStaticLineSegments() {

@@ -30,6 +30,11 @@ public class Tile extends GameObject implements Collidable {
             this.y = y;
         }
 
+        public void setValue(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+
         @Override
         public int hashCode() {
             return x + 31 * y;
@@ -94,15 +99,5 @@ public class Tile extends GameObject implements Collidable {
     @Override
     public boolean checkShapeCollision(Rectangle rectangle) {
         return Intersector.overlaps(rectangle, getBoundingShape());
-    }
-
-    @Override
-    public LineSegment[] getLineSegments() {
-        return new LineSegment[] {
-                new LineSegment(new Point(getX(), getY()), new Point(getX() + getWidth(), getY())),
-                new LineSegment(new Point(getX() + getWidth(), getY()), new Point(getX() + getWidth(), getY() + getHeight())),
-                new LineSegment(new Point(getX() + getWidth(), getY() + getHeight()), new Point(getX(), getY() + getHeight())),
-                new LineSegment(new Point(getX(), getY() + getHeight()), new Point(getX(), getY())),
-        };
     }
 }

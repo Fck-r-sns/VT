@@ -69,6 +69,8 @@ public class Constants {
 
     // resources --------------------------------------------------------------
     public static final String GUI_ATLAS_PACK = "gui.pack";
+    public static final String RED_VECTOR_BASE_ASSET_NAME = "redPixel";
+    public static final String BLUE_VECTOR_BASE_ASSET_NAME = "bluePixel";
     public static final String VIEW_BUTTON_UP_ASSET_NAME = "buttonUp";
     public static final String VIEW_BUTTON_DOWN_ASSET_NAME = "buttonDown";
     public static final String PAUSE_BUTTON_UP_ASSET_NAME = "buttonUp";

@@ -7,7 +7,6 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.vt.game.Constants;
 
@@ -16,6 +15,11 @@ import com.vt.game.Constants;
  */
 public class Assets implements Disposable, AssetErrorListener {
     public class Gui {
+        public TextureAtlas.AtlasRegion redVector;
+        public TextureAtlas.AtlasRegion blueVector;
+        public TextureAtlas.AtlasRegion movementVector;
+        public TextureAtlas.AtlasRegion viewVector;
+        public TextureAtlas.AtlasRegion visibilityVector;
         public TextureAtlas.AtlasRegion viewButtonUp;
         public TextureAtlas.AtlasRegion viewButtonDown;
         public TextureAtlas.AtlasRegion pauseButtonUp;
@@ -89,6 +93,11 @@ public class Assets implements Disposable, AssetErrorListener {
             t.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         gui = new Gui();
+        gui.redVector = atlas.findRegion(Constants.RED_VECTOR_BASE_ASSET_NAME);
+        gui.blueVector = atlas.findRegion(Constants.BLUE_VECTOR_BASE_ASSET_NAME);
+        gui.movementVector = gui.blueVector;
+        gui.viewVector = gui.redVector;
+        gui.visibilityVector = gui.redVector;
         gui.viewButtonUp = atlas.findRegion(Constants.VIEW_BUTTON_UP_ASSET_NAME);
         gui.viewButtonDown = atlas.findRegion(Constants.VIEW_BUTTON_DOWN_ASSET_NAME);
         gui.pauseButtonUp = atlas.findRegion(Constants.PAUSE_BUTTON_UP_ASSET_NAME);

@@ -280,11 +280,12 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         m_spriteBatch.begin();
         m_level.draw(m_spriteBatch);
+        m_visibilityChecker.draw(m_spriteBatch);
+        m_actionQueue.draw(m_spriteBatch);
         m_spriteBatch.end();
         m_stage.draw();
 
-        m_visibilityChecker.draw(m_renderer);
-        m_actionQueue.draw(m_renderer);
+
 
         m_cameraGui.update(false);
         m_spriteBatch.setProjectionMatrix(m_cameraGui.combined);

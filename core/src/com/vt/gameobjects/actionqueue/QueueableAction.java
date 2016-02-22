@@ -1,5 +1,6 @@
 package com.vt.gameobjects.actionqueue;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 /**
@@ -20,7 +21,7 @@ public interface QueueableAction {
 
     State getState();
     Flags getFlags();
-    void draw(ShapeRenderer renderer);
+    void draw(SpriteBatch batch);
 
     void onAdd(Context ctx);
     void onRemove(Context ctx);

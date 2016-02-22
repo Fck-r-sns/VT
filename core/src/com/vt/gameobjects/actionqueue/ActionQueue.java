@@ -1,5 +1,6 @@
 package com.vt.gameobjects.actionqueue;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -57,14 +58,14 @@ public class ActionQueue {
         }
     }
 
-    public void draw(ShapeRenderer renderer) {
+    public void draw(SpriteBatch batch) {
         if (m_currentAction != null)
-            m_currentAction.draw(renderer);
+            m_currentAction.draw(batch);
         if (m_candidate != null)
-            m_candidate.draw(renderer);
+            m_candidate.draw(batch);
         for (Queue<AbstractQueueableAction> subqueue : m_actions)
             for (QueueableAction action : subqueue)
-                action.draw(renderer);
+                action.draw(batch);
     }
 
     public void addAction(AbstractQueueableAction action) {

@@ -5,15 +5,29 @@ filter: Nearest,Nearest
 repeat: none
 buttonDown
   rotate: false
-  xy: 1, 1
+  xy: 1, 4
   size: 44, 44
   orig: 44, 44
   offset: 0, 0
   index: -1
 buttonUp
   rotate: false
-  xy: 47, 1
+  xy: 47, 4
   size: 44, 44
   orig: 44, 44
+  offset: 0, 0
+  index: -1
+bluePixel
+  rotate: false
+  xy: 1, 1
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+redPixel
+  rotate: false
+  xy: 93, 47
+  size: 1, 1
+  orig: 1, 1
   offset: 0, 0
   index: -1

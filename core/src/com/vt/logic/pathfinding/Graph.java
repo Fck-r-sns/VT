@@ -1,10 +1,12 @@
 package com.vt.logic.pathfinding;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.vt.gameobjects.pointers.DrawableVector;
 import com.vt.gameobjects.terrain.tiles.Tile;
+import com.vt.resources.Assets;
 
 import java.util.HashMap;
 import java.util.List;
@@ -55,7 +57,7 @@ public class Graph {
         return m_nodes.size();
     }
 
-    public void draw(ShapeRenderer renderer) {
+    public void draw(SpriteBatch batch) {
         for (Map.Entry entry : m_nodes.entrySet()) {
             Vertex vertex = (Vertex) entry.getValue();
             float sourceX = vertex.x;
@@ -63,12 +65,12 @@ public class Graph {
             for (Edge edge : vertex.incidentEdges) {
                 float destX = edge.destination.x;
                 float destY = edge.destination.y;
-                new DrawableVector(sourceX, sourceY, destX, destY, m_edgeColor, m_edgeWidth).draw(renderer);
+                new DrawableVector(sourceX, sourceY, destX, destY, Assets.getInstance().gui.blueVector, m_edgeWidth).draw(batch);
             }
         }
     }
 
-    public static void drawPath(ShapeRenderer renderer, List<Vertex> path) {
+    public static void drawPath(SpriteBatch batch, List<Vertex> path) {
         float x1, y1;
         float x2 = Float.POSITIVE_INFINITY;
         float y2 = Float.POSITIVE_INFINITY;
@@ -79,7 +81,7 @@ public class Graph {
             y2 = vertex.y;
             if (x1 == Float.POSITIVE_INFINITY || y2 == Float.POSITIVE_INFINITY)
                 continue;
-            new DrawableVector(x1, y1, x2, y2, m_pathColor, m_pathWidth, true).draw(renderer);
+            new DrawableVector(x1, y1, x2, y2, Assets.getInstance().gui.redVector, m_pathWidth, true).draw(batch);
         }
     }
 }

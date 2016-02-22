@@ -1,6 +1,7 @@
 package com.vt.physics.raycasting;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -11,6 +12,7 @@ import com.vt.physics.CollisionManager;
 import com.vt.physics.geometry.LineSegment;
 import com.vt.physics.geometry.Point;
 import com.vt.physics.geometry.Ray;
+import com.vt.resources.Assets;
 
 /**
  * Created by fckrsns on 22.02.2016.
@@ -96,7 +98,7 @@ public class VisibilityChecker {
                 result.put(i, nearest);
                 DrawableVector v = m_vectors.get(i, null);
                 if (v == null) {
-                    v = new DrawableVector(m_source.x, m_source.y, nearest.x, nearest.y, Color.RED, 0.03f, false);
+                    v = new DrawableVector(m_source.x, m_source.y, nearest.x, nearest.y, Assets.getInstance().gui.redVector, 0.03f, false);
                     m_vectors.put(i, v);
                 } else {
                     v.setOrigin(m_source.x, m_source.y);
@@ -109,8 +111,8 @@ public class VisibilityChecker {
         return result;
     }
 
-    public void draw(ShapeRenderer renderer) {
+    public void draw(SpriteBatch batch) {
         for (DrawableVector v : m_vectors.values())
-            v.draw(renderer);
+            v.draw(batch);
     }
 }

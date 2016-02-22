@@ -224,12 +224,9 @@ public class PathfindingTestScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         m_spriteBatch.begin();
         m_level.draw(m_spriteBatch);
-        m_spriteBatch.end();
-        m_stage.draw();
-
         m_renderer.setProjectionMatrix(m_camera.combined);
         if (m_drawGraph)
-            m_graph.draw(m_renderer);
+            m_graph.draw(m_spriteBatch);
 
 //        if (m_drawVariations)
 //            for (DrawableVector v : m_pathfinder.variations)
@@ -237,7 +234,11 @@ public class PathfindingTestScreen implements Screen {
 
         if (m_drawPath)
             if (m_path != null)
-                Graph.drawPath(m_renderer, m_path);
+                Graph.drawPath(m_spriteBatch, m_path);
+        m_spriteBatch.end();
+        m_stage.draw();
+
+
     }
 
     @Override

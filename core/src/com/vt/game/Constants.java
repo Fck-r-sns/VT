@@ -119,8 +119,8 @@ public class Constants {
     public final static float MAX_ANGULAR_SPEED_DEFAULT = 30;
     public final static float MAX_ANGULAR_ACCELERATION_DEFAULT = 30;
 
-    public final static float MAX_PLAYER_LINEAR_SPEED = 3.0f; // meters per second (4 m/s = 14.4 km/h)
-    public final static float MAX_PLAYER_LINEAR_ACCELERATION = 6.0f;
+    public final static float MAX_PLAYER_LINEAR_SPEED = 3.5f; // meters per second (4 m/s = 14.4 km/h)
+    public final static float MAX_PLAYER_LINEAR_ACCELERATION = 10.0f;
     public final static float MAX_PLAYER_ANGULAR_SPEED = 120; // old value = 30
     public final static float MAX_PLAYER_ANGULAR_ACCELERATION = 120; // old value = 30
 
@@ -146,6 +146,7 @@ public class Constants {
     static public class Level {
         public final static String LEVEL_TEST_FILE = "levels/test";
         public final static String PATHFINDING_TEST_FILE = "levels/pathfinding";
+        public final static String RAYCASTING_TEST_FILE = "levels/raycasting_test";
 
         public final static int FLOOR_CODE = '0';
         public final static int WALL_CODE = '1';

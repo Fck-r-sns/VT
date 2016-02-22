@@ -30,6 +30,7 @@ import com.vt.gameobjects.gui.ButtonAction;
 import com.vt.gameobjects.gui.ButtonFactory;
 import com.vt.gameobjects.terrain.levels.AbstractLevel;
 import com.vt.gameobjects.terrain.levels.LevelFactory;
+import com.vt.logic.raycasting.RayCaster;
 import com.vt.messages.Context;
 import com.vt.messages.MessageDispatcher;
 import com.vt.messages.MessageHandler;
@@ -93,7 +94,8 @@ public class GameScreen implements Screen {
 
         Assets.getInstance().init();
 
-        m_level = LevelFactory.createFromTextFile(Constants.Level.LEVEL_TEST_FILE);
+//        m_level = LevelFactory.createFromTextFile(Constants.Level.LEVEL_TEST_FILE);
+        m_level = LevelFactory.createFromTextFile(Constants.Level.RAYCASTING_TEST_FILE);
 
         m_player = new CharacterObject();
         m_player.setInitialPosition(m_level.getPlayerPosition().x, m_level.getPlayerPosition().y);
@@ -102,6 +104,12 @@ public class GameScreen implements Screen {
         m_actionQueue = new ActionQueue(m_player);
         m_actionQueueController = m_actionQueue.new Controller();
         MessageDispatcher.getInstance().subscribeToBroadcast(MessageDispatcher.BroadcastMessageType.TouchDownWithRealTime, new MessageHandler() {
+            @Override
+            public void onMessageReceived(Context ctx) {
+                m_actionQueue.clear();
+            }
+        });
+        MessageDispatcher.getInstance().subscribeToBroadcast(MessageDispatcher.BroadcastMessageType.Rewind, new MessageHandler() {
             @Override
             public void onMessageReceived(Context ctx) {
                 m_actionQueue.clear();
@@ -259,12 +267,16 @@ public class GameScreen implements Screen {
 
         m_camera.update(false);
         m_spriteBatch.setProjectionMatrix(m_camera.combined);
+        m_renderer.setProjectionMatrix(m_camera.combined);
+
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         m_spriteBatch.begin();
         m_level.draw(m_spriteBatch);
         m_spriteBatch.end();
         m_stage.draw();
+
+        m_actionQueue.draw(m_renderer);
 
         m_cameraGui.update(false);
         m_spriteBatch.setProjectionMatrix(m_cameraGui.combined);
@@ -283,9 +295,6 @@ public class GameScreen implements Screen {
                 m_cameraGui.viewportHeight - Constants.FPS_LABEL_MARGIN_Y
         );
         m_spriteBatch.end();
-
-        m_renderer.setProjectionMatrix(m_camera.combined);
-        m_actionQueue.draw(m_renderer);
 
         if (env.debugDrawings) {
             Circle c = m_player.getBoundingShape();

@@ -2,7 +2,6 @@ package com.vt.game;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.vt.messages.MessageDispatcher;
-import com.vt.messages.RewindContext;
 
 /**
  * Created by Fck.r.sns on 08.07.2015.

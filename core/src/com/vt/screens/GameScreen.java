@@ -15,18 +15,17 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.OrderedMap;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.vt.gameobjects.TouchHandler;
-import com.vt.gameobjects.actionqueue.ActionQueue;
 import com.vt.game.CameraHelper;
 import com.vt.game.Constants;
 import com.vt.game.Environment;
 import com.vt.gameobjects.CameraTarget;
 import com.vt.gameobjects.GameObject;
+import com.vt.gameobjects.TouchHandler;
+import com.vt.gameobjects.actionqueue.ActionQueue;
+import com.vt.gameobjects.characters.CharacterObject;
 import com.vt.gameobjects.characters.ManualController;
 import com.vt.gameobjects.gui.Button;
-import com.vt.gameobjects.characters.CharacterObject;
 import com.vt.gameobjects.gui.ButtonAction;
 import com.vt.gameobjects.gui.ButtonFactory;
 import com.vt.gameobjects.terrain.levels.AbstractLevel;
@@ -266,8 +265,7 @@ public class GameScreen implements Screen {
             m_cameraHelper.update(delta);
             m_actionQueue.act(delta);
             m_stage.act(delta);
-            m_visibilityChecker.setSource(new Point(m_player.getX(Constants.ALIGN_ORIGIN), m_player.getY(Constants.ALIGN_ORIGIN)));
-            m_visibilityChecker.updateVisibilityZone();
+            m_visibilityChecker.updateVisibilityZone(new Point(m_player.getX(Constants.ALIGN_ORIGIN), m_player.getY(Constants.ALIGN_ORIGIN)));
         }
 
         m_stageGui.act(delta); // gui updates even on pause (gui animation and others)

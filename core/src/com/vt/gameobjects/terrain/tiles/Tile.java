@@ -8,8 +8,6 @@ import com.badlogic.gdx.utils.Align;
 import com.vt.game.Constants;
 import com.vt.gameobjects.GameObject;
 import com.vt.physics.colliders.Collidable;
-import com.vt.physics.geometry.LineSegment;
-import com.vt.physics.geometry.Point;
 
 /**
  * Created by Fck.r.sns on 22.06.2015.

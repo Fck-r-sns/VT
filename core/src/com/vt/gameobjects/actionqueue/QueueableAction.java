@@ -1,7 +1,6 @@
 package com.vt.gameobjects.actionqueue;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 /**
  * Created by Fck.r.sns on 22.08.2015.

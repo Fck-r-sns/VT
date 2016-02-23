@@ -12,7 +12,6 @@ import com.badlogic.gdx.utils.Align;
 import com.vt.game.Constants;
 import com.vt.game.Environment;
 import com.vt.physics.colliders.Collidable;
-import com.vt.physics.geometry.LineSegment;
 import com.vt.serialization.RestorableValue;
 
 /**

@@ -15,7 +15,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.vt.game.CameraHelper;
 import com.vt.game.Constants;
 import com.vt.game.Environment;
-import com.vt.gameobjects.pointers.DrawableVector;
 import com.vt.gameobjects.terrain.levels.AbstractLevel;
 import com.vt.gameobjects.terrain.levels.LevelFactory;
 import com.vt.gameobjects.terrain.tiles.Tile;

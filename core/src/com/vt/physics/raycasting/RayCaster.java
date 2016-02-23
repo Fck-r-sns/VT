@@ -2,8 +2,8 @@ package com.vt.physics.raycasting;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
-import com.vt.physics.geometry.Point;
 import com.vt.physics.geometry.LineSegment;
+import com.vt.physics.geometry.Point;
 import com.vt.physics.geometry.Ray;
 
 /**

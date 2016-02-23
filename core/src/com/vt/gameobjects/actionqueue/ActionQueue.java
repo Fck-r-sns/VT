@@ -1,10 +1,8 @@
 package com.vt.gameobjects.actionqueue;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Queue;
 import com.vt.game.Constants;
 import com.vt.gameobjects.TouchHandler;
@@ -69,6 +67,8 @@ public class ActionQueue {
     }
 
     public void addAction(AbstractQueueableAction action) {
+        if (action == null)
+            return;
         Queue<AbstractQueueableAction> subQueue = new Queue<AbstractQueueableAction>(1);
         subQueue.addLast(action);
         m_actions.addLast(subQueue);
@@ -76,6 +76,8 @@ public class ActionQueue {
     }
 
     public void addAction(Queue<AbstractQueueableAction> subqueue, AbstractQueueableAction action) {
+        if (action == null)
+            return;
         subqueue.addLast(action);
         action.onAdd(m_context);
     }
@@ -157,7 +159,7 @@ public class ActionQueue {
         public void handleTouchDragged(InputEvent event, float x, float y, int pointer) {
             if (m_pointerSwitcher.isCurrentPointerMovement()) {
                 float dst = new Vector2(x, y).dst2(lastX, lastY);
-                if (dst > 1.0f) {
+                if (dst > 0.4f) {
                     handleTouchUp(event, x, y, pointer, 0);
                     handleTouchDown(event, x, y, pointer, 0);
                     lastX = x;

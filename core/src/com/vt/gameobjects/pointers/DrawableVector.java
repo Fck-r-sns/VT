@@ -1,11 +1,8 @@
 package com.vt.gameobjects.pointers;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.vt.resources.Assets;
 
 /**
  * Created by Fck.r.sns on 15.12.2015.

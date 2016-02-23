@@ -1,5 +1,6 @@
 package com.vt.gameobjects.pointers;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -49,7 +50,7 @@ public class DrawableVector {
         updateLengthAndRotation();
     }
 
-    public void draw(SpriteBatch batch) {
+    public void draw(Batch batch) {
         if (m_texture != null) {
             batch.draw(
                     m_texture,

@@ -136,6 +136,8 @@ public class Constants {
     public final static float CAMERA_ARRIVAL_TOLERANCE = 0.02f;
     public final static float CAMERA_ARRIVAL_TOLERANCE_POW_2 = CAMERA_ARRIVAL_TOLERANCE * CAMERA_ARRIVAL_TOLERANCE;
     public final static float CAMERA_ARRIVAL_DECELERATION_RADIUS = 1.6f;
+
+    public final static float CHARACTER_VISIBILITY_RANGE_ANGLE_DEG = 120.0f;
     // ------------------------------------------------------------------------
 
     // time and game logic ----------------------------------------------------

@@ -14,6 +14,7 @@ public class Environment {
 
     private static Environment instance = null;
     public boolean debugDrawings = false;
+    public long frameCounter = 0;
     public float globalTime = 0.0f;
     public float gameTime = 0.0f;
     public float rewindableTime = 0.0f;

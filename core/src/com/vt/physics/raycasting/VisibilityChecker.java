@@ -1,6 +1,7 @@
 package com.vt.physics.raycasting;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
@@ -17,10 +18,11 @@ import com.vt.resources.Assets;
  */
 public class VisibilityChecker {
     private static final int RAY_COUNT = 60;
-    private static final float ROTATION_STEP = 360.0f / RAY_COUNT;
     private ObjectMap<Integer, Ray> m_rays = new ObjectMap<Integer, Ray>(64);
     private ObjectMap<Integer, DrawableVector> m_vectors = new ObjectMap<Integer, DrawableVector>(RAY_COUNT);
     private RayCaster m_rc = new RayCaster();
+    private long timeSum = 0;
+    private int counter = 0;
 
     public VisibilityChecker() {
     }
@@ -68,12 +70,14 @@ public class VisibilityChecker {
 //        return result;
 //    }
 
-    public OrderedMap<Integer, Point> updateVisibilityZone(Point source) {
+    public OrderedMap<Integer, Point> updateVisibilityZone(Point source, float centerAngle_deg, float rangeAngle_deg) {
+        long startTime = System.nanoTime();
         ObjectSet<LineSegment> segments = CollisionManager.getInstance().getStaticLineSegments();
         OrderedMap<Integer, Point> result = new OrderedMap<Integer, Point>(RAY_COUNT);
-        Vector2 dir = new Vector2(0, 1);
+        Vector2 dir = new Vector2(1, 0).rotate(centerAngle_deg - rangeAngle_deg / 2);
         Ray ray = new Ray(source, dir);
         m_rc.setRay(ray);
+        final float ROTATION_STEP = rangeAngle_deg / RAY_COUNT;
         for (int i = 0; i < RAY_COUNT; ++i) {
             dir.rotate(ROTATION_STEP);
             Point nearest = null;
@@ -100,10 +104,17 @@ public class VisibilityChecker {
                 m_vectors.remove(i);
             }
         }
+        timeSum += System.nanoTime() - startTime;
+        ++counter;
+        if (counter >= 60) {
+            Gdx.app.log("VisibilityChecker", "Time elapsed: " + timeSum / counter);
+            counter = 0;
+            timeSum = 0;
+        }
         return result;
     }
 
-    public void draw(SpriteBatch batch) {
+    public void draw(Batch batch) {
         for (DrawableVector v : m_vectors.values())
             v.draw(batch);
     }

@@ -12,6 +12,8 @@ import com.vt.gameobjects.pointers.ViewPointer;
 import com.vt.gameobjects.weapons.AbstractWeapon;
 import com.vt.gameobjects.weapons.Pistol;
 import com.vt.physics.CollisionManager;
+import com.vt.physics.geometry.Point;
+import com.vt.physics.raycasting.VisibilityChecker;
 import com.vt.resources.Assets;
 import com.vt.serialization.RestorableValue;
 import com.vt.timedriven.DelayedAction;
@@ -23,12 +25,14 @@ import com.vt.timedriven.TimeDrivenExecutor;
 public class CharacterObject extends ActingObject implements ControllableCharacter {
     private static final String TAG = CharacterObject.class.getName();
     private TimeDrivenExecutor m_actionsManager;
+    private VisibilityChecker m_visibilityChecker;
     private MovementPointer m_movementPointer;
     private ViewPointer m_viewPointer;
     private Vector2 m_lastPosition;
     private boolean m_keepOrientation = true;
     private AbstractWeapon m_weapon;
     private DelayedAction m_shootingAction;
+    private float m_visibilityRange_deg = Constants.CHARACTER_VISIBILITY_RANGE_ANGLE_DEG;
 
     protected enum State {
         Stand,
@@ -42,6 +46,8 @@ public class CharacterObject extends ActingObject implements ControllableCharact
         m_actionsManager = new TimeDrivenExecutor();
         m_actionsManager.setValuesHistory(getValuesHistory());
         m_lastPosition = new Vector2(0, 0);
+
+        m_visibilityChecker = new VisibilityChecker();
 
         m_movementPointer = new MovementPointer();
         m_viewPointer = new ViewPointer();
@@ -184,6 +190,13 @@ public class CharacterObject extends ActingObject implements ControllableCharact
                     setRotationDeltaRelativeToCurrent(getLinearVelocity().angle());
             }
 
+            m_visibilityChecker.updateVisibilityZone(
+                    new Point(getX(Constants.ALIGN_ORIGIN), getY(Constants.ALIGN_ORIGIN)),
+                    getRotation(),
+                    m_visibilityRange_deg
+            );
+
+
             updateLastPosition();
         }
         manageAnimation();
@@ -202,6 +215,7 @@ public class CharacterObject extends ActingObject implements ControllableCharact
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
+        m_visibilityChecker.draw(batch);
     }
 
     private void updateLastPosition() {

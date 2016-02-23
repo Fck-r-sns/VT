@@ -59,7 +59,6 @@ public class GameScreen implements Screen {
     private EnumMap<Environment.TimeState, TouchHandler> m_touchHandlers;
     private Array<CharacterObject> m_enemies;
     private CameraTarget m_cameraTarget;
-    private VisibilityChecker m_visibilityChecker;
     private Button m_viewButton;
     private Button m_pauseButton;
     private Button m_shootButton;
@@ -75,8 +74,6 @@ public class GameScreen implements Screen {
         m_cameraHelper = new CameraHelper(m_camera);
         m_stage = new Stage(new ScreenViewport(m_camera), m_spriteBatch); // stage overwrites camera's viewport
         m_cameraHelper.setZoom(1.5f);
-
-        m_visibilityChecker = new VisibilityChecker();
 
         Environment env = Environment.getInstance();
         env.currentStage = m_stage;
@@ -239,6 +236,7 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         Environment env = Environment.getInstance();
+        ++env.frameCounter;
         boolean paused = env.isPaused();
         boolean rewinding = env.isRewinding();
         delta = 1 / 60.0f;
@@ -265,7 +263,6 @@ public class GameScreen implements Screen {
             m_cameraHelper.update(delta);
             m_actionQueue.act(delta);
             m_stage.act(delta);
-            m_visibilityChecker.updateVisibilityZone(new Point(m_player.getX(Constants.ALIGN_ORIGIN), m_player.getY(Constants.ALIGN_ORIGIN)));
         }
 
         m_stageGui.act(delta); // gui updates even on pause (gui animation and others)
@@ -278,12 +275,9 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         m_spriteBatch.begin();
         m_level.draw(m_spriteBatch);
-        m_visibilityChecker.draw(m_spriteBatch);
         m_actionQueue.draw(m_spriteBatch);
         m_spriteBatch.end();
         m_stage.draw();
-
-
 
         m_cameraGui.update(false);
         m_spriteBatch.setProjectionMatrix(m_cameraGui.combined);

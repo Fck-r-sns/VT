@@ -10,13 +10,15 @@ import com.vt.messages.MessageDispatcher;
 import com.vt.messages.MessageHandler;
 import com.vt.messages.RewindContext;
 import com.vt.physics.Spatial;
+import com.vt.physics.SpatialHash;
+import com.vt.physics.SpatiallyHashable;
 import com.vt.serialization.RestorableValue;
 import com.vt.serialization.ValuesChangeHistory;
 
 /**
  * Created by Fck.r.sns on 04.05.2015.
  */
-public abstract class GameObject extends Group implements Spatial {
+public abstract class GameObject extends Group implements Spatial, SpatiallyHashable {
     static private int m_idGenerator = 0;
     private ValuesChangeHistory m_valuesHistory;
     private final Integer m_id;
@@ -37,6 +39,11 @@ public abstract class GameObject extends Group implements Spatial {
                     }
                 });
         setActive(true);
+    }
+
+    @Override
+    public SpatialHash spatialHash() {
+        return new SpatialHash((int)getX(Constants.ALIGN_ORIGIN), (int)getY(Constants.ALIGN_ORIGIN));
     }
 
     protected ValuesChangeHistory getValuesHistory() {

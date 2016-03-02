@@ -64,4 +64,9 @@ public class Point {
     public static Point substraction(final Point p1, final Point p2) {
         return new Point(p1.x - p2.x, p1.y - p2.y);
     }
+
+    @Override
+    public String toString() {
+        return "(" + x + "," + y + ")";
+    }
 }

@@ -9,6 +9,8 @@ import com.vt.gameobjects.terrain.tiles.Tile;
 import com.vt.gameobjects.terrain.tiles.TileFactory;
 import com.vt.gameobjects.terrain.tiles.Wall;
 import com.vt.physics.CollisionManager;
+import com.vt.physics.SpatialHash;
+import com.vt.physics.SpatialHashTable;
 import com.vt.physics.geometry.LineSegment;
 import com.vt.physics.geometry.Point;
 
@@ -74,7 +76,7 @@ public class LevelFactory {
             }
             maxX[yPos] = xPos;
         }
-        ObjectSet<LineSegment> segments = new ObjectSet<LineSegment>(64);
+        SpatialHashTable<LineSegment> segmentsTable = new SpatialHashTable<LineSegment>(64, 16);
         Tile.Index idx = new Tile.Index(0, 0);
         for (int y = 0; y < maxY; ++y) {
             for (int x = 0; x < maxX[y]; ++x) {
@@ -98,16 +100,38 @@ public class LevelFactory {
                     float y1 = beginY * Constants.TILE_SIZE;
                     float x2 = (beginX + width) * Constants.TILE_SIZE;
                     float y2 = (beginY + height) * Constants.TILE_SIZE;
-                    segments.addAll(
+
+                    LineSegment[] ss = {
                             new LineSegment(new Point(x1, y1), new Point(x2, y1)),
                             new LineSegment(new Point(x2, y1), new Point(x2, y2)),
                             new LineSegment(new Point(x2, y2), new Point(x1, y2)),
                             new LineSegment(new Point(x1, y2), new Point(x1, y1))
-                    );
+                    };
+                    for (LineSegment s : ss) {
+                        SpatialHash h1 = s.spatialHash1();
+                        SpatialHash h2 = s.spatialHash2();
+                        if (h1.x == h2.x) {
+                            // go vertical
+                            int xHash = h1.x;
+                            int yStart = Math.min(h1.y, h2.y);
+                            int yStop = Math.max(h1.y, h2.y);
+                            for (int yHash = yStart; yHash <= yStop; ++yHash) {
+                                segmentsTable.add(new SpatialHash(xHash, yHash), s);
+                            }
+                        } else {
+                            // go horizontal
+                            int yHash = h1.y;
+                            int xStart = Math.min(h1.x, h2.x);
+                            int xStop = Math.max(h1.x, h2.x);
+                            for (int xHash = xStart; xHash <= xStop; ++xHash) {
+                                segmentsTable.add(new SpatialHash(xHash, yHash), s);
+                            }
+                        }
+                    }
                 }
             }
         }
-        CollisionManager.getInstance().setStaticLineSegments(segments);
+        CollisionManager.getInstance().setStaticLineSegments(segmentsTable);
         return level;
     }
 }

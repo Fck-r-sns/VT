@@ -11,7 +11,7 @@ import com.vt.physics.geometry.LineSegment;
  */
 public class CollisionManager {
     private static CollisionManager instance = null;
-    private ObjectSet<LineSegment> m_staticLineSegments;
+    private SpatialHashTable<LineSegment> m_staticLineSegments;
     private ObjectMap<Integer, Collidable> m_staticCollidables;
     private ObjectMap<Integer, Collidable> m_dynamicCollidables;
 
@@ -63,11 +63,11 @@ public class CollisionManager {
         m_dynamicCollidables.remove(key);
     }
 
-    public void setStaticLineSegments(ObjectSet<LineSegment> segments) {
+    public void setStaticLineSegments(SpatialHashTable<LineSegment> segments) {
         m_staticLineSegments = segments;
     }
 
-    public ObjectSet<LineSegment> getStaticLineSegments() {
+    public SpatialHashTable<LineSegment> getStaticLineSegments() {
         return m_staticLineSegments;
     }
 }

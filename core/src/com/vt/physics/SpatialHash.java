@@ -1,5 +1,7 @@
 package com.vt.physics;
 
+import com.vt.game.Constants;
+
 /**
  * Created by fckrsns on 02.03.2016.
  */
@@ -10,6 +12,13 @@ public class SpatialHash implements Comparable<SpatialHash> {
     public SpatialHash(int x, int y) {
         this.x = x;
         this.y = y;
+    }
+
+    public static SpatialHash createFromPosition(float x, float y) {
+        return new SpatialHash(
+                (int)(x / Constants.SPATIAL_HASH_TABLE_BUCKET_WIDTH),
+                (int)(y / Constants.SPATIAL_HASH_TABLE_BUCKET_HEIGHT)
+        );
     }
 
     @Override

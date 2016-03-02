@@ -6,8 +6,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.badlogic.gdx.utils.OrderedMap;
-import com.vt.gameobjects.pointers.DrawableVector;
+import com.badlogic.gdx.utils.Queue;
+import com.vt.gameobjects.primitives.DrawableVector;
 import com.vt.physics.CollisionManager;
+import com.vt.physics.SpatialHash;
+import com.vt.physics.SpatialHashTable;
 import com.vt.physics.geometry.LineSegment;
 import com.vt.physics.geometry.Point;
 import com.vt.physics.geometry.Ray;
@@ -24,72 +27,59 @@ public class VisibilityChecker {
     private long timeSum = 0;
     private int counter = 0;
 
-    public VisibilityChecker() {
-    }
-
-//    public OrderedMap<Integer, Point> updateVisibilityZone(Point source) {
-//        ObjectSet<LineSegment> segments = CollisionManager.getInstance().getStaticLineSegments();
-//        m_rays.clear();
-//        if (m_rays.size == 0) {
-//            int counter = 0;
-//            for (LineSegment s : segments) {
-//                Ray r1 = new Ray(source, new Vector2(s.p1.x - source.x, s.p1.y - source.y));
-//                m_rays.put(counter++, r1);
-//                Ray r2 = new Ray(source, new Vector2(s.p2.x - source.x, s.p2.y - source.y));
-//                m_rays.put(counter++, r2);
-//            }
-//        }
-//        OrderedMap<Integer, Point> result = new OrderedMap<Integer, Point>(m_rays.size);
-//        for (ObjectMap.Entry<Integer, Ray> entry : m_rays.entries()) {
-//            int id = entry.key;
-//            m_rc.setRay(entry.value);
-//            Point nearest = null;
-//            float minRayParameter = Float.MAX_VALUE;
-//            for (LineSegment s : segments) {
-//                Point newIntersection = m_rc.findIntersection(s);
-//                float newRayParameter = m_rc.getRayParameter();
-//                if (newIntersection != null && newRayParameter < minRayParameter) {
-//                    nearest = newIntersection;
-//                    minRayParameter = newRayParameter;
-//                }
-//            }
-//            if (nearest != null) {
-//                result.put(id, nearest);
-//                DrawableVector v = m_vectors.get(id, null);
-//                if (v == null) {
-//                    v = new DrawableVector(source.x, source.y, nearest.x, nearest.y, Assets.getInstance().gui.visibilityVector, 0.03f, false);
-//                    m_vectors.put(id, v);
-//                } else {
-//                    v.setOrigin(source.x, source.y);
-//                    v.setVector(nearest.x, nearest.y);
-//                }
-//            } else {
-//                m_vectors.remove(id);
-//            }
-//        }
-//        return result;
-//    }
+    private ObjectSet<SpatialHash> visitedBuckets = new ObjectSet<SpatialHash>(16);
+    private Queue<SpatialHash> bucketQueue = new Queue<SpatialHash>(16);
 
     public OrderedMap<Integer, Point> updateVisibilityZone(Point source, float centerAngle_deg, float rangeAngle_deg) {
         long startTime = System.nanoTime();
-        ObjectSet<LineSegment> segments = CollisionManager.getInstance().getStaticLineSegments();
+        SpatialHashTable<LineSegment> segmentsTable = CollisionManager.getInstance().getStaticLineSegments();
         OrderedMap<Integer, Point> result = new OrderedMap<Integer, Point>(RAY_COUNT);
         Vector2 dir = new Vector2(1, 0).rotate(centerAngle_deg - rangeAngle_deg / 2);
         Ray ray = new Ray(source, dir);
+        SpatialHash rayHash = SpatialHash.createFromPosition(source.x, source.y);
         m_rc.setRay(ray);
         final float ROTATION_STEP = rangeAngle_deg / RAY_COUNT;
         for (int i = 0; i < RAY_COUNT; ++i) {
             dir.rotate(ROTATION_STEP);
+
+            visitedBuckets.clear();
+            bucketQueue.clear();
+            bucketQueue.addLast(rayHash);
             Point nearest = null;
             float minRayParameter = Float.MAX_VALUE;
-            for (LineSegment s : segments) {
-                Point newIntersection = m_rc.findIntersection(s);
-                float newRayParameter = m_rc.getRayParameter();
-                if (newIntersection != null && newRayParameter < minRayParameter) {
-                    nearest = newIntersection;
-                    minRayParameter = newRayParameter;
+            while (bucketQueue.size > 0) {
+                SpatialHash currentHash = bucketQueue.removeFirst();
+                ObjectSet<LineSegment> segmentsBucket = segmentsTable.getBucket(currentHash);
+                if (segmentsBucket == null) {
+                    continue;
+                }
+                for (LineSegment s : segmentsBucket) {
+                    Point newIntersection = m_rc.findIntersection(s);
+                    float newRayParameter = m_rc.getRayParameter();
+                    if (newIntersection != null && newRayParameter < minRayParameter) {
+                        nearest = newIntersection;
+                        minRayParameter = newRayParameter;
+                    }
+                }
+                if (nearest != null) {
+                    // found
+                    break;
+                } else {
+                    visitedBuckets.add(currentHash);
+                    for (int deltaX = -1; deltaX <= 1; ++deltaX) {
+                        for (int deltaY = -1; deltaY <= 1; ++deltaY) {
+                            if (deltaX == 0 && deltaY == 0) {
+                                continue;
+                            }
+                            SpatialHash nearbyHash = new SpatialHash(currentHash.x + deltaX, currentHash.y + deltaY);
+                            if (!visitedBuckets.contains(nearbyHash)) {
+                                bucketQueue.addLast(nearbyHash);
+                            }
+                        }
+                    }
                 }
             }
+
             if (nearest != null) {
                 result.put(i, nearest);
                 DrawableVector v = m_vectors.get(i, null);
@@ -107,7 +97,7 @@ public class VisibilityChecker {
         timeSum += System.nanoTime() - startTime;
         ++counter;
         if (counter >= 60) {
-            Gdx.app.log("VisibilityChecker", "Time elapsed: " + timeSum / counter);
+            Gdx.app.log("VisibilityChecker", "Time elapsed: " + timeSum / counter / 1000000.0f);
             counter = 0;
             timeSum = 0;
         }

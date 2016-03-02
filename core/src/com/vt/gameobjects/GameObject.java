@@ -43,7 +43,9 @@ public abstract class GameObject extends Group implements Spatial, SpatiallyHash
 
     @Override
     public SpatialHash spatialHash() {
-        return new SpatialHash((int)getX(Constants.ALIGN_ORIGIN), (int)getY(Constants.ALIGN_ORIGIN));
+        return new SpatialHash(
+                (int)(getX(Constants.ALIGN_ORIGIN) / Constants.SPATIAL_HASH_TABLE_BUCKET_WIDTH),
+                (int)(getY(Constants.ALIGN_ORIGIN) / Constants.SPATIAL_HASH_TABLE_BUCKET_HEIGHT));
     }
 
     protected ValuesChangeHistory getValuesHistory() {

@@ -19,12 +19,15 @@ public class Point {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (obj.getClass() != Point.class)
+        }
+        if (obj.getClass() != Point.class) {
             return false;
+        }
         Point other = (Point)obj;
         return x == other.x && y == other.y;
     }

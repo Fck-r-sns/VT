@@ -46,7 +46,7 @@ public class LineSegment {
             return false;
         }
         LineSegment other = (LineSegment)obj;
-        return p1 == other.p1 && p2 == other.p2;
+        return p1.equals(other.p1) && p2.equals(other.p2);
     }
 
     @Override

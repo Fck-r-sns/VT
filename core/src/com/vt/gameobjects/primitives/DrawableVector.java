@@ -61,15 +61,14 @@ public class DrawableVector {
                     m_rotation
             );
             if (m_drawArrow) {
-                float angle = m_vector.cpy().sub(m_origin).angle();
-                float arrowLength = 5.1f * m_width; // sqrt(1^2 + 5^2) * m_width
+                float arrowLength = 5f * m_width;
                 batch.draw(
                         m_texture,
                         m_vector.x, m_vector.y,
                         m_width / 2, 0,
                         m_width, arrowLength,
                         1.0f, 1.0f,
-                        angle + 90 - 15
+                        m_rotation + 75
                 );
                 batch.draw(
                         m_texture,
@@ -77,7 +76,7 @@ public class DrawableVector {
                         m_width / 2, 0,
                         m_width, arrowLength,
                         1.0f, 1.0f,
-                        angle + 90 + 15
+                        m_rotation + 105
                 );
             }
         }

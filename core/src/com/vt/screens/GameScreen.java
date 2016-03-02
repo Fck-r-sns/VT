@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectSet;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.vt.gameobjects.CameraHelper;
 import com.vt.game.Constants;
@@ -28,6 +29,7 @@ import com.vt.gameobjects.characters.ManualController;
 import com.vt.gameobjects.gui.Button;
 import com.vt.gameobjects.gui.ButtonAction;
 import com.vt.gameobjects.gui.ButtonFactory;
+import com.vt.gameobjects.primitives.DrawableRectangle;
 import com.vt.gameobjects.terrain.levels.AbstractLevel;
 import com.vt.gameobjects.terrain.levels.LevelFactory;
 import com.vt.messages.Context;
@@ -37,6 +39,7 @@ import com.vt.messages.RewindContext;
 import com.vt.physics.CollisionManager;
 import com.vt.resources.Assets;
 
+import java.io.ObjectStreamClass;
 import java.util.EnumMap;
 
 /**
@@ -61,6 +64,8 @@ public class GameScreen implements Screen {
     private Button m_pauseButton;
     private Button m_shootButton;
     private Button m_rewindButton;
+
+    private ObjectSet<DrawableRectangle> m_spatialHashGrid;
 
     private AbstractLevel m_level;
 
@@ -221,6 +226,20 @@ public class GameScreen implements Screen {
 
         Gdx.input.setInputProcessor(new InputMultiplexer(m_stageGui, m_stage));
 
+        m_spatialHashGrid = new ObjectSet<DrawableRectangle>(64);
+        for (int x = 0; x < 10; ++x) {
+            for (int y = 0; y < 10; ++y) {
+                m_spatialHashGrid.add(new DrawableRectangle(
+                        x * Constants.SPATIAL_HASH_TABLE_BUCKET_WIDTH,
+                        y * Constants.SPATIAL_HASH_TABLE_BUCKET_HEIGHT,
+                        Constants.SPATIAL_HASH_TABLE_BUCKET_WIDTH,
+                        Constants.SPATIAL_HASH_TABLE_BUCKET_HEIGHT,
+                        Assets.getInstance().gui.blueVector,
+                        0.03f
+                ));
+            }
+        }
+
         // here is the game starts
         env.globalTime = 0.0f;
         env.gameTime = 0.0f;
@@ -274,6 +293,9 @@ public class GameScreen implements Screen {
         m_spriteBatch.begin();
         m_level.draw(m_spriteBatch);
         m_actionQueue.draw(m_spriteBatch);
+        for (DrawableRectangle r : m_spatialHashGrid) {
+            r.draw(m_spriteBatch);
+        }
         m_spriteBatch.end();
         m_stage.draw();
 

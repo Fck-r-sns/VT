@@ -66,6 +66,9 @@ public class LevelFactory {
                         tile = TileFactory.create(Tile.Type.Wall, Constants.TILE_SIZE * xPos, Constants.TILE_SIZE * yPos);
                         walls.put(new Tile.Index(xPos, yPos), (Wall)tile);
                         break;
+                    case '\r':
+                    case '\n':
+                        continue;
                     default:
                         break;
                 }
@@ -84,7 +87,7 @@ public class LevelFactory {
                 int beginX = x;
                 int beginY = y;
                 int height = Integer.MAX_VALUE;
-                while (walls.remove(idx) != null) {
+                while (walls.containsKey(idx)) {
                     int currentHeight = 0;
                     do {
                         ++currentHeight;
@@ -96,6 +99,12 @@ public class LevelFactory {
                 }
                 int width = x - beginX;
                 if (width != 0) {
+                    for (int i = beginX; i < beginX + width; ++i) {
+                        for (int j = beginY; j < beginY + height; ++j) {
+                            idx.setValue(i, j);
+                            walls.remove(idx);
+                        }
+                    }
                     float x1 = beginX * Constants.TILE_SIZE;
                     float y1 = beginY * Constants.TILE_SIZE;
                     float x2 = (beginX + width) * Constants.TILE_SIZE;

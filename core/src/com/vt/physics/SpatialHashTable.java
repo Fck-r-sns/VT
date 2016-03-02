@@ -47,4 +47,16 @@ public class SpatialHashTable<T> {
             m_data.put(hash, new ObjectSet<T>(m_bucketCapacity));
         }
     }
+
+    public int getFullSize() {
+        int res = 0;
+        for (ObjectSet<T> set : m_data.values()) {
+            res += set.size;
+        }
+        return res;
+    }
+
+    public ObjectMap<SpatialHash, ObjectSet<T>> getData() {
+        return m_data;
+    }
 }

@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.vt.gameobjects.CameraHelper;
@@ -29,6 +30,7 @@ import com.vt.gameobjects.characters.ManualController;
 import com.vt.gameobjects.gui.Button;
 import com.vt.gameobjects.gui.ButtonAction;
 import com.vt.gameobjects.gui.ButtonFactory;
+import com.vt.gameobjects.primitives.DrawableLine;
 import com.vt.gameobjects.primitives.DrawableRectangle;
 import com.vt.gameobjects.terrain.levels.AbstractLevel;
 import com.vt.gameobjects.terrain.levels.LevelFactory;
@@ -37,6 +39,9 @@ import com.vt.messages.MessageDispatcher;
 import com.vt.messages.MessageHandler;
 import com.vt.messages.RewindContext;
 import com.vt.physics.CollisionManager;
+import com.vt.physics.SpatialHash;
+import com.vt.physics.SpatialHashTable;
+import com.vt.physics.geometry.LineSegment;
 import com.vt.resources.Assets;
 
 import java.io.ObjectStreamClass;
@@ -295,6 +300,20 @@ public class GameScreen implements Screen {
         m_actionQueue.draw(m_spriteBatch);
         for (DrawableRectangle r : m_spatialHashGrid) {
             r.draw(m_spriteBatch);
+        }
+        {
+//            ObjectMap<SpatialHash, ObjectSet<LineSegment>> lines = CollisionManager.getInstance().getStaticLineSegments().getData();
+//            for (ObjectSet<LineSegment> b : lines.values()) {
+//                for (LineSegment s : b) {
+//                    new DrawableLine(s.p1.x, s.p1.y, s.p2.x, s.p2.y, Assets.getInstance().gui.redVector, 0.05f).draw(m_spriteBatch);
+//                }
+//            }
+
+            ObjectSet<LineSegment> b = CollisionManager.getInstance().getStaticLineSegments().getBucket(m_player.spatialHash());
+            for (LineSegment s : b) {
+                new DrawableLine(s.p1.x, s.p1.y, s.p2.x, s.p2.y, Assets.getInstance().gui.redVector, 0.08f).draw(m_spriteBatch);
+            }
+
         }
         m_spriteBatch.end();
         m_stage.draw();

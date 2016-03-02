@@ -1,4 +1,4 @@
-package com.vt.gameobjects.pointers;
+package com.vt.gameobjects.primitives;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -55,30 +55,32 @@ public class DrawableVector {
             batch.draw(
                     m_texture,
                     m_origin.x, m_origin.y,
-                    0, 0,
+                    m_width / 2, 0,
                     m_width, m_length,
                     1.0f, 1.0f,
                     m_rotation
             );
+            if (m_drawArrow) {
+                float angle = m_vector.cpy().sub(m_origin).angle();
+                float arrowLength = 5.1f * m_width; // sqrt(1^2 + 5^2) * m_width
+                batch.draw(
+                        m_texture,
+                        m_vector.x, m_vector.y,
+                        m_width / 2, 0,
+                        m_width, arrowLength,
+                        1.0f, 1.0f,
+                        angle + 90 - 15
+                );
+                batch.draw(
+                        m_texture,
+                        m_vector.x, m_vector.y,
+                        m_width / 2, 0,
+                        m_width, arrowLength,
+                        1.0f, 1.0f,
+                        angle + 90 + 15
+                );
+            }
         }
-
-//        renderer.begin(ShapeRenderer.ShapeType.Filled);
-//        Color prevColor = renderer.getColor();
-//        renderer.setColor(m_color);
-//        renderer.rectLine(m_origin, m_vector, m_width);
-//        renderer.end();
-//        if (m_drawArrow) {
-//            final float ARROW_X = 5 * m_width;
-//            final float ARROW_Y = m_width;
-//            renderer.begin(ShapeRenderer.ShapeType.Filled);
-//            float angle = m_vector.cpy().sub(m_origin).angle();
-//            Vector2 arrow1 = new Vector2(-ARROW_X, ARROW_Y).rotate(angle).add(m_vector);
-//            Vector2 arrow2 = new Vector2(-ARROW_X, -ARROW_Y).rotate(angle).add(m_vector);
-//            renderer.rectLine(m_vector, arrow1, m_width);
-//            renderer.rectLine(m_vector, arrow2, m_width);
-//            renderer.end();
-//        }
-//        renderer.setColor(prevColor);
     }
 
     private void updateLengthAndRotation() {

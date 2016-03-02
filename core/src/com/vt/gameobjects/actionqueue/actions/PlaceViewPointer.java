@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.vt.game.Constants;
 import com.vt.gameobjects.actionqueue.AbstractQueueableAction;
 import com.vt.gameobjects.actionqueue.Context;
-import com.vt.gameobjects.pointers.DrawableVector;
+import com.vt.gameobjects.primitives.DrawableVector;
 import com.vt.resources.Assets;
 
 /**

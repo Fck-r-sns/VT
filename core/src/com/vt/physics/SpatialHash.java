@@ -4,8 +4,8 @@ package com.vt.physics;
  * Created by fckrsns on 02.03.2016.
  */
 public class SpatialHash implements Comparable<SpatialHash> {
-    public int x;
-    public int y;
+    public final int x;
+    public final int y;
 
     public SpatialHash(int x, int y) {
         this.x = x;

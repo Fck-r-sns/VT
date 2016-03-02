@@ -16,7 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.vt.game.CameraHelper;
+import com.vt.gameobjects.CameraHelper;
 import com.vt.game.Constants;
 import com.vt.game.Environment;
 import com.vt.gameobjects.CameraTarget;
@@ -35,8 +35,6 @@ import com.vt.messages.MessageDispatcher;
 import com.vt.messages.MessageHandler;
 import com.vt.messages.RewindContext;
 import com.vt.physics.CollisionManager;
-import com.vt.physics.geometry.Point;
-import com.vt.physics.raycasting.VisibilityChecker;
 import com.vt.resources.Assets;
 
 import java.util.EnumMap;

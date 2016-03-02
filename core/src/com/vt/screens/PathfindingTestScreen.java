@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.vt.game.CameraHelper;
+import com.vt.gameobjects.CameraHelper;
 import com.vt.game.Constants;
 import com.vt.game.Environment;
 import com.vt.gameobjects.terrain.levels.AbstractLevel;

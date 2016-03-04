@@ -53,18 +53,18 @@ public class LevelFactory {
                 switch (symbol) {
                     case Constants.Level.PLAYER_START_POS_CODE:
                         tile = TileFactory.create(Tile.Type.Floor, Constants.TILE_SIZE * xPos, Constants.TILE_SIZE * yPos);
-                        level.setPlayerPosition((xPos + 0.5f ) * Constants.TILE_SIZE, (yPos + 0.5f ) * Constants.TILE_SIZE);
+                        level.setPlayerPosition((xPos + 0.5f) * Constants.TILE_SIZE, (yPos + 0.5f) * Constants.TILE_SIZE);
                         break;
                     case Constants.Level.ENEMY_START_POS_CODE:
                         tile = TileFactory.create(Tile.Type.Floor, Constants.TILE_SIZE * xPos, Constants.TILE_SIZE * yPos);
-                        level.addEnemyPosition((xPos + 0.5f ) * Constants.TILE_SIZE, (yPos + 0.5f ) * Constants.TILE_SIZE);
+                        level.addEnemyPosition((xPos + 0.5f) * Constants.TILE_SIZE, (yPos + 0.5f) * Constants.TILE_SIZE);
                         break;
                     case Constants.Level.FLOOR_CODE:
                         tile = TileFactory.create(Tile.Type.Floor, Constants.TILE_SIZE * xPos, Constants.TILE_SIZE * yPos);
                         break;
                     case Constants.Level.WALL_CODE:
                         tile = TileFactory.create(Tile.Type.Wall, Constants.TILE_SIZE * xPos, Constants.TILE_SIZE * yPos);
-                        walls.put(new Tile.Index(xPos, yPos), (Wall)tile);
+                        walls.put(new Tile.Index(xPos, yPos), (Wall) tile);
                         break;
                     case '\r':
                     case '\n':
@@ -110,29 +110,74 @@ public class LevelFactory {
                     float x2 = (beginX + width) * Constants.TILE_SIZE;
                     float y2 = (beginY + height) * Constants.TILE_SIZE;
 
-                    LineSegment[] ss = {
-                            new LineSegment(new Point(x1, y1), new Point(x2, y1)),
-                            new LineSegment(new Point(x2, y1), new Point(x2, y2)),
-                            new LineSegment(new Point(x2, y2), new Point(x1, y2)),
-                            new LineSegment(new Point(x1, y2), new Point(x1, y1))
+                    // assume that lines are only vertical or horizontal - not diagonal
+                    class TwoPoints {
+                        float xMin;
+                        float yMin;
+                        float xMax;
+                        float yMax;
+
+                        public TwoPoints(float x1, float y1, float x2, float y2) {
+                            if (x1 < x2) {
+                                xMin = x1;
+                                xMax = x2;
+                            } else {
+                                xMin = x2;
+                                xMax = x1;
+                            }
+                            if (y1 < y2) {
+                                yMin = y1;
+                                yMax = y2;
+                            } else {
+                                yMin = y2;
+                                yMax = y1;
+                            }
+                        }
+                    }
+
+                    TwoPoints[] pp = {
+                            new TwoPoints(x1, y1, x2, y1),
+                            new TwoPoints(x2, y1, x2, y2),
+                            new TwoPoints(x2, y2, x1, y2),
+                            new TwoPoints(x1, y2, x1, y1)
                     };
-                    for (LineSegment s : ss) {
-                        SpatialHash h1 = s.spatialHash1();
-                        SpatialHash h2 = s.spatialHash2();
-                        if (h1.x == h2.x) {
+                    for (TwoPoints p : pp) {
+                        SpatialHash hMin = SpatialHash.createFromPosition(p.xMin, p.yMin);
+                        SpatialHash hMax = SpatialHash.createFromPosition(p.xMax, p.yMax);
+                        if (hMin.x == hMax.x) {
                             // go vertical
-                            int xHash = h1.x;
-                            int yStart = Math.min(h1.y, h2.y);
-                            int yStop = Math.max(h1.y, h2.y);
+                            int xHash = hMin.x;
+                            int yStart = hMin.y;
+                            int yStop = hMax.y;
                             for (int yHash = yStart; yHash <= yStop; ++yHash) {
+                                LineSegment s = new LineSegment(
+                                        new Point(
+                                                p.xMin,
+                                                Math.max(yHash * Constants.SPATIAL_HASH_TABLE_BUCKET_HEIGHT, p.yMin)
+                                        ),
+                                        new Point(
+                                                p.xMax,
+                                                Math.min((yHash + 1) * Constants.SPATIAL_HASH_TABLE_BUCKET_HEIGHT, p.yMax)
+                                        )
+                                );
                                 segmentsTable.add(new SpatialHash(xHash, yHash), s);
                             }
                         } else {
                             // go horizontal
-                            int yHash = h1.y;
-                            int xStart = Math.min(h1.x, h2.x);
-                            int xStop = Math.max(h1.x, h2.x);
+                            int yHash = hMin.y;
+                            int xStart = hMin.x;
+                            int xStop = hMax.x;
                             for (int xHash = xStart; xHash <= xStop; ++xHash) {
+                                LineSegment s = new LineSegment(
+                                        new Point(
+                                                Math.max(xHash * Constants.SPATIAL_HASH_TABLE_BUCKET_WIDTH, p.xMin),
+                                                p.yMin
+                                        ),
+                                        new Point(
+                                                Math.min((xHash + 1) * Constants.SPATIAL_HASH_TABLE_BUCKET_WIDTH, p.xMax),
+                                                p.yMax
+                                        )
+                                );
                                 segmentsTable.add(new SpatialHash(xHash, yHash), s);
                             }
                         }

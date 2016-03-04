@@ -38,7 +38,6 @@ public class VisibilityChecker {
         final float ROTATION_STEP = rangeAngle_deg / RAY_COUNT;
         for (int i = 0; i < RAY_COUNT; ++i) {
             dir.rotate(ROTATION_STEP);
-
             SpatialHash currentHash = rayHash;
             Point nearest = null;
             float minRayParameter = Float.MAX_VALUE;
@@ -92,14 +91,13 @@ public class VisibilityChecker {
 
     private static SpatialHash findNextBucket(SpatialHash currentHash, Vector2 dir, RayCaster rayCaster) {
         // find intersections with bounds of current bucket to find next.
-        // i used such long names for variables
-        // because i don't want to forget for what i created it
         final float currentBucketXLeft = currentHash.x * Constants.SPATIAL_HASH_TABLE_BUCKET_WIDTH;
         final float currentBucketXRight = (currentHash.x + 1) * Constants.SPATIAL_HASH_TABLE_BUCKET_WIDTH;
         final float currentBucketYBottom = currentHash.y * Constants.SPATIAL_HASH_TABLE_BUCKET_HEIGHT;
         final float currentBucketYTop = (currentHash.y + 1) * Constants.SPATIAL_HASH_TABLE_BUCKET_HEIGHT;
         int delta = 0;
         LineSegment bucketBound;
+        // use heuristics to determine which bound should be checked first
         if (Math.abs(dir.x) > Math.abs(dir.y)) {
             // then ray points mostly left or right
             if (dir.x < 0) {

@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.badlogic.gdx.utils.OrderedMap;
-import com.badlogic.gdx.utils.Queue;
+import com.vt.game.Constants;
 import com.vt.gameobjects.primitives.DrawableVector;
 import com.vt.physics.CollisionManager;
 import com.vt.physics.SpatialHash;
@@ -21,14 +21,11 @@ import com.vt.resources.Assets;
  */
 public class VisibilityChecker {
     private static final int RAY_COUNT = 60;
-    private ObjectMap<Integer, Ray> m_rays = new ObjectMap<Integer, Ray>(64);
+//    private ObjectMap<Integer, Ray> m_rays = new ObjectMap<Integer, Ray>(64);
     private ObjectMap<Integer, DrawableVector> m_vectors = new ObjectMap<Integer, DrawableVector>(RAY_COUNT);
     private RayCaster m_rc = new RayCaster();
     private long timeSum = 0;
     private int counter = 0;
-
-    private ObjectSet<SpatialHash> visitedBuckets = new ObjectSet<SpatialHash>(16);
-    private Queue<SpatialHash> bucketQueue = new Queue<SpatialHash>(16);
 
     public OrderedMap<Integer, Point> updateVisibilityZone(Point source, float centerAngle_deg, float rangeAngle_deg) {
         long startTime = System.nanoTime();
@@ -42,13 +39,12 @@ public class VisibilityChecker {
         for (int i = 0; i < RAY_COUNT; ++i) {
             dir.rotate(ROTATION_STEP);
 
-            visitedBuckets.clear();
-            bucketQueue.clear();
-            bucketQueue.addLast(rayHash);
+            SpatialHash currentHash = rayHash;
             Point nearest = null;
             float minRayParameter = Float.MAX_VALUE;
-            while (bucketQueue.size > 0) {
-                SpatialHash currentHash = bucketQueue.removeFirst();
+            int iterationCounter = 0;
+            final int maxIterations = segmentsTable.getBucketCount();
+            while (iterationCounter < maxIterations) {
                 ObjectSet<LineSegment> segmentsBucket = segmentsTable.getBucket(currentHash);
                 if (segmentsBucket == null) {
                     continue;
@@ -65,33 +61,18 @@ public class VisibilityChecker {
                     // found
                     break;
                 } else {
-                    visitedBuckets.add(currentHash);
-                    for (int deltaX = -1; deltaX <= 1; ++deltaX) {
-                        for (int deltaY = -1; deltaY <= 1; ++deltaY) {
-                            if (deltaX == 0 && deltaY == 0) {
-                                continue;
-                            }
-                            SpatialHash nearbyHash = new SpatialHash(currentHash.x + deltaX, currentHash.y + deltaY);
-                            if (!visitedBuckets.contains(nearbyHash)) {
-                                bucketQueue.addLast(nearbyHash);
-                            }
-                        }
-                    }
+                    currentHash = findNextBucket(currentHash, dir, m_rc);
                 }
             }
 
-            if (nearest != null) {
-                result.put(i, nearest);
-                DrawableVector v = m_vectors.get(i, null);
-                if (v == null) {
-                    v = new DrawableVector(source.x, source.y, nearest.x, nearest.y, Assets.getInstance().gui.visibilityVector, 0.03f, false);
-                    m_vectors.put(i, v);
-                } else {
-                    v.setOrigin(source.x, source.y);
-                    v.setVector(nearest.x, nearest.y);
-                }
+            result.put(i, nearest);
+            DrawableVector v = m_vectors.get(i, null);
+            if (v == null) {
+                v = new DrawableVector(source.x, source.y, nearest.x, nearest.y, Assets.getInstance().gui.visibilityVector, 0.03f, false);
+                m_vectors.put(i, v);
             } else {
-                m_vectors.remove(i);
+                v.setOrigin(source.x, source.y);
+                v.setVector(nearest.x, nearest.y);
             }
         }
         timeSum += System.nanoTime() - startTime;
@@ -107,5 +88,92 @@ public class VisibilityChecker {
     public void draw(Batch batch) {
         for (DrawableVector v : m_vectors.values())
             v.draw(batch);
+    }
+
+    private static SpatialHash findNextBucket(SpatialHash currentHash, Vector2 dir, RayCaster rayCaster) {
+        // find intersections with bounds of current bucket to find next.
+        // i used such long names for variables
+        // because i don't want to forget for what i created it
+        final float currentBucketXLeft = currentHash.x * Constants.SPATIAL_HASH_TABLE_BUCKET_WIDTH;
+        final float currentBucketXRight = (currentHash.x + 1) * Constants.SPATIAL_HASH_TABLE_BUCKET_WIDTH;
+        final float currentBucketYBottom = currentHash.y * Constants.SPATIAL_HASH_TABLE_BUCKET_HEIGHT;
+        final float currentBucketYTop = (currentHash.y + 1) * Constants.SPATIAL_HASH_TABLE_BUCKET_HEIGHT;
+        int delta = 0;
+        LineSegment bucketBound;
+        if (Math.abs(dir.x) > Math.abs(dir.y)) {
+            // then ray points mostly left or right
+            if (dir.x < 0) {
+                bucketBound = new LineSegment(
+                        new Point(currentBucketXLeft, currentBucketYBottom),
+                        new Point(currentBucketXLeft, currentBucketYTop)
+                );
+                delta = -1;
+            } else {
+                bucketBound = new LineSegment(
+                        new Point(currentBucketXRight, currentBucketYBottom),
+                        new Point(currentBucketXRight, currentBucketYTop)
+                );
+                delta = +1;
+            }
+            if (null != rayCaster.findIntersection(bucketBound)) {
+                return new SpatialHash(currentHash.x + delta, currentHash.y);
+            } else {
+                if (dir.y < 0) {
+                    bucketBound = new LineSegment(
+                            new Point(currentBucketXLeft, currentBucketYBottom),
+                            new Point(currentBucketXRight, currentBucketYBottom)
+                    );
+                    delta = -1;
+                } else {
+                    bucketBound = new LineSegment(
+                            new Point(currentBucketXLeft, currentBucketYTop),
+                            new Point(currentBucketXRight, currentBucketYTop)
+                    );
+                    delta = +1;
+                }
+                if (null != rayCaster.findIntersection(bucketBound)) {
+                    return new SpatialHash(currentHash.x, currentHash.y + delta);
+                } else {
+                    throw new RuntimeException("No next bucket, wtf?");
+                }
+            }
+        } else {
+            // then ray points mostly down or up
+            if (dir.y < 0) {
+                bucketBound = new LineSegment(
+                        new Point(currentBucketXLeft, currentBucketYBottom),
+                        new Point(currentBucketXRight, currentBucketYBottom)
+                );
+                delta = -1;
+            } else {
+                bucketBound = new LineSegment(
+                        new Point(currentBucketXLeft, currentBucketYTop),
+                        new Point(currentBucketXRight, currentBucketYTop)
+                );
+                delta = +1;
+            }
+            if (null != rayCaster.findIntersection(bucketBound)) {
+                return new SpatialHash(currentHash.x, currentHash.y + delta);
+            } else {
+                if (dir.x < 0) {
+                    bucketBound = new LineSegment(
+                            new Point(currentBucketXLeft, currentBucketYBottom),
+                            new Point(currentBucketXLeft, currentBucketYTop)
+                    );
+                    delta = -1;
+                } else {
+                    bucketBound = new LineSegment(
+                            new Point(currentBucketXRight, currentBucketYBottom),
+                            new Point(currentBucketXRight, currentBucketYTop)
+                    );
+                    delta = +1;
+                }
+                if (null != rayCaster.findIntersection(bucketBound)) {
+                    return new SpatialHash(currentHash.x + delta, currentHash.y);
+                } else {
+                    throw new RuntimeException("No next bucket, wtf?");
+                }
+            }
+        }
     }
 }

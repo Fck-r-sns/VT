@@ -48,6 +48,10 @@ public class SpatialHashTable<T> {
         }
     }
 
+    public int getBucketCount() {
+        return m_data.size;
+    }
+
     public int getFullSize() {
         int res = 0;
         for (ObjectSet<T> set : m_data.values()) {

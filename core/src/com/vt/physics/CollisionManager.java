@@ -2,9 +2,9 @@ package com.vt.physics;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.badlogic.gdx.utils.ObjectSet;
 import com.vt.physics.colliders.Collidable;
 import com.vt.physics.geometry.LineSegment;
+import com.vt.utils.DumbProfiler;
 
 /**
  * Created by Fck.r.sns on 08.07.2015.
@@ -14,6 +14,8 @@ public class CollisionManager {
     private SpatialHashTable<LineSegment> m_staticLineSegments;
     private ObjectMap<Integer, Collidable> m_staticCollidables;
     private ObjectMap<Integer, Collidable> m_dynamicCollidables;
+
+    private DumbProfiler m_profiler = new DumbProfiler("CollisionManager", 60);
 
     public static CollisionManager getInstance() {
         if (instance == null)
@@ -26,7 +28,8 @@ public class CollisionManager {
         m_dynamicCollidables = new ObjectMap<Integer, Collidable>(32);
     }
 
-    public void update(float delta) {
+    public void checkCollisions(float delta) {
+        m_profiler.start();
         int sizeDynamics = m_dynamicCollidables.size;
         Array<Collidable> dynamicCollidablesArray = m_dynamicCollidables.values().toArray();
         for (int firstIdx = 0; firstIdx < sizeDynamics; ++firstIdx) {
@@ -45,6 +48,7 @@ public class CollisionManager {
                 }
             }
         }
+        m_profiler.process();
     }
 
     public void registerStaticCollidableObject(Integer key, Collidable object) {

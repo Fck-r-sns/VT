@@ -3,7 +3,6 @@ package com.vt.gameobjects.terrain.levels;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.badlogic.gdx.utils.ObjectSet;
 import com.vt.game.Constants;
 import com.vt.gameobjects.terrain.tiles.Tile;
 import com.vt.gameobjects.terrain.tiles.TileFactory;
@@ -13,11 +12,14 @@ import com.vt.physics.SpatialHash;
 import com.vt.physics.SpatialHashTable;
 import com.vt.physics.geometry.LineSegment;
 import com.vt.physics.geometry.Point;
+import com.vt.utils.DumbProfiler;
 
 /**
  * Created by Fck.r.sns on 08.07.2015.
  */
 public class LevelFactory {
+    private static DumbProfiler m_profiler = new DumbProfiler("LevelFactory", 1);
+
     public static AbstractLevel createStub(int width, int height) {
         return new StubLevel(width, height);
     }
@@ -33,6 +35,7 @@ public class LevelFactory {
     }
 
     public static AbstractLevel createFromTextFile(String fileName) {
+        m_profiler.start("Read from file");
         FileHandle file = Gdx.files.internal(fileName);
         if (!file.exists())
             return null;
@@ -79,6 +82,8 @@ public class LevelFactory {
             }
             maxX[yPos] = xPos;
         }
+        m_profiler.process();
+        m_profiler.start("Create line segments for ray tracing");
         SpatialHashTable<LineSegment> segmentsTable = new SpatialHashTable<LineSegment>(64, 16);
         Tile.Index idx = new Tile.Index(0, 0);
         for (int y = 0; y < maxY; ++y) {
@@ -186,6 +191,7 @@ public class LevelFactory {
             }
         }
         CollisionManager.getInstance().setStaticLineSegments(segmentsTable);
+        m_profiler.process();
         return level;
     }
 }

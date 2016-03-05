@@ -15,7 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.vt.gameobjects.CameraHelper;
@@ -39,12 +38,9 @@ import com.vt.messages.MessageDispatcher;
 import com.vt.messages.MessageHandler;
 import com.vt.messages.RewindContext;
 import com.vt.physics.CollisionManager;
-import com.vt.physics.SpatialHash;
-import com.vt.physics.SpatialHashTable;
 import com.vt.physics.geometry.LineSegment;
 import com.vt.resources.Assets;
 
-import java.io.ObjectStreamClass;
 import java.util.EnumMap;
 
 /**
@@ -279,7 +275,7 @@ public class GameScreen implements Screen {
             if (!rewinding) {
                 env.gameTime += delta;
                 env.rewindableTime = Math.min(env.rewindableTime + delta, Constants.MAX_HISTORY_TIME);
-                CollisionManager.getInstance().update(delta);
+                CollisionManager.getInstance().checkCollisions(delta);
             }
             m_level.update(delta);
             m_cameraHelper.update(delta);

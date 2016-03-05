@@ -68,7 +68,7 @@ public class DrawableVector {
                         m_width / 2, 0,
                         m_width, arrowLength,
                         1.0f, 1.0f,
-                        m_rotation + 75
+                        180 + m_rotation + 15
                 );
                 batch.draw(
                         m_texture,
@@ -76,7 +76,7 @@ public class DrawableVector {
                         m_width / 2, 0,
                         m_width, arrowLength,
                         1.0f, 1.0f,
-                        m_rotation + 105
+                        180 + m_rotation - 15
                 );
             }
         }

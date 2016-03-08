@@ -1,6 +1,6 @@
 Major:
-TODO: Implement tactical control on pause (action queue)
 TODO: Add enemies
+TODO: Add animations using interpolators
 TODO: Add level generator
 
 Minor:

@@ -139,8 +139,8 @@ public class Constants {
 
     public final static float CHARACTER_VISIBILITY_RANGE_ANGLE_DEG = 120.0f;
 
-    public final static float SPATIAL_HASH_TABLE_BUCKET_WIDTH = 5.0f;
-    public final static float SPATIAL_HASH_TABLE_BUCKET_HEIGHT = 5.0f;
+    public final static float SPATIAL_HASH_TABLE_BUCKET_WIDTH = 3.0f;
+    public final static float SPATIAL_HASH_TABLE_BUCKET_HEIGHT = 3.0f;
     // ------------------------------------------------------------------------
 
     // time and game logic ----------------------------------------------------

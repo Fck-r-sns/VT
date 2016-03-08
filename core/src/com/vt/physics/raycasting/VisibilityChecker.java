@@ -21,10 +21,15 @@ import com.vt.utils.DumbProfiler;
  */
 public class VisibilityChecker {
     private static final int RAY_COUNT = 30;
-//    private ObjectMap<Integer, Ray> m_rays = new ObjectMap<Integer, Ray>(64);
+    //    private ObjectMap<Integer, Ray> m_rays = new ObjectMap<Integer, Ray>(64);
     private ObjectMap<Integer, DrawableVector> m_vectors = new ObjectMap<Integer, DrawableVector>(RAY_COUNT);
     private RayCaster m_rc = new RayCaster();
+
     private DumbProfiler m_profiler = new DumbProfiler("VisibilityChecker", 60);
+
+    {
+        m_profiler.setEnabled(true);
+    }
 
 //    public OrderedMap<Integer, Point> updateVisibilityZone(Point source, float centerAngle_deg, float rangeAngle_deg) {
 //        long startTime = System.nanoTime();
@@ -127,10 +132,9 @@ public class VisibilityChecker {
             float minRayParameter = Float.MAX_VALUE;
             int iterationCounter = 0;
             while (iterationCounter < maxIterations) {
+                ++iterationCounter;
+
                 ObjectSet<LineSegment> segmentsBucket = segmentsTable.getBucket(currentHash);
-                if (segmentsBucket == null) {
-                    continue;
-                }
                 for (LineSegment s : segmentsBucket) {
                     Point newIntersection = m_rc.findIntersection(s);
                     float newRayParameter = m_rc.getRayParameter();
@@ -139,6 +143,7 @@ public class VisibilityChecker {
                         minRayParameter = newRayParameter;
                     }
                 }
+
                 if (nearest != null) {
                     // found
                     break;

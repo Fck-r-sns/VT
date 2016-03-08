@@ -40,6 +40,7 @@ import com.vt.messages.RewindContext;
 import com.vt.physics.CollisionManager;
 import com.vt.physics.geometry.LineSegment;
 import com.vt.resources.Assets;
+import com.vt.utils.DumbProfiler;
 
 import java.util.EnumMap;
 
@@ -66,11 +67,15 @@ public class GameScreen implements Screen {
     private Button m_shootButton;
     private Button m_rewindButton;
 
+    private DumbProfiler m_worldProfiler = new DumbProfiler("GameScreen", 60);
+    private DumbProfiler m_renderingProfiler = new DumbProfiler("GameScreen", 60);
+
     private ObjectSet<DrawableRectangle> m_spatialHashGrid;
 
     private AbstractLevel m_level;
 
     public GameScreen() {
+        m_worldProfiler.start("Initialisation");
         Constants.SCREEN_RATIO = (float) Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth();
         m_renderer = new ShapeRenderer();
         m_spriteBatch = new SpriteBatch();
@@ -241,6 +246,8 @@ public class GameScreen implements Screen {
             }
         }
 
+        m_worldProfiler.process();
+
         // here is the game starts
         env.globalTime = 0.0f;
         env.gameTime = 0.0f;
@@ -260,6 +267,7 @@ public class GameScreen implements Screen {
         delta = 1 / 60.0f;
         env.globalTime += delta;
 
+        m_worldProfiler.start("Update state");
         if (rewinding) {
             if (env.gameTime <= env.getRewindTargetTime() || env.rewindableTime <= 0.0f) {
                 stopRewinding();
@@ -285,6 +293,9 @@ public class GameScreen implements Screen {
 
         m_stageGui.act(delta); // gui updates even on pause (gui animation and others)
 
+        m_worldProfiler.process();
+
+        m_renderingProfiler.start("Rendering");
         m_camera.update(false);
         m_spriteBatch.setProjectionMatrix(m_camera.combined);
         m_renderer.setProjectionMatrix(m_camera.combined);
@@ -341,6 +352,8 @@ public class GameScreen implements Screen {
             m_renderer.circle(c.x, c.y, c.radius, 20);
             m_renderer.end();
         }
+
+        m_renderingProfiler.process();
     }
 
     @Override

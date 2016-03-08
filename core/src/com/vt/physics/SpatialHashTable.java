@@ -16,7 +16,13 @@ public class SpatialHashTable<T> {
     }
 
     public ObjectSet<T> getBucket(SpatialHash hash) {
-        return m_data.get(hash);
+        if (!m_data.containsKey(hash)) {
+            ObjectSet<T> bucket = new ObjectSet<T>(m_bucketCapacity);
+            m_data.put(hash, bucket);
+            return bucket;
+        } else {
+            return m_data.get(hash);
+        }
     }
 
     public void add(T value) {
